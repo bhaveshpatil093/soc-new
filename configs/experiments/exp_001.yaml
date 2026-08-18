@@ -1,0 +1,34 @@
+# ============================================================
+# TADS Example Experiment: Isolation Forest Baseline
+# ============================================================
+
+experiment:
+  name: "exp_001_baseline_iforest"
+  description: "Isolation Forest baseline on volume + entropy features"
+  seed: 42
+
+data:
+  training_start: "2025-07-01T00:00:00Z"
+  training_end: "2025-07-31T23:59:59Z"
+  evaluation_start: "2025-08-01T00:00:00Z"
+  evaluation_end: "2025-08-31T23:59:59Z"
+  window_size_seconds: 5
+
+features:
+  enabled:
+    - volume
+    - entropy
+    - temporal_delta
+
+model:
+  type: "isolation_forest"
+  hyperparameters:
+    n_estimators: 200
+    contamination: "auto"
+
+normalization:
+  method: "z_score"
+  source: "training"  # Constraint #12: ALWAYS "training"
+
+pipeline:
+  io_batch_size: 5000  # I/O only — does not affect semantics

@@ -1,0 +1,109 @@
+# ============================================================
+# TADS Base Configuration
+# Temporal Anomaly Detection System
+#
+# This file encodes project constraints as validated defaults.
+# Per-experiment overrides go in configs/experiments/*.yaml
+# ============================================================
+
+# --- Constraint Encoding ---
+# These are enforced by Pydantic validation in src/tads/experiments/config.py
+# Changing them requires explicit justification and may break constraint tests.
+
+constraints:
+  # Constraint #2: READ-ONLY Elasticsearch access
+  es_allowed_methods:
+    - "GET"
+    - "POST"  # Only for _search, _msearch, _scroll, _pit endpoints
+  es_forbidden_endpoints:
+    - "_bulk"
+    - "_update"
+    - "_delete"
+    - "_index"
+    - "_create"
+    - "_ilm"
+    - "_reindex"
+
+  # Constraint #7: Primary temporal unit
+  window_size_seconds: 5
+
+  # Constraint #12: Normalization source
+  normalization_source: "training"  # MUST be "training" — never "batch" or "evaluation"
+
+  # Constraint #16: File format
+  data_format: "parquet"  # No CSV allowed
+
+  # Constraint #19: Priority order for trade-offs
+  priority_order:
+    - "correctness"
+    - "scientific_validity"
+    - "scalability"
+    - "detection_quality"
+
+# --- Data Configuration ---
+data:
+  # Constraint #5: July = training/baseline
+  training:
+    start: "2025-07-01T00:00:00Z"
+    end: "2025-07-31T23:59:59Z"
+    label: "july_baseline"
+
+  # Constraint #6: August = unseen evaluation
+  evaluation:
+    start: "2025-08-01T00:00:00Z"
+    end: "2025-08-31T23:59:59Z"
+    label: "august_unseen"
+
+  # Temporal windowing
+  window_size_seconds: 5  # Constraint #7
+
+  # Train/validation split within July (temporal, not random)
+  train_val_split:
+    method: "temporal"  # NOT random — respects time ordering
+    train_fraction: 0.8  # Early 80% of July = train
+    val_fraction: 0.2    # Late 20% of July = validation
+
+# --- Pipeline Configuration ---
+pipeline:
+  # Constraint #8, #9: I/O batch size is performance-only, never semantic
+  io_batch_size: 5000
+  io_batch_size_note: >
+    This controls how many documents are fetched per ES scroll page.
+    It MUST NOT affect windowing, features, or scoring.
+    The batch_invariance test verifies this.
+
+  # Parquet output settings
+  parquet:
+    compression: "zstd"
+    compression_level: 3
+    row_group_size: 100000
+
+  # Memory budget (Constraint #13, #15)
+  memory:
+    max_memory_mb: 4096
+    streaming_batch_rows: 50000
+
+# --- Normalization Configuration ---
+normalization:
+  method: "z_score"
+  source: "training"  # Constraint #12: ALWAYS "training"
+  # Statistics computed once on July training set and frozen
+  # Applied identically to August — score depends only on window + frozen stats
+
+# --- Reproducibility Configuration ---
+reproducibility:
+  # Constraint #20
+  default_seed: 42
+  torch_deterministic: true
+  numerical_tolerance: 1.0e-6
+  hash_algorithm: "sha256"
+
+# --- Elasticsearch Configuration ---
+# Note: Actual credentials come from environment variables (Constraint #4)
+# Only non-sensitive connection parameters go here
+elasticsearch:
+  timeout: 300
+  max_retries: 5
+  retry_on_timeout: true
+  scroll_keepalive: "5m"
+  request_timeout: 60

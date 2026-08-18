@@ -1,0 +1,55 @@
+# ============================================================
+# TADS Pre-commit Configuration
+# Enforces: Constraint #4 (no credentials), #16 (no CSV)
+# ============================================================
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+        args: ['--branch', 'main']
+
+  # Credential scanning (Constraint #4)
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: \.env\.example$
+
+  # Linting (Constraints #16, #17 enforced via custom checks)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.8
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Ban CSV files from being committed (Constraint #16)
+  - repo: local
+    hooks:
+      - id: no-csv-files
+        name: Ban CSV files (Constraint #16)
+        entry: bash -c 'csv_files=$(git diff --cached --name-only --diff-filter=ACM | grep -i "\.csv$" || true); if [ -n "$csv_files" ]; then echo "ERROR: CSV files are not allowed (Constraint #16). Use Parquet instead."; echo "$csv_files"; exit 1; fi'
+        language: system
+        pass_filenames: false
+
+      - id: no-credentials-in-code
+        name: Ban hardcoded credentials (Constraint #4)
+        entry: bash -c 'if git diff --cached -U0 | grep -iE "(password|passwd|secret|api_key|apikey|token)\s*=\s*[\"'\''][^\"'\'']+[\"'\'']" | grep -v "\.example" | grep -v "test_" | grep -v "your_"; then echo "ERROR: Possible hardcoded credentials detected (Constraint #4)"; exit 1; fi'
+        language: system
+        pass_filenames: false
+
+      - id: no-external-project-refs
+        name: Ban references to external SOC project
+        entry: bash -c 'if git diff --cached -U0 -- "*.py" "*.yaml" "*.yml" "*.toml" | grep -iE "(from soc|import soc|soc-dashboard|soc_dashboard)" | grep -v "soc-new"; then echo "ERROR: Reference to external project detected"; exit 1; fi'
+        language: system
+        pass_filenames: false
