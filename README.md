@@ -29,7 +29,7 @@ pip install -e ".[dev]"
 
 # 4. Configure credentials (Constraint #4: never hardcode)
 cp .env.example .env
-# Edit .env with your Elasticsearch credentials
+# Edit .env with your Kibana credentials (read-only dashboard access)
 
 # 5. Install pre-commit hooks
 pre-commit install
@@ -44,7 +44,8 @@ This project enforces 20 constraints. Key highlights:
 
 | # | Constraint | Enforcement |
 |---|-----------|-------------|
-| 2 | ES READ-ONLY access | HTTP verb allowlist + tests |
+| 1 | Data source is Kibana (read-only) | Kibana API proxy to ES |
+| 2 | READ-ONLY access via Kibana | HTTP verb allowlist + tests |
 | 4 | No credential leakage | Pre-commit hooks + log scrubber |
 | 7 | 5-second temporal windows | Hardcoded constant + tests |
 | 8 | Batch size is I/O only | Module separation + invariance tests |
@@ -58,8 +59,8 @@ See `configs/base.yaml` for the complete constraint encoding.
 ## Architecture
 
 ```
-Elasticsearch → Raw Parquet → 5-sec Windows → Features → Model → Results
-     (READ)       (Stage 1)      (Stage 2)     (Stage 3)  (4/5)   (Stage 6)
+Kibana (READ-ONLY) → Raw Parquet → 5-sec Windows → Features → Model → Results
+     (Stage 0)        (Stage 1)      (Stage 2)     (Stage 3)  (4/5)   (Stage 6)
 ```
 
 - **July data** = training baseline (learn "normal")
@@ -70,7 +71,7 @@ Elasticsearch → Raw Parquet → 5-sec Windows → Features → Model → Resul
 
 ```
 src/tads/           Main package
-├── io/             Data ingestion (ES reader, Parquet writer, chunking)
+├── io/             Data ingestion (Kibana reader, Parquet writer, chunking)
 ├── windowing/      5-second temporal windowing
 ├── features/       Feature engineering + frozen normalization
 ├── models/         ML models (training, freezing, inference, scoring)

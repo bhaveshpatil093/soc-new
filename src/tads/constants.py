@@ -15,7 +15,7 @@ WINDOW_SIZE_SECONDS: int = 5
 WINDOW_SIZE_MS: int = WINDOW_SIZE_SECONDS * 1000
 
 # ============================================================
-# Constraint #2: READ-ONLY Elasticsearch access
+# Constraint #1, #2: READ-ONLY Kibana proxy access to ES
 # Only these HTTP method + endpoint combinations are allowed.
 # ============================================================
 ES_ALLOWED_HTTP_METHODS: frozenset[str] = frozenset({"GET", "POST"})

@@ -98,12 +98,17 @@ reproducibility:
   numerical_tolerance: 1.0e-6
   hash_algorithm: "sha256"
 
-# --- Elasticsearch Configuration ---
-# Note: Actual credentials come from environment variables (Constraint #4)
-# Only non-sensitive connection parameters go here
-elasticsearch:
+# --- Kibana Configuration ---
+# Data is accessed through Kibana's read-only dashboard.
+# Kibana proxies search requests to the underlying Elasticsearch cluster.
+# Actual credentials come from environment variables (Constraint #4).
+# Only non-sensitive connection parameters go here.
+kibana:
   timeout: 300
   max_retries: 5
   retry_on_timeout: true
-  scroll_keepalive: "5m"
   request_timeout: 60
+  # Kibana's internal ES proxy endpoint for search operations
+  # Kibana exposes ES search via /api/console/proxy or /internal/search
+  # The exact endpoint depends on Kibana version and configuration
+  scroll_keepalive: "5m"
