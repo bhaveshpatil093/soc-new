@@ -142,7 +142,8 @@ async def _run_test_connection(settings: Settings, index_pattern: str) -> None:
 @click.option("--end", required=True, help="ISO8601 end time (exclusive)")
 @click.option("--batch-size", default=5000, help="Number of documents per page")
 @click.option("--run-id", default="default", help="Identifier for checkpointing")
-def run_ingest(dataset: str, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+@click.option("--dedup/--no-dedup", default=True, help="Perform partition-wise deduplication at the end of extraction")
+def run_ingest(dataset: str, index: str, start: str, end: str, batch_size: int, run_id: str, dedup: bool) -> None:
     """
     Run scalable event extraction with resumability and checkpoints.
     """
@@ -154,12 +155,21 @@ def run_ingest(dataset: str, index: str, start: str, end: str, batch_size: int, 
         sys.exit(10)
 
     try:
-        asyncio.run(_run_extraction(settings, dataset, index, start, end, batch_size, run_id))
+        asyncio.run(_run_extraction(settings, dataset, index, start, end, batch_size, run_id, dedup))
     except KeyboardInterrupt:
         click.secho("\nProcess interrupted by user (SIGINT).", fg="yellow")
         sys.exit(130)
 
-async def _run_extraction(settings: Settings, dataset: Any, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+async def _run_extraction(
+    settings: Settings,
+    dataset: Any,
+    index: str,
+    start: str,
+    end: str,
+    batch_size: int,
+    run_id: str,
+    dedup: bool
+) -> None:
     import datetime
     import time
 
@@ -316,6 +326,15 @@ async def _run_extraction(settings: Settings, dataset: Any, index: str, start: s
         # Finalize the partition so readers will accept it
         writer.finalize_partition(partition, run_id, total_docs=docs_processed)
 
+        dedup_metrics = None
+        if dedup:
+            click.echo("\n4. Running scalable partition deduplication...")
+            from tads.storage.dedup import PartitionDeduplicator
+            deduplicator = PartitionDeduplicator(dataset=dataset, base_dir=settings.data_dir)
+            dedup_metrics = deduplicator.compact_partition(partition)
+            docs_processed = dedup_metrics.get("retained_count", docs_processed)
+            click.secho(f"Compaction Complete! Duplicates dropped: {dedup_metrics.get('duplicates_found', 0)}", fg="green")
+
         # Mark manifest completed
         manifest_builder.mark_completed(
             run_id=run_id,
@@ -344,6 +363,13 @@ async def _run_extraction(settings: Settings, dataset: Any, index: str, start: s
                 click.echo(f"  - {reason}: {count}")
 
         click.echo(f"Partitions:    {len({partition})}")
+
+        if dedup_metrics:
+            click.echo("\n--- Deduplication ---")
+            click.echo(f"Input Events:  {dedup_metrics.get('input_count', 0)}")
+            click.echo(f"Duplicates:    {dedup_metrics.get('duplicates_found', 0)}")
+            click.echo(f"Retained:      {dedup_metrics.get('retained_count', 0)}")
+            click.echo(f"Dup Ratio:     {dedup_metrics.get('duplicate_ratio_percent', 0.0):.2f}%")
 
     except asyncio.CancelledError:
         click.secho("\nExtraction cancelled. Checkpoint safely preserved.", fg="yellow")
