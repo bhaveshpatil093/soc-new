@@ -162,14 +162,20 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
     import datetime
 
     from tads.ingestion.checkpoint import CheckpointManager, ExtractionCheckpoint
+    from tads.ingestion.manifest import ManifestBuilder
     from tads.storage.writer import ParquetStorage
 
     source = ReadOnlyElasticSource(settings=settings)
     manager = CheckpointManager()
     writer = ParquetStorage()
+    manifest_builder = ManifestBuilder()
 
     # We define the partition string from the start date (e.g. "2024-07")
     partition = start[:7] if len(start) >= 7 else "default"
+
+    files_written = []
+    actual_min_ts = None
+    actual_max_ts = None
 
     # Check for existing checkpoint
     checkpoint = manager.load(run_id)
@@ -194,6 +200,9 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
         )
         manager.save(run_id, checkpoint)
 
+        # Initialize manifest only on fresh run
+        manifest_builder.initialize_run(run_id, index, start, end, batch_size)
+
     try:
         await source.connect()
         stream = source.stream_events(
@@ -209,15 +218,29 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
         batch_counter = 0
         async for batch, next_sa in stream:
             batch_len = len(batch)
+            if batch_len == 0:
+                continue
+
             docs_processed += batch_len
             batch_counter += 1
 
             # Form a deterministic batch ID (e.g. index + counter) so if we crash and retry,
             # we overwrite the exact same file for this batch.
-            # Using docs_processed as an offset gives us stable file names.
             batch_id = f"offset_{docs_processed - batch_len}"
 
-            writer.write_batch(batch, partition, run_id, batch_id)
+            # Track min/max timestamps BEFORE writer mutates the hits
+            for hit in batch:
+                src = hit.get("_source", {})
+                ts = src.get("@timestamp")
+                if ts:
+                    if not actual_min_ts or ts < actual_min_ts:
+                        actual_min_ts = ts
+                    if not actual_max_ts or ts > actual_max_ts:
+                        actual_max_ts = ts
+
+            file_path = writer.write_batch(batch, partition, run_id, batch_id)
+            if file_path not in files_written:
+                files_written.append(file_path)
 
             # Save checkpoint AFTER successful processing of batch
             checkpoint.search_after = next_sa
@@ -232,10 +255,24 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
         click.secho(f"Extraction complete! Total documents processed: {docs_processed}", fg="green")
         manager.clear(run_id)
 
+        # Finalize the partition so readers will accept it
+        writer.finalize_partition(partition, run_id, total_docs=docs_processed)
+
+        # Mark manifest completed
+        manifest_builder.mark_completed(
+            run_id=run_id,
+            files_written=files_written,
+            actual_min_timestamp=actual_min_ts,
+            actual_max_timestamp=actual_max_ts,
+            event_count=docs_processed,
+            partitions={partition}
+        )
+
     except asyncio.CancelledError:
         click.secho("\nExtraction cancelled. Checkpoint safely preserved.", fg="yellow")
         raise
     except Exception as e:
+        manifest_builder.mark_failed(run_id, event_count=docs_processed)
         click.secho(f"\nError during extraction: {e}", fg="red")
         sys.exit(1)
     finally:

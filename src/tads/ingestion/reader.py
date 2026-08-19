@@ -311,7 +311,8 @@ class ReadOnlyElasticSource:
                 last_hit = hits[-1]
                 next_search_after = last_hit.get("sort")
 
-                docs = [h["_source"] for h in hits]
+                # Yield full hits so _id and _source are preserved
+                docs = hits
 
                 yield docs, next_search_after
 

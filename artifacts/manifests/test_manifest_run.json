@@ -1,0 +1,18 @@
+{
+  "run_id": "test_manifest_run",
+  "source": "logs-mock",
+  "requested_start": "2026-07-01",
+  "requested_end": "2026-08-01",
+  "actual_min_timestamp": "2026-07-01T12:00:00Z",
+  "actual_max_timestamp": "2026-07-01T13:49:00Z",
+  "event_count": 100,
+  "partition_count": 1,
+  "schema_hash": "8fd0f627463722ad277781e9f940d8c822e09dd2c6e7a1625225b8b0194d8b6d",
+  "software_version": "0.1.0",
+  "configuration_hash": "aa8813ec6571c8b9b01392aafebbc3bbb7e12016f7c1b5f7cdf87528b5ca3d80",
+  "checksums": {
+    "2026-07/test_manifest_run_batch_offset_0.parquet": "7082e85738c80fdc535be7074fc793a456a09830925bb952f151cf27400a2dc2",
+    "2026-07/test_manifest_run_batch_offset_50.parquet": "91c6b6027fd19b5cb9999c7adf5ca045a38feeca05d0ecc3250fd14419c849e4"
+  },
+  "status": "COMPLETED"
+}
