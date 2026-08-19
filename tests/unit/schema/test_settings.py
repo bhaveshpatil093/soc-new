@@ -19,7 +19,7 @@ def test_settings_missing_var_error(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test failure path 1: Missing environment variable."""
     monkeypatch.setenv("ELASTIC_HOST", "https://es.example.com:9200")
     monkeypatch.setenv("ELASTIC_USERNAME", "admin")
-    monkeypatch.delenv("ELASTIC_PASSWORD", raising=False)
+    monkeypatch.setenv("ELASTIC_PASSWORD", "")
 
     with pytest.raises(ValueError, match="Configuration Validation Error") as exc_info:
         get_settings()

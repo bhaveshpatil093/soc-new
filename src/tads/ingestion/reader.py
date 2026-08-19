@@ -71,11 +71,7 @@ class ReadOnlyElasticSource:
             await self._client.info() # type: ignore
             return True
 
-        try:
-            return await self._retry_decorator(_ping_with_retry)()
-        except Exception as e:
-            logger.error("Failed to validate connection", error=str(e))
-            return False
+        return await self._retry_decorator(_ping_with_retry)()
 
     async def discover_sources(self, pattern: str) -> list[str]:
         """
