@@ -13,14 +13,15 @@ class ParquetReader:
         else:
             self.base_dir = Path(base_dir)
 
-    def load_and_deduplicate(self, partition: str, unique_id_field: str = "id") -> pl.LazyFrame:
+    def load_and_deduplicate(self, partition: str, unique_id_field: str = "_id") -> pl.LazyFrame:
         """
         Loads all Parquet files in a partition into a lazy frame,
         and explicitly deduplicates them across exactly-once boundaries.
+        Only processes partitions that have been finalized (i.e. possess a manifest marker).
 
         Args:
             partition: The directory partition (e.g., '2024-07')
-            unique_id_field: The column uniquely identifying events (e.g. 'event.id' or 'id')
+            unique_id_field: The column uniquely identifying events (defaults to '_id')
 
         Returns:
             A deduplicated Polars LazyFrame ready for downstream windowing.
@@ -28,6 +29,12 @@ class ParquetReader:
         partition_dir = self.base_dir / partition
         if not partition_dir.exists():
             raise FileNotFoundError(f"Partition directory not found: {partition_dir}")
+
+        # Check if the partition is finalized by checking for ANY manifest.
+        # In a real system, you might check if all expected run_ids have manifests.
+        manifests = list(partition_dir.glob("manifest_*.json"))
+        if not manifests:
+            raise RuntimeError(f"Partition {partition} is not finalized (missing manifest).")
 
         # Read all parquet files in the partition directory
         files_pattern = str(partition_dir / "*.parquet")
