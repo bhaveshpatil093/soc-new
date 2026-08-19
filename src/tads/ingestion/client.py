@@ -1,5 +1,7 @@
 from elasticsearch import AsyncElasticsearch
+
 from tads.schema.settings import Settings
+
 
 def get_es_client(settings: Settings) -> AsyncElasticsearch:
     """
@@ -11,8 +13,8 @@ def get_es_client(settings: Settings) -> AsyncElasticsearch:
         "request_timeout": settings.elastic_timeout,
         "verify_certs": settings.elastic_verify_tls,
     }
-    
+
     if settings.elastic_ca_cert:
         client_kwargs["ca_certs"] = str(settings.elastic_ca_cert)
-        
+
     return AsyncElasticsearch(**client_kwargs)
