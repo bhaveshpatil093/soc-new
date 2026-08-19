@@ -38,27 +38,6 @@ class DistinctUsersFeature(BaseFeature):  # type: ignore[misc]
         return {"distinct_users": float(window_data.get("distinct_users", 0))}
 
 
-class DistinctIPsFeature(BaseFeature):  # type: ignore[misc]
-    """IPs: count of distinct source_ip values in the window."""
-
-    @property
-    def metadata(self) -> FeatureMetadata:
-        return FeatureMetadata(
-            name="distinct_ips",
-            group=FeatureGroup.IPS,
-            source_fields=["distinct_ips"],
-            mathematical_definition="COUNT(DISTINCT source_ip) within the window",
-            data_type="int64",
-            expected_range=(0, None),
-            missing_value_behavior="0 (no IPs observed)",
-            requires_baseline=False,
-            is_causal=True,
-        )
-
-    def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"distinct_ips": float(window_data.get("distinct_ips", 0))}
-
-
 class HourOfDayFeature(BaseFeature):  # type: ignore[misc]
     """Temporal: hour of day extracted from the window start."""
 
@@ -107,7 +86,6 @@ class IsWeekendFeature(BaseFeature):  # type: ignore[misc]
 # ------------------------------------------------------------------
 _BUILTIN_FEATURES: list[type[BaseFeature]] = [
     DistinctUsersFeature,
-    DistinctIPsFeature,
     HourOfDayFeature,
     IsWeekendFeature,
 ]
