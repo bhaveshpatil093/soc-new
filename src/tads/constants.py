@@ -17,6 +17,22 @@ WINDOW_SIZE_SECONDS: int = 5
 WINDOW_SIZE_MS: int = WINDOW_SIZE_SECONDS * 1000
 ALLOWED_LATENESS_SECONDS: int = 60
 
+# --- Empty window policy ---
+# When True, empty 5-second windows (zero events) are explicitly materialized as
+# rows with event_count=0 and null/zero feature values in the window summary.
+# This preserves temporal continuity for the sequence model (Prompt 45):
+# the model must "see" silence as signal — a sudden gap from 50 events/window
+# to 0 events/window is itself anomalous.  Dropping empty windows would corrupt
+# the regular 5-second spacing and make consecutive silence invisible.
+#
+# When False, empty windows are absent from the dataset and must be
+# reconstructed on demand.  Use only if the downstream model explicitly
+# handles irregular time series (e.g. event-driven, not tick-driven).
+#
+# This constant is the SINGLE configurable point — no other module should
+# independently decide whether to include or exclude empty windows.
+MATERIALIZE_EMPTY_WINDOWS: bool = True
+
 # ============================================================
 # Constraint #1, #2: READ-ONLY Kibana proxy access to ES
 # Only these HTTP method + endpoint combinations are allowed.
