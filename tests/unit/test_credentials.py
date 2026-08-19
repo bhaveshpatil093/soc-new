@@ -123,11 +123,11 @@ class TestCredentialEnvironmentLoading:
         assert env_example.exists(), ".env.example must exist"
 
     def test_env_example_has_required_vars(self, project_root: Path) -> None:
-        """The .env.example must define KIBANA_HOST, KIBANA_USERNAME, KIBANA_PASSWORD."""
+        """The .env.example file must demonstrate required authentication keys."""
         content = (project_root / ".env.example").read_text()
-        assert "KIBANA_HOST" in content
-        assert "KIBANA_USERNAME" in content
-        assert "KIBANA_PASSWORD" in content
+        assert "ELASTIC_HOST" in content
+        assert "ELASTIC_USERNAME" in content
+        assert "ELASTIC_PASSWORD" in content
 
     def test_env_example_has_no_real_values(self, project_root: Path) -> None:
         """The .env.example values must be placeholders, not real credentials."""
