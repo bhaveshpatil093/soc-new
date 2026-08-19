@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-08-19T21:56:44.418485",
+  "dataset": "august",
+  "run_id": "august_demo_run",
+  "total_events": 10000,
+  "timestamp_coverage": {
+    "min": "2026-08-19T21:56:44.299662+05:30",
+    "max": "2026-08-19T21:56:44.309501+05:30",
+    "daily_buckets": 1,
+    "hourly_buckets": 1
+  },
+  "unique_counts": {
+    "users_approx": 48,
+    "ips_approx": 239,
+    "hosts_approx": 4,
+    "processes_approx": 11
+  },
+  "duplicate_rate_percent": 0.0,
+  "missingness": {
+    "_id": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "@timestamp": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "raw_timestamp": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "event_id": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "event_action": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "event_category": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "event_type": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "event_outcome": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "user_name": {
+      "missing_count": 3000,
+      "missing_percentage": 30.0,
+      "flagged_review": true
+    },
+    "user_id": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "source_ip": {
+      "missing_count": 2500,
+      "missing_percentage": 25.0,
+      "flagged_review": true
+    },
+    "source_port": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "destination_ip": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "destination_port": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "host_name": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "host_ip": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "process_name": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "process_command_line": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "process_parent_name": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "network_protocol": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "file_path": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "log_level": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    },
+    "message": {
+      "missing_count": 0,
+      "missing_percentage": 0.0,
+      "flagged_review": false
+    },
+    "agent_id": {
+      "missing_count": 10000,
+      "missing_percentage": 100.0,
+      "flagged_review": true
+    }
+  },
+  "distributions": {
+    "event_category": {
+      "['a', 'u', 't', 'h', 'e', 'n', 't', 'i', 'c', 'a', 't', 'i', 'o', 'n']": 5000,
+      "['n', 'e', 't', 'w', 'o', 'r', 'k']": 5000
+    },
+    "event_outcome": {
+      "failure": 1000,
+      "success": 9000
+    }
+  },
+  "volume": {
+    "daily": {
+      "2026-08-19T00:00:00+05:30": 10000
+    },
+    "hourly": {
+      "2026-08-19T21:00:00+05:30": 10000
+    }
+  }
+}
