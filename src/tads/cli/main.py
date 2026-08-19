@@ -3,6 +3,7 @@ import click
 from tads.cli.discover import discover_group
 from tads.cli.ingest import ingest_group
 from tads.cli.profile import profile_group
+from tads.cli.window import window_group
 
 
 @click.group()
@@ -13,6 +14,7 @@ def cli() -> None:
 cli.add_command(ingest_group, name="ingest")
 cli.add_command(discover_group, name="discover")
 cli.add_command(profile_group, name="profile")
+cli.add_command(window_group, name="window")
 
 def main() -> None:
     cli()
