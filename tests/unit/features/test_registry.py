@@ -69,18 +69,18 @@ class TestFeatureRegistry:
 
     def test_duplicate_raises(self) -> None:
         reg = FeatureRegistry()
-        feat = FEATURE_REGISTRY.get("event_count")
+        feat = FEATURE_REGISTRY.get("distinct_users")
         reg.register(feat)
         with pytest.raises(ValueError, match="Duplicate"):
             reg.register(feat)
 
     def test_get_by_name(self) -> None:
-        feat = FEATURE_REGISTRY.get("event_count")
-        assert feat.metadata.name == "event_count"
+        feat = FEATURE_REGISTRY.get("distinct_users")
+        assert feat.metadata.name == "distinct_users"
 
-    def test_by_group_volume(self) -> None:
-        volume = FEATURE_REGISTRY.by_group(FeatureGroup.VOLUME)
-        assert any(f.metadata.name == "event_count" for f in volume)
+    def test_by_group_users(self) -> None:
+        users_grp = FEATURE_REGISTRY.by_group(FeatureGroup.USERS)
+        assert any(f.metadata.name == "distinct_users" for f in users_grp)
 
     def test_by_group_temporal(self) -> None:
         temporal = FEATURE_REGISTRY.by_group(FeatureGroup.TEMPORAL)
@@ -128,13 +128,13 @@ class TestFeatureCompute:
             assert isinstance(k, str)
             assert isinstance(v, float | int), f"{k}: {v} is {type(v)}"
 
-    def test_event_count_value(self) -> None:
-        result = FEATURE_REGISTRY.get("event_count").compute(SAMPLE_WINDOW)
-        assert result["event_count"] == 42.0
+    def test_distinct_users_value(self) -> None:
+        result = FEATURE_REGISTRY.get("distinct_users").compute(SAMPLE_WINDOW)
+        assert result["distinct_users"] == 5.0
 
-    def test_event_count_empty_window(self) -> None:
-        result = FEATURE_REGISTRY.get("event_count").compute(EMPTY_WINDOW)
-        assert result["event_count"] == 0.0
+    def test_distinct_users_empty_window(self) -> None:
+        result = FEATURE_REGISTRY.get("distinct_users").compute(EMPTY_WINDOW)
+        assert result["distinct_users"] == 0.0
 
     def test_is_weekend_weekday(self) -> None:
         result = FEATURE_REGISTRY.get("is_weekend").compute(SAMPLE_WINDOW)
@@ -146,7 +146,6 @@ class TestFeatureCompute:
 
     def test_compute_all(self) -> None:
         result = FEATURE_REGISTRY.compute_all(SAMPLE_WINDOW)
-        assert "event_count" in result
         assert "distinct_users" in result
         assert "hour_of_day" in result
 

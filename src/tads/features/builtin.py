@@ -17,27 +17,6 @@ from tads.features.registry import (
 )
 
 
-class EventCountFeature(BaseFeature):  # type: ignore[misc]
-    """Volume: raw event count in the window."""
-
-    @property
-    def metadata(self) -> FeatureMetadata:
-        return FeatureMetadata(
-            name="event_count",
-            group=FeatureGroup.VOLUME,
-            source_fields=["event_count"],
-            mathematical_definition="COUNT(*) of events whose @timestamp falls in [window_start, window_end)",
-            data_type="int64",
-            expected_range=(0, None),
-            missing_value_behavior="0 (empty window)",
-            requires_baseline=False,
-            is_causal=True,
-        )
-
-    def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"event_count": float(window_data.get("event_count", 0))}
-
-
 class DistinctUsersFeature(BaseFeature):  # type: ignore[misc]
     """Users: count of distinct user_name values in the window."""
 
@@ -127,7 +106,6 @@ class IsWeekendFeature(BaseFeature):  # type: ignore[misc]
 # Auto-register built-in features
 # ------------------------------------------------------------------
 _BUILTIN_FEATURES: list[type[BaseFeature]] = [
-    EventCountFeature,
     DistinctUsersFeature,
     DistinctIPsFeature,
     HourOfDayFeature,
