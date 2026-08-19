@@ -40,6 +40,8 @@ class ExtractionManifest(BaseModel):
     actual_max_timestamp: str | None = None
     event_count: int
     partition_count: int
+    duration_seconds: float = 0.0
+    dropped_events: dict[str, int] = Field(default_factory=dict, description="Counts of events dropped due to schema issues")
     schema_hash: str
     software_version: str
     configuration_hash: str
@@ -129,7 +131,9 @@ class ManifestBuilder:
         actual_min_timestamp: str | None,
         actual_max_timestamp: str | None,
         event_count: int,
-        partitions: set[str]
+        partitions: set[str],
+        duration_seconds: float,
+        dropped_events: dict[str, int]
     ) -> None:
         """
         Transitions the manifest to COMPLETED, generating file checksums.
@@ -155,6 +159,8 @@ class ManifestBuilder:
         manifest.partition_count = len(partitions)
         manifest.checksums = checksums
         manifest.status = "COMPLETED"
+        manifest.duration_seconds = duration_seconds
+        manifest.dropped_events = dropped_events
 
         self._save(manifest)
 

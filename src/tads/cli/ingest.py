@@ -160,22 +160,50 @@ def run_ingest(index: str, start: str, end: str, batch_size: int, run_id: str) -
 
 async def _run_extraction(settings: Settings, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
     import datetime
+    import time
 
     from tads.ingestion.checkpoint import CheckpointManager, ExtractionCheckpoint
     from tads.ingestion.manifest import ManifestBuilder
     from tads.storage.writer import ParquetStorage
 
+    # Check for existing completed manifest first (Idempotency)
+    manifest_builder = ManifestBuilder()
+    try:
+        existing_manifest = manifest_builder.load(run_id)
+        if existing_manifest.status == "COMPLETED":
+            click.secho(f"\nManifest '{run_id}' is already COMPLETED. Skipping extraction.", fg="green")
+            click.secho("\n--- Ingestion Summary ---", fg="cyan", bold=True)
+            click.echo(f"Run ID:        {existing_manifest.run_id}")
+            click.echo(f"Source:        {existing_manifest.source}")
+            click.echo(f"Duration:      {existing_manifest.duration_seconds:.2f}s")
+
+            throughput = 0.0
+            if existing_manifest.duration_seconds > 0:
+                throughput = existing_manifest.event_count / existing_manifest.duration_seconds
+            click.echo(f"Throughput:    {throughput:.2f} events/sec")
+
+            click.echo(f"Extracted:     {existing_manifest.event_count} events")
+            if existing_manifest.dropped_events:
+                click.echo("Dropped Events:")
+                for reason, count in existing_manifest.dropped_events.items():
+                    click.echo(f"  - {reason}: {count}")
+            click.echo(f"Partitions:    {existing_manifest.partition_count}")
+            click.echo(f"Schema Hash:   {existing_manifest.schema_hash}")
+            return
+    except FileNotFoundError:
+        pass
+
     source = ReadOnlyElasticSource(settings=settings)
     manager = CheckpointManager()
     writer = ParquetStorage()
-    manifest_builder = ManifestBuilder()
 
     # We define the partition string from the start date (e.g. "2024-07")
     partition = start[:7] if len(start) >= 7 else "default"
 
-    files_written = []
+    files_written: list[Any] = []
     actual_min_ts = None
     actual_max_ts = None
+    total_dropped: dict[str, int] = {}
 
     # Check for existing checkpoint
     checkpoint = manager.load(run_id)
@@ -204,7 +232,22 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
         manifest_builder.initialize_run(run_id, index, start, end, batch_size)
 
     try:
+        click.echo("\n1. Validating connection...")
         await source.connect()
+        click.secho("Connection successful.", fg="green")
+
+        click.echo("2. Discovering source...")
+        is_valid = await source.validate_connection()
+        if not is_valid:
+            click.secho("Source validation failed. Check permissions or network.", fg="red")
+            sys.exit(1)
+        # Verify index mapping
+        mapping = await source.discover_fields(index)
+        if not mapping:
+            click.secho(f"Warning: Could not discover mappings for index {index}.", fg="yellow")
+
+        click.echo(f"Source '{index}' ready.")
+
         stream = source.stream_events(
             index=index,
             start_time=start,
@@ -213,7 +256,8 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
             search_after=search_after
         )
 
-        click.echo("Extraction running. Press Ctrl+C to stop gracefully...")
+        click.echo("3. Extracting... Press Ctrl+C to stop gracefully.")
+        start_time_real = time.time()
 
         batch_counter = 0
         async for batch, next_sa in stream:
@@ -221,14 +265,7 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
             if batch_len == 0:
                 continue
 
-            docs_processed += batch_len
-            batch_counter += 1
-
-            # Form a deterministic batch ID (e.g. index + counter) so if we crash and retry,
-            # we overwrite the exact same file for this batch.
-            batch_id = f"offset_{docs_processed - batch_len}"
-
-            # Track min/max timestamps BEFORE writer mutates the hits
+            # Tracking min/max timestamps BEFORE writer mutates the hits
             for hit in batch:
                 src = hit.get("_source", {})
                 ts = src.get("@timestamp")
@@ -238,8 +275,22 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
                     if not actual_max_ts or ts > actual_max_ts:
                         actual_max_ts = ts
 
-            file_path = writer.write_batch(batch, partition, run_id, batch_id)
-            if file_path not in files_written:
+            batch_counter += 1
+
+            # Form a deterministic batch ID (e.g. index + counter)
+            batch_id = f"offset_{docs_processed}"
+
+            file_path, dropped = writer.write_batch(batch, partition, run_id, batch_id)
+
+            # Aggregate dropped events
+            for reason, count in dropped.items():
+                total_dropped[reason] = total_dropped.get(reason, 0) + count
+
+            # Update successfully coerced docs
+            survived_count = batch_len - sum(dropped.values())
+            docs_processed += survived_count
+
+            if file_path and file_path not in files_written:
                 files_written.append(file_path)
 
             # Save checkpoint AFTER successful processing of batch
@@ -248,9 +299,14 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
             checkpoint.timestamp = datetime.datetime.now(datetime.UTC).isoformat()
             manager.save(run_id, checkpoint)
 
-            sys.stdout.write(f"\rProcessed {docs_processed} documents... (Saved batch {batch_counter})")
+            sys.stdout.write(
+                f"\rProcessed {docs_processed} documents "
+                f"(Dropped: {sum(total_dropped.values())})... "
+                f"(Saved batch {batch_counter})"
+            )
             sys.stdout.flush()
 
+        duration = time.time() - start_time_real
         print()
         click.secho(f"Extraction complete! Total documents processed: {docs_processed}", fg="green")
         manager.clear(run_id)
@@ -265,8 +321,27 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
             actual_min_timestamp=actual_min_ts,
             actual_max_timestamp=actual_max_ts,
             event_count=docs_processed,
-            partitions={partition}
+            partitions={partition},
+            duration_seconds=duration,
+            dropped_events=total_dropped
         )
+
+        # Print End Summary
+        click.secho("\n--- Ingestion Summary ---", fg="cyan", bold=True)
+        click.echo(f"Run ID:        {run_id}")
+        click.echo(f"Duration:      {duration:.2f}s")
+        throughput = 0.0
+        if duration > 0:
+            throughput = docs_processed / duration
+        click.echo(f"Throughput:    {throughput:.2f} events/sec")
+        click.echo(f"Extracted:     {docs_processed} events")
+
+        if total_dropped:
+            click.echo("Dropped Events:")
+            for reason, count in total_dropped.items():
+                click.echo(f"  - {reason}: {count}")
+
+        click.echo(f"Partitions:    {len({partition})}")
 
     except asyncio.CancelledError:
         click.secho("\nExtraction cancelled. Checkpoint safely preserved.", fg="yellow")
@@ -276,5 +351,6 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
         click.secho(f"\nError during extraction: {e}", fg="red")
         sys.exit(1)
     finally:
-        await source.close()
+        if 'source' in locals():
+            await source.close()
 

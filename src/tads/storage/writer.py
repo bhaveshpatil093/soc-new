@@ -31,13 +31,15 @@ class ParquetStorage:
         partition: str,
         run_id: str,
         batch_id: str | None = None
-    ) -> Path:
+    ) -> tuple[Path | None, dict[str, int]]:
         """
         Writes a batch of events to a distinct Parquet file.
-        Enforces canonical schema strictly.
+        Enforces canonical schema strictly. Drops events that violate the schema,
+        returning a tuple of the written file path (if any records survived) and
+        a dictionary mapping reason codes to the count of dropped events.
         """
         if not batch:
-            raise ValueError("Batch is empty")
+            return None, {}
 
         p_dir = self._get_partition_dir(partition)
 
@@ -46,8 +48,28 @@ class ParquetStorage:
 
         file_path = p_dir / f"{run_id}_batch_{batch_id}.parquet"
 
-        # Coerce to canonical dicts
-        coerced_records = [coerce_hit_to_canonical(hit) for hit in batch]
+        coerced_records = []
+        dropped: dict[str, int] = {}
+
+        for hit in batch:
+            try:
+                coerced = coerce_hit_to_canonical(hit)
+                coerced_records.append(coerced)
+            except ValueError as e:
+                msg = str(e).lower()
+                if "missing required field '_id'" in msg:
+                    reason = "MISSING_ID"
+                elif "missing required field '@timestamp'" in msg:
+                    reason = "MISSING_TIMESTAMP"
+                elif "invalid '@timestamp'" in msg:
+                    reason = "INVALID_TIMESTAMP"
+                else:
+                    reason = "SCHEMA_ERROR"
+
+                dropped[reason] = dropped.get(reason, 0) + 1
+
+        if not coerced_records:
+            return None, dropped
 
         # Enforce canonical PyArrow schema
         # If any types are fundamentally incompatible and cannot be cast, this will raise.
@@ -59,7 +81,7 @@ class ParquetStorage:
         # memory usage (~50MB peak) with vectorization read efficiency in DuckDB.
         pq.write_table(table, file_path, compression="ZSTD")
 
-        return file_path
+        return file_path, dropped
 
     def finalize_partition(self, partition: str, run_id: str, total_docs: int) -> Path:
         """
