@@ -1,1 +1,5 @@
-"""TADS Experiments module — Config validation, run orchestration, audit (Constraint #20)."""
+"""
+experiments module.
+
+Responsibility: Experiment definition, freezing, and manifesting. Explicitly does NOT implement model logic.
+"""

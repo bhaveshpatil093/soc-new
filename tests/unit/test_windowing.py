@@ -8,8 +8,6 @@ and that the 5-second window calculation produces expected results.
 
 from __future__ import annotations
 
-import datetime
-
 from tads.constants import (
     DEFAULT_SEED,
     FORBIDDEN_DATA_FORMATS,
@@ -59,7 +57,7 @@ class TestNormalizationConstants:
 
     def test_only_training_is_valid_source(self) -> None:
         """Only 'training' is a valid normalization source."""
-        assert VALID_NORMALIZATION_SOURCES == frozenset({"training"})
+        assert frozenset({"training"}) == VALID_NORMALIZATION_SOURCES
 
     def test_batch_is_forbidden(self) -> None:
         """'batch' normalization is explicitly forbidden."""

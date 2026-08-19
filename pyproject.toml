@@ -53,6 +53,7 @@ dev = [
     "pre-commit>=3.0.0",
     "detect-secrets>=1.4.0",
     "psutil>=6.0.0",
+    "mypy>=1.9.0",
 ]
 
 [project.scripts]
@@ -65,9 +66,16 @@ tads-experiment = "tads.cli:experiment"
 # Tool configurations
 # ============================================================
 
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+warn_return_any = false
+explicit_package_bases = true
+
 [tool.ruff]
 target-version = "py311"
-line-length = 100
+line-length = 140
 src = ["src"]
 
 [tool.ruff.lint]

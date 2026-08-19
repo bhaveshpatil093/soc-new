@@ -12,9 +12,11 @@ This project (TADS / soc-new) must be completely self-contained.
 
 from __future__ import annotations
 
-import os
 import re
-from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # Patterns that would indicate dependency on an external project
 # These are checked against all source and config files
@@ -41,7 +43,7 @@ ALLOWED_FILES = {
 
 def _get_scannable_files(root: Path) -> list[Path]:
     """Get all files that should be scanned for external references."""
-    files = []
+    files: list[Path] = []
     for ext in SCAN_EXTENSIONS:
         files.extend(root.rglob(f"*{ext}"))
     # Exclude .git directory and virtual environments
@@ -75,7 +77,7 @@ class TestProjectIndependence:
                     )
 
         assert violations == [], (
-            f"External project references in source:\n" + "\n".join(violations)
+            "External project references in source:\n" + "\n".join(violations)
         )
 
     def test_no_external_references_in_configs(self, project_root: Path) -> None:
@@ -97,7 +99,7 @@ class TestProjectIndependence:
                     )
 
         assert violations == [], (
-            f"External project references in configs:\n" + "\n".join(violations)
+            "External project references in configs:\n" + "\n".join(violations)
         )
 
     def test_no_symlinks_to_external(self, project_root: Path) -> None:
@@ -115,7 +117,7 @@ class TestProjectIndependence:
                     violations.append(f"{path} -> {target}")
 
         assert violations == [], (
-            f"Symlinks to external directories:\n" + "\n".join(violations)
+            "Symlinks to external directories:\n" + "\n".join(violations)
         )
 
     def test_no_git_submodules(self, project_root: Path) -> None:

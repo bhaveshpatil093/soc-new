@@ -19,7 +19,7 @@ class TestESAllowedMethods:
 
     def test_only_get_and_post_allowed(self) -> None:
         """Only GET and POST should be in the allowlist."""
-        assert ES_ALLOWED_HTTP_METHODS == frozenset({"GET", "POST"})
+        assert frozenset({"GET", "POST"}) == ES_ALLOWED_HTTP_METHODS
 
     def test_put_not_allowed(self) -> None:
         """PUT is a mutating method and must not be allowed."""

@@ -8,12 +8,14 @@ These tests validate the test infrastructure itself.
 from __future__ import annotations
 
 import datetime
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pyarrow as pa
 import pyarrow.parquet as pq
-
 from tests.conftest import generate_synthetic_events
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class TestSyntheticDataGeneration:
@@ -21,13 +23,13 @@ class TestSyntheticDataGeneration:
 
     def test_generates_correct_count(self) -> None:
         """Generated table has the requested number of rows."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table = generate_synthetic_events(n_events=100, base_timestamp=base_ts, seed=42)
         assert table.num_rows == 100
 
     def test_has_required_columns(self) -> None:
         """Generated table includes all expected columns."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table = generate_synthetic_events(n_events=10, base_timestamp=base_ts, seed=42)
         expected_columns = {
             "@timestamp", "source_ip", "dest_ip", "dest_port",
@@ -38,7 +40,7 @@ class TestSyntheticDataGeneration:
 
     def test_timestamps_within_range(self) -> None:
         """All timestamps fall within [base, base + duration]."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         duration = 60.0
         table = generate_synthetic_events(
             n_events=100, base_timestamp=base_ts,
@@ -53,34 +55,34 @@ class TestSyntheticDataGeneration:
 
     def test_timestamps_are_sorted(self) -> None:
         """Generated timestamps are in ascending order."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table = generate_synthetic_events(n_events=100, base_timestamp=base_ts, seed=42)
         timestamps = table.column("@timestamp").to_pylist()
         assert timestamps == sorted(timestamps)
 
     def test_reproducibility_same_seed(self) -> None:
         """Same seed produces identical output (Constraint #20)."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table1 = generate_synthetic_events(n_events=50, base_timestamp=base_ts, seed=123)
         table2 = generate_synthetic_events(n_events=50, base_timestamp=base_ts, seed=123)
         assert table1.equals(table2)
 
     def test_different_seed_different_output(self) -> None:
         """Different seeds produce different output."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table1 = generate_synthetic_events(n_events=50, base_timestamp=base_ts, seed=1)
         table2 = generate_synthetic_events(n_events=50, base_timestamp=base_ts, seed=2)
         assert not table1.equals(table2)
 
     def test_returns_pyarrow_table(self) -> None:
         """Generator returns a PyArrow Table, not a pandas DataFrame."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table = generate_synthetic_events(n_events=10, base_timestamp=base_ts, seed=42)
         assert isinstance(table, pa.Table)
 
     def test_parquet_roundtrip(self, tmp_data_dir: Path) -> None:
         """Generated data survives a Parquet write/read roundtrip."""
-        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        base_ts = datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
         table = generate_synthetic_events(n_events=100, base_timestamp=base_ts, seed=42)
 
         path = tmp_data_dir / "roundtrip_test.parquet"

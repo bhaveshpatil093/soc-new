@@ -9,10 +9,11 @@ Verifies that:
 
 from __future__ import annotations
 
-import ast
 import re
-from pathlib import Path
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # Patterns that suggest hardcoded credentials
 # These are intentionally broad to catch potential leaks
@@ -48,7 +49,7 @@ def _get_python_files(root: Path) -> list[Path]:
 def _get_config_files(root: Path) -> list[Path]:
     """Get all YAML/JSON config files."""
     configs_dir = root / "configs"
-    files = []
+    files: list[Path] = []
     if configs_dir.exists():
         files.extend(configs_dir.rglob("*.yaml"))
         files.extend(configs_dir.rglob("*.yml"))
@@ -74,7 +75,7 @@ class TestNoHardcodedCredentials:
                     )
 
         assert violations == [], (
-            f"Hardcoded credentials found (Constraint #4):\n"
+            "Hardcoded credentials found (Constraint #4):\n"
             + "\n".join(violations)
         )
 
@@ -93,7 +94,7 @@ class TestNoHardcodedCredentials:
                     )
 
         assert violations == [], (
-            f"Hardcoded credentials in configs (Constraint #4):\n"
+            "Hardcoded credentials in configs (Constraint #4):\n"
             + "\n".join(violations)
         )
 

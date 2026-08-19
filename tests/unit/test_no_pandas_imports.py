@@ -11,7 +11,10 @@ with "# pandas-justified:" explaining why it's needed.
 from __future__ import annotations
 
 import ast
-from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _get_all_python_files(root: Path) -> list[Path]:
@@ -47,20 +50,20 @@ def _check_file_for_pandas_usage(filepath: Path) -> list[str]:
                     is_pandas_import = True
 
         # Check: from pandas import ... / from pandas.xxx import ...
-        elif isinstance(node, ast.ImportFrom):
-            if node.module and (
-                node.module == "pandas" or node.module.startswith("pandas.")
-            ):
-                is_pandas_import = True
+        elif isinstance(node, ast.ImportFrom) and node.module and (
+            node.module == "pandas" or node.module.startswith("pandas.")
+        ):
+            is_pandas_import = True
 
         if is_pandas_import:
             # Check if the line has a justification comment
-            line_idx = node.lineno - 1
-            if line_idx < len(lines):
+            node_lineno = getattr(node, "lineno", 0)
+            line_idx = node_lineno - 1
+            if line_idx >= 0 and line_idx < len(lines):
                 line_content = lines[line_idx]
                 if "# pandas-justified:" not in line_content:
                     violations.append(
-                        f"Line {node.lineno}: pandas import without justification — "
+                        f"Line {node_lineno}: pandas import without justification — "
                         f"Use Polars/PyArrow/DuckDB instead (Constraint #17). "
                         f"If pandas is truly needed, add '# pandas-justified: <reason>'"
                     )

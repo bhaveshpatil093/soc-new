@@ -8,7 +8,10 @@ the `csv` module. All data must use Parquet format.
 from __future__ import annotations
 
 import ast
-from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _get_all_python_files(root: Path) -> list[Path]:
@@ -43,13 +46,12 @@ def _check_file_for_csv_usage(filepath: Path) -> list[str]:
                     )
 
         # Check: from csv import ...
-        elif isinstance(node, ast.ImportFrom):
-            if node.module and (node.module == "csv" or node.module.startswith("csv.")):
-                names = ", ".join(a.name for a in node.names)
-                violations.append(
-                    f"Line {node.lineno}: 'from {node.module} import {names}' — "
-                    f"CSV imports forbidden (Constraint #16)"
-                )
+        elif isinstance(node, ast.ImportFrom) and node.module and (node.module == "csv" or node.module.startswith("csv.")):
+            names = ", ".join(a.name for a in node.names)
+            violations.append(
+                f"Line {node.lineno}: 'from {node.module} import {names}' — "
+                f"CSV imports forbidden (Constraint #16)"
+            )
 
     return violations
 

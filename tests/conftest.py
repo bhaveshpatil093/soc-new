@@ -14,7 +14,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
-from tads.constants import WINDOW_SIZE_MS, WINDOW_SIZE_SECONDS
+from tads.constants import WINDOW_SIZE_SECONDS
 
 # ============================================================
 # Path fixtures
@@ -63,13 +63,13 @@ def _generate_timestamp(
 @pytest.fixture
 def july_base_timestamp() -> datetime.datetime:
     """Base timestamp in July for training data."""
-    return datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+    return datetime.datetime(2025, 7, 15, 12, 0, 0, tzinfo=datetime.UTC)
 
 
 @pytest.fixture
 def august_base_timestamp() -> datetime.datetime:
     """Base timestamp in August for evaluation data."""
-    return datetime.datetime(2025, 8, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+    return datetime.datetime(2025, 8, 15, 12, 0, 0, tzinfo=datetime.UTC)
 
 
 @pytest.fixture
