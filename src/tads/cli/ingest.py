@@ -230,7 +230,8 @@ async def _run_extraction(settings: Settings, dataset: Any, index: str, start: s
         manager.save(run_id, checkpoint)
 
         # Initialize manifest only on fresh run
-        manifest_builder.initialize_run(run_id, index, start, end, batch_size)
+        from tads.schema.canonical import SCHEMA_V1
+        manifest_builder.initialize_run(run_id, index, start, end, batch_size, schema_version=SCHEMA_V1.version)
 
     try:
         click.echo("\n1. Validating connection...")

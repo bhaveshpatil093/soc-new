@@ -1,7 +1,7 @@
 import hashlib
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -32,22 +32,22 @@ def compute_file_checksum(filepath: Path) -> str:
 
 
 class ExtractionManifest(BaseModel):
-    """Immutable record of an extraction run."""
-    run_id: str
-    source: str
-    requested_start: str
-    requested_end: str
-    actual_min_timestamp: str | None = None
-    actual_max_timestamp: str | None = None
-    event_count: int
-    partition_count: int
-    duration_seconds: float = 0.0
-    dropped_events: dict[str, int] = Field(default_factory=dict, description="Counts of events dropped due to schema issues")
-    schema_hash: str
-    software_version: str
-    configuration_hash: str
-    checksums: dict[str, str] = Field(description="Mapping of relative file path to SHA256 hash")
-    status: str = Field(description="'IN_PROGRESS' | 'COMPLETED' | 'FAILED'")
+    run_id: str = Field(..., description="Unique identifier for the extraction run")
+    source: str = Field(..., description="Target index or pattern")
+    requested_start: str = Field(..., description="Requested start time")
+    requested_end: str = Field(..., description="Requested end time")
+    actual_min_timestamp: str | None = Field(default=None, description="Actual earliest timestamp seen")
+    actual_max_timestamp: str | None = Field(default=None, description="Actual latest timestamp seen")
+    event_count: int = Field(default=0, description="Total number of events extracted")
+    partition_count: int = Field(default=0, description="Total number of partitions written")
+    schema_version: int = Field(..., description="Version of the canonical schema used")
+    schema_hash: str = Field(..., description="Hash of the exact canonical Arrow schema used")
+    software_version: str = Field(..., description="Version of TADS used")
+    configuration_hash: str = Field(..., description="Hash of the active settings during run")
+    checksums: dict[str, str] = Field(default_factory=dict, description="Mapping of relative file path to SHA-256 checksum")
+    status: Literal["IN_PROGRESS", "COMPLETED", "FAILED"] = Field(default="IN_PROGRESS")
+    duration_seconds: float = Field(default=0.0, description="Total seconds taken to extract")
+    dropped_events: dict[str, int] = Field(default_factory=dict, description="Counts of events dropped by reason")
 
 
 class ManifestBuilder:
@@ -80,6 +80,7 @@ class ManifestBuilder:
         start_time: str,
         end_time: str,
         batch_size: int,
+        schema_version: int,
         software_version: str = "0.1.0"
     ) -> None:
         """Creates and saves the initial IN_PROGRESS manifest."""
@@ -101,6 +102,7 @@ class ManifestBuilder:
             requested_end=end_time,
             event_count=0,
             partition_count=0,
+            schema_version=schema_version,
             schema_hash=compute_schema_hash(),
             software_version=software_version,
             configuration_hash=compute_config_hash(config),
