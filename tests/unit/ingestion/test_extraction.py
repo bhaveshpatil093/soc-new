@@ -24,11 +24,13 @@ class TestCheckpointManager:
         run_id = "test_run"
 
         checkpoint = ExtractionCheckpoint(
-            index="logs-test",
-            start_time="2026-07-01",
-            end_time="2026-08-01",
+            source="logs-test",
+            time_range={"start": "2026-07-01", "end": "2026-08-01"},
             search_after=["2026-07-02T12:00:00Z", "id123"],
-            documents_processed=500
+            partition="2026-07",
+            event_count=500,
+            timestamp="2026-08-19T12:00:00Z",
+            software_version="0.1.0"
         )
 
         # Save it
@@ -37,9 +39,9 @@ class TestCheckpointManager:
         # Load it
         loaded = manager.load(run_id)
         assert loaded is not None
-        assert loaded.index == "logs-test"
+        assert loaded.source == "logs-test"
         assert loaded.search_after == ["2026-07-02T12:00:00Z", "id123"]
-        assert loaded.documents_processed == 500
+        assert loaded.event_count == 500
 
         # Check clear
         manager.clear(run_id)

@@ -10,11 +10,13 @@ logger = structlog.get_logger()
 
 class ExtractionCheckpoint(BaseModel):
     """Represents the state of an extraction process."""
-    index: str = Field(..., description="The target index or data stream")
-    start_time: str = Field(..., description="ISO8601 start boundary (inclusive)")
-    end_time: str = Field(..., description="ISO8601 end boundary (exclusive)")
+    source: str = Field(..., description="The target index or data stream (source of extraction)")
+    time_range: dict[str, str] = Field(..., description="Dictionary containing 'start' and 'end' ISO8601 bounds")
     search_after: list[Any] | None = Field(default=None, description="The sort values to resume from")
-    documents_processed: int = Field(default=0, description="Total documents successfully processed so far")
+    partition: str = Field(..., description="Partition string, e.g. '2024-07'")
+    event_count: int = Field(default=0, description="Total documents successfully processed so far")
+    timestamp: str = Field(..., description="ISO8601 timestamp of when the checkpoint was last updated")
+    software_version: str = Field(..., description="Version of the extraction software")
 
 
 class CheckpointManager:
@@ -58,7 +60,7 @@ class CheckpointManager:
             # Atomic rename (POSIX ensures this is atomic, Windows may raise if file exists in older Python,
             # but Python 3.3+ os.replace is atomic on both platforms where possible)
             os.replace(tmp_path, path)
-            logger.debug("Checkpoint saved", run_id=run_id, docs=checkpoint.documents_processed)
+            logger.debug("Checkpoint saved", run_id=run_id, docs=checkpoint.event_count)
         except Exception as e:
             logger.error("Failed to save checkpoint", run_id=run_id, error=str(e))
             if tmp_path.exists():

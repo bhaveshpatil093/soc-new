@@ -159,29 +159,38 @@ def run_ingest(index: str, start: str, end: str, batch_size: int, run_id: str) -
         sys.exit(130)
 
 async def _run_extraction(settings: Settings, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+    import datetime
+
     from tads.ingestion.checkpoint import CheckpointManager, ExtractionCheckpoint
+    from tads.storage.writer import ParquetStorage
 
     source = ReadOnlyElasticSource(settings=settings)
     manager = CheckpointManager()
+    writer = ParquetStorage()
+
+    # We define the partition string from the start date (e.g. "2024-07")
+    partition = start[:7] if len(start) >= 7 else "default"
 
     # Check for existing checkpoint
     checkpoint = manager.load(run_id)
     if checkpoint:
-        click.secho(f"Resuming from checkpoint '{run_id}'. Documents processed: {checkpoint.documents_processed}", fg="green")
-        if checkpoint.index != index or checkpoint.start_time != start or checkpoint.end_time != end:
+        click.secho(f"Resuming from checkpoint '{run_id}'. Documents processed: {checkpoint.event_count}", fg="green")
+        if checkpoint.source != index or checkpoint.time_range.get("start") != start or checkpoint.time_range.get("end") != end:
             click.secho("Warning: Current run parameters differ from checkpoint parameters!", fg="yellow")
         search_after = checkpoint.search_after
-        docs_processed = checkpoint.documents_processed
+        docs_processed = checkpoint.event_count
     else:
         click.echo("No checkpoint found. Starting fresh extraction.")
         search_after = None
         docs_processed = 0
         checkpoint = ExtractionCheckpoint(
-            index=index,
-            start_time=start,
-            end_time=end,
+            source=index,
+            time_range={"start": start, "end": end},
             search_after=search_after,
-            documents_processed=0
+            partition=partition,
+            event_count=0,
+            timestamp=datetime.datetime.now(datetime.UTC).isoformat(),
+            software_version="0.1.0"
         )
         manager.save(run_id, checkpoint)
 
@@ -197,19 +206,26 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
 
         click.echo("Extraction running. Press Ctrl+C to stop gracefully...")
 
+        batch_counter = 0
         async for batch, next_sa in stream:
             batch_len = len(batch)
             docs_processed += batch_len
+            batch_counter += 1
 
-            # Here we would normally yield the batch to the next processing stage.
-            # For now, we simulate processing by just counting.
+            # Form a deterministic batch ID (e.g. index + counter) so if we crash and retry,
+            # we overwrite the exact same file for this batch.
+            # Using docs_processed as an offset gives us stable file names.
+            batch_id = f"offset_{docs_processed - batch_len}"
 
-            # Save checkpoint after successful processing of batch
+            writer.write_batch(batch, partition, run_id, batch_id)
+
+            # Save checkpoint AFTER successful processing of batch
             checkpoint.search_after = next_sa
-            checkpoint.documents_processed = docs_processed
+            checkpoint.event_count = docs_processed
+            checkpoint.timestamp = datetime.datetime.now(datetime.UTC).isoformat()
             manager.save(run_id, checkpoint)
 
-            sys.stdout.write(f"\rProcessed {docs_processed} documents...")
+            sys.stdout.write(f"\rProcessed {docs_processed} documents... (Saved batch {batch_counter})")
             sys.stdout.flush()
 
         print()
