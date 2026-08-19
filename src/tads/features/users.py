@@ -7,18 +7,19 @@ and login behaviors.
 """
 from __future__ import annotations
 
-import math
-from collections import Counter
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from collections.abc import Collection
+from typing import Any
 
 from tads.features.registry import (
     FEATURE_REGISTRY,
     BaseFeature,
     FeatureGroup,
     FeatureMetadata,
+)
+from tads.features.utils import (
+    average_distinct_per_entity,
+    calculate_entropy,
+    calculate_hhi,
+    calculate_historical_deviation,
 )
 
 
@@ -69,13 +70,7 @@ class UserEventConcentrationFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"user_event_concentration": 0.0}
-
-        counts = Counter(e.get("user_name") or "unknown" for e in events)
-        total = sum(counts.values())
-        hhi = sum((v / total) ** 2 for v in counts.values())
-        return {"user_event_concentration": float(hhi)}
+        return {"user_event_concentration": float(calculate_hhi(events, "user_name"))}
 
 
 class UserDiversityFeature(BaseFeature):  # type: ignore[misc]
@@ -100,13 +95,7 @@ class UserDiversityFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"user_diversity": 0.0}
-
-        counts = Counter(e.get("user_name") or "unknown" for e in events)
-        total = sum(counts.values())
-        entropy = -sum((v / total) * math.log2(v / total) for v in counts.values())
-        return {"user_diversity": float(entropy)}
+        return {"user_diversity": float(calculate_entropy(events, "user_name"))}
 
 
 class LoginVolumeFeature(BaseFeature):  # type: ignore[misc]
@@ -168,24 +157,6 @@ class FailedLoginRatioFeature(BaseFeature):  # type: ignore[misc]
         return {"failed_login_ratio": float(ratio)}
 
 
-def _average_distinct_per_user(events: Collection[dict[str, Any]], field: str) -> float:
-    """Helper to calculate average distinct values of `field` per user."""
-    if not events:
-        return 0.0
-
-    user_to_items: dict[str, set[str]] = {}
-    for e in events:
-        user = e.get("user_name") or "unknown"
-        val = e.get(field) or "unknown"
-        user_to_items.setdefault(user, set()).add(val)
-
-    if not user_to_items:
-        return 0.0
-
-    total_distinct = sum(len(items) for items in user_to_items.values())
-    return float(total_distinct / len(user_to_items))
-
-
 class UserHostDiversityFeature(BaseFeature):  # type: ignore[misc]
     """Average number of distinct hosts per user."""
 
@@ -204,7 +175,8 @@ class UserHostDiversityFeature(BaseFeature):  # type: ignore[misc]
         )
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"user_host_diversity": _average_distinct_per_user(window_data.get("events", []), "host_name")}
+        events = window_data.get("events", [])
+        return {"user_host_diversity": average_distinct_per_entity(events, "user_name", "host_name")}
 
 
 class UserIpDiversityFeature(BaseFeature):  # type: ignore[misc]
@@ -225,7 +197,8 @@ class UserIpDiversityFeature(BaseFeature):  # type: ignore[misc]
         )
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"user_ip_diversity": _average_distinct_per_user(window_data.get("events", []), "source_ip")}
+        events = window_data.get("events", [])
+        return {"user_ip_diversity": average_distinct_per_entity(events, "user_name", "source_ip")}
 
 
 class UserProcessDiversityFeature(BaseFeature):  # type: ignore[misc]
@@ -246,7 +219,8 @@ class UserProcessDiversityFeature(BaseFeature):  # type: ignore[misc]
         )
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"user_process_diversity": _average_distinct_per_user(window_data.get("events", []), "process_name")}
+        events = window_data.get("events", [])
+        return {"user_process_diversity": average_distinct_per_entity(events, "user_name", "process_name")}
 
 
 class HistoricalUserDeviationFeature(BaseFeature):  # type: ignore[misc]
@@ -271,23 +245,9 @@ class HistoricalUserDeviationFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"historical_user_deviation": 0.0}
-
-        # Stub implementation until baselines are ready
-        # We expect a 'baseline' dict in window_data containing July stats.
-        # Format: {'known_users': {'alice', 'bob'}}
         baseline = window_data.get("baseline", {})
-        known_users = baseline.get("known_users", set())
-
-        novel_events = 0
-        for e in events:
-            user = e.get("user_name") or "unknown"
-            if user not in known_users:
-                novel_events += 1
-
-        deviation = novel_events / len(events)
-        return {"historical_user_deviation": float(deviation)}
+        dev = calculate_historical_deviation(events, "user_name", baseline, "known_users")
+        return {"historical_user_deviation": dev}
 
 
 # ------------------------------------------------------------------

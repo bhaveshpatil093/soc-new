@@ -8,18 +8,20 @@ frequency / relationship novelty.
 from __future__ import annotations
 
 import ipaddress
-import math
-from collections import Counter
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from collections.abc import Collection
+from typing import Any
 
 from tads.features.registry import (
     FEATURE_REGISTRY,
     BaseFeature,
     FeatureGroup,
     FeatureMetadata,
+)
+from tads.features.utils import (
+    average_distinct_per_entity,
+    calculate_entropy,
+    calculate_hhi,
+    calculate_historical_deviation,
+    calculate_relationship_novelty,
 )
 
 # Configurable definition of internal networks.
@@ -112,13 +114,7 @@ class SourceIpConcentrationFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"source_ip_concentration": 0.0}
-
-        counts = Counter(e.get("source_ip") or "unknown" for e in events)
-        total = sum(counts.values())
-        hhi = sum((v / total) ** 2 for v in counts.values())
-        return {"source_ip_concentration": float(hhi)}
+        return {"source_ip_concentration": float(calculate_hhi(events, "source_ip"))}
 
 
 class DestinationDiversityFeature(BaseFeature):  # type: ignore[misc]
@@ -142,13 +138,7 @@ class DestinationDiversityFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"destination_diversity": 0.0}
-
-        counts = Counter(e.get("destination_ip") or "unknown" for e in events)
-        total = sum(counts.values())
-        entropy = -sum((v / total) * math.log2(v / total) for v in counts.values())
-        return {"destination_diversity": float(entropy)}
+        return {"destination_diversity": float(calculate_entropy(events, "destination_ip"))}
 
 
 class InternalExternalProportionFeature(BaseFeature):  # type: ignore[misc]
@@ -193,24 +183,6 @@ class InternalExternalProportionFeature(BaseFeature):  # type: ignore[misc]
         return {"internal_source_ratio": float(ratio)}
 
 
-def _average_distinct_per_ip(events: Collection[dict[str, Any]], ip_field: str, target_field: str) -> float:
-    """Helper to calculate average distinct values of `target_field` per `ip_field`."""
-    if not events:
-        return 0.0
-
-    ip_to_items: dict[str, set[str]] = {}
-    for e in events:
-        ip_val = e.get(ip_field) or "unknown"
-        target_val = e.get(target_field) or "unknown"
-        ip_to_items.setdefault(ip_val, set()).add(target_val)
-
-    if not ip_to_items:
-        return 0.0
-
-    total_distinct = sum(len(items) for items in ip_to_items.values())
-    return float(total_distinct / len(ip_to_items))
-
-
 class IpUserDiversityFeature(BaseFeature):  # type: ignore[misc]
     """Average number of distinct users per source IP."""
 
@@ -229,7 +201,8 @@ class IpUserDiversityFeature(BaseFeature):  # type: ignore[misc]
         )
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"ip_user_diversity": _average_distinct_per_ip(window_data.get("events", []), "source_ip", "user_name")}
+        events = window_data.get("events", [])
+        return {"ip_user_diversity": average_distinct_per_entity(events, "source_ip", "user_name")}
 
 
 class IpHostDiversityFeature(BaseFeature):  # type: ignore[misc]
@@ -250,7 +223,8 @@ class IpHostDiversityFeature(BaseFeature):  # type: ignore[misc]
         )
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        return {"ip_host_diversity": _average_distinct_per_ip(window_data.get("events", []), "source_ip", "host_name")}
+        events = window_data.get("events", [])
+        return {"ip_host_diversity": average_distinct_per_entity(events, "source_ip", "host_name")}
 
 
 class HistoricalIpFrequencyFeature(BaseFeature):  # type: ignore[misc]
@@ -275,20 +249,9 @@ class HistoricalIpFrequencyFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"historical_ip_deviation": 0.0}
-
         baseline = window_data.get("baseline", {})
-        known_ips = baseline.get("known_source_ips", set())
-
-        novel_events = 0
-        for e in events:
-            ip = e.get("source_ip") or "unknown"
-            if ip not in known_ips:
-                novel_events += 1
-
-        deviation = novel_events / len(events)
-        return {"historical_ip_deviation": float(deviation)}
+        dev = calculate_historical_deviation(events, "source_ip", baseline, "known_source_ips")
+        return {"historical_ip_deviation": dev}
 
 
 class RelationshipNoveltyFeature(BaseFeature):  # type: ignore[misc]
@@ -313,21 +276,9 @@ class RelationshipNoveltyFeature(BaseFeature):  # type: ignore[misc]
 
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
-        if not events:
-            return {"relationship_novelty_ip_user": 0.0}
-
         baseline = window_data.get("baseline", {})
-        known_pairs = baseline.get("known_ip_user_pairs", set())
-
-        novel_events = 0
-        for e in events:
-            ip = e.get("source_ip") or "unknown"
-            user = e.get("user_name") or "unknown"
-            if (ip, user) not in known_pairs:
-                novel_events += 1
-
-        ratio = novel_events / len(events)
-        return {"relationship_novelty_ip_user": float(ratio)}
+        ratio = calculate_relationship_novelty(events, "source_ip", "user_name", baseline, "known_ip_user_pairs")
+        return {"relationship_novelty_ip_user": ratio}
 
 
 # ------------------------------------------------------------------
