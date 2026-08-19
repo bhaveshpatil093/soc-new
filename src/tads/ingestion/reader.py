@@ -52,6 +52,7 @@ class ReadOnlyElasticSource:
             ),
             "request_timeout": self._settings.elastic_timeout,
             "verify_certs": self._settings.elastic_verify_tls,
+            "headers": self._settings.elastic_headers,
         }
 
         if self._settings.elastic_ca_cert:

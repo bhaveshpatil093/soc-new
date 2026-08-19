@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     elastic_password: SecretStr = Field(
         ..., description="Password for authentication. MUST be kept secret."
     )
+    elastic_headers: dict[str, str] = Field(
+        default_factory=dict,
+        description="(Optional) Custom headers to include in every request",
+    )
     elastic_ca_cert: Path | None = Field(
         default=None,
         description="(Optional) Absolute path to CA certificate for TLS verification",
