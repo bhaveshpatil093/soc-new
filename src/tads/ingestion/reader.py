@@ -1,5 +1,8 @@
 from collections.abc import AsyncIterator
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from tads.schema.metadata import SourceMetadata
 
 import structlog
 from elastic_transport import ConnectionError as ESConnectionError
@@ -110,6 +113,90 @@ class ReadOnlyElasticSource:
             return dict(res)
 
         return await self._retry_decorator(_mapping)()
+
+    async def discover_source_metadata(self, index: str) -> "SourceMetadata":
+        """
+        Discovers detailed metadata for a given index, including field counts,
+        timestamp candidates, min/max time bounds, and document count.
+        """
+        from tads.schema.metadata import SourceMetadata
+
+        if not self._client:
+            raise RuntimeError("Must call connect() before discover_source_metadata()")
+
+        fields_mapping = await self.discover_fields(index)
+
+        def get_date_fields(mapping: dict[str, Any], prefix: str = "") -> list[str]:
+            date_fields: list[str] = []
+            props = mapping.get("properties", {})
+            for k, v in props.items():
+                full_key = f"{prefix}.{k}" if prefix else k
+                if v.get("type") == "date":
+                    date_fields.append(full_key)
+                elif "properties" in v:
+                    date_fields.extend(get_date_fields(v, full_key))
+            return date_fields
+
+        date_fields = get_date_fields(fields_mapping)
+        primary_ts = "@timestamp" if "@timestamp" in date_fields else (date_fields[0] if date_fields else None)
+
+        def count_fields(mapping: dict[str, Any]) -> int:
+            count = 0
+            for v in mapping.get("properties", {}).values():
+                count += 1
+                if "properties" in v:
+                    count += count_fields(v)
+            return count
+
+        fields_count = count_fields(fields_mapping)
+
+        earliest = None
+        latest = None
+        approx_count = None
+
+        aggs = {}
+        if primary_ts:
+            aggs = {
+                "min_ts": {"min": {"field": primary_ts, "format": "strict_date_optional_time"}},
+                "max_ts": {"max": {"field": primary_ts, "format": "strict_date_optional_time"}}
+            }
+
+        async def _fetch_stats() -> dict[str, Any]:
+            body = {"aggs": aggs} if aggs else {}
+            # track_total_hits=True returns accurate count for small sets or bounded by 10k usually,
+            # which is sufficient for "approximate_document_count"
+            res = await self._client.search( # type: ignore
+                index=index,
+                size=0,
+                track_total_hits=True,
+                body=body
+            )
+            return dict(res)
+
+        try:
+            stats = await self._retry_decorator(_fetch_stats)()
+            total = stats.get("hits", {}).get("total", {})
+            approx_count = total.get("value") if isinstance(total, dict) else total
+
+            aggs_result = stats.get("aggregations", {})
+            if "min_ts" in aggs_result:
+                earliest = aggs_result["min_ts"].get("value_as_string")
+            if "max_ts" in aggs_result:
+                latest = aggs_result["max_ts"].get("value_as_string")
+        except Exception as e:
+            logger.warning(f"Failed to fetch aggregations for {index}", error=str(e))
+
+        return SourceMetadata(
+            name=index,
+            source_type="index",
+            fields_count=fields_count,
+            timestamp_candidates=date_fields,
+            primary_timestamp_field=primary_ts,
+            earliest_timestamp=earliest,
+            latest_timestamp=latest,
+            approximate_document_count=approx_count
+        )
+
 
     async def count_events(self, index: str, query: dict[str, Any] | None = None) -> int:
         """

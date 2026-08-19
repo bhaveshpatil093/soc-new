@@ -33,6 +33,7 @@ def test_public_api_surface_is_strictly_read_only(mock_settings: Settings) -> No
         "validate_connection",
         "discover_sources",
         "discover_fields",
+        "discover_source_metadata",
         "count_events",
         "stream_events",
         "close",  # graceful teardown helper
