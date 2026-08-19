@@ -219,51 +219,112 @@ class ReadOnlyElasticSource:
     async def stream_events(
         self,
         index: str,
+        start_time: str,
+        end_time: str,
+        timestamp_field: str = "@timestamp",
         query: dict[str, Any] | None = None,
         batch_size: int = 5000,
-        keep_alive: str = "2m"
-    ) -> AsyncIterator[list[dict[str, Any]]]:
+        keep_alive: str = "2m",
+        search_after: list[Any] | None = None,
+        tiebreaker_field: str = "_id"
+    ) -> AsyncIterator[tuple[list[dict[str, Any]], list[Any] | None]]:
         """
-        Streams events using the scroll API or Point in Time (PIT) / search_after.
-        Yields batches of documents to prevent memory exhaustion.
+        Streams events using PIT (if supported) or search_after fallback.
+        Yields tuples of (batch_of_documents, search_after_values).
+        Time boundaries: start_time is inclusive (gte), end_time is exclusive (lt).
         """
+        import contextlib
+
         if not self._client:
             raise RuntimeError("Must call connect() before stream_events()")
 
         if not index or not index.strip():
             raise ValueError("A valid index must be explicitly provided.")
 
-        actual_query = query or {"match_all": {}}
+        user_query = query or {"match_all": {}}
 
-        # We wrap the initial search in a retry block
-        async def _initial_search() -> Any:
-            return await self._client.search( # type: ignore
-                index=index,
-                body={"query": actual_query},
-                scroll=keep_alive,
-                size=batch_size,
-            )
+        # Combine user query with strict time bounds
+        range_query = {
+            "range": {
+                timestamp_field: {
+                    "gte": start_time,
+                    "lt": end_time
+                }
+            }
+        }
 
-        res = await self._retry_decorator(_initial_search)()
-        scroll_id = res.get("_scroll_id")
-        hits = res.get("hits", {}).get("hits", [])
+        full_query = {
+            "bool": {
+                "must": [user_query],
+                "filter": [range_query]
+            }
+        }
 
-        while hits:
-            yield [h["_source"] for h in hits]
+        sort = [
+            {timestamp_field: "asc"},
+            {tiebreaker_field: "asc"}
+        ]
 
-            # Wrap scroll fetch in retry
-            async def _scroll(s_id: str | None = scroll_id) -> Any:
-                return await self._client.scroll(scroll_id=s_id, scroll=keep_alive) # type: ignore
+        pit_id: str | None = None
 
-            res = await self._retry_decorator(_scroll)()
-            scroll_id = res.get("_scroll_id")
-            hits = res.get("hits", {}).get("hits", [])
+        # Try to open PIT
+        async def _open_pit() -> str | None:
+            try:
+                res = await self._client.open_point_in_time(index=index, keep_alive=keep_alive) # type: ignore
+                return res.get("id")
+            except Exception as e:
+                logger.warning("PIT creation failed, falling back to standard search_after", error=str(e))
+                return None
 
-        if scroll_id:
-            import contextlib
-            # Best effort clear scroll
-            with contextlib.suppress(Exception):
-                await self._client.clear_scroll(scroll_id=scroll_id)
+        pit_id = await self._retry_decorator(_open_pit)()
+
+        current_search_after = search_after
+
+        try:
+            while True:
+                async def _search_page(sa: list[Any] | None = None) -> dict[str, Any]:
+                    body: dict[str, Any] = {
+                        "query": full_query,
+                        "sort": sort,
+                        "size": batch_size
+                    }
+                    if sa:
+                        body["search_after"] = sa
+
+                    kwargs: dict[str, Any] = {"body": body}
+                    if pit_id:
+                        body["pit"] = {"id": pit_id, "keep_alive": keep_alive}
+                        # When using PIT, index should not be specified
+                    else:
+                        kwargs["index"] = index
+
+                    res = await self._client.search(**kwargs) # type: ignore
+                    return dict(res)
+
+                res = await self._retry_decorator(_search_page)(current_search_after)
+                hits = res.get("hits", {}).get("hits", [])
+
+                if not hits:
+                    break
+
+                # The search_after values for the next page come from the last document in the current page
+                last_hit = hits[-1]
+                next_search_after = last_hit.get("sort")
+
+                docs = [h["_source"] for h in hits]
+
+                yield docs, next_search_after
+
+                current_search_after = next_search_after
+
+                # If we got fewer hits than requested, we've reached the end
+                if len(hits) < batch_size:
+                    break
+
+        finally:
+            if pit_id:
+                with contextlib.suppress(Exception):
+                    await self._client.close_point_in_time(body={"id": pit_id})
 
     async def close(self) -> None:
         """Closes the client connection."""

@@ -87,4 +87,4 @@ async def test_stream_events_requires_explicit_index(mock_settings: Settings) ->
             pass
 
     with pytest.raises(ValueError, match="valid index must be explicitly provided"):
-        await drain(source.stream_events(""))
+        await drain(source.stream_events("", start_time="a", end_time="b"))

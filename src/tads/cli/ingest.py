@@ -134,3 +134,94 @@ async def _run_test_connection(settings: Settings, index_pattern: str) -> None:
         await source.close()
 
     click.echo("\n--- Diagnostic Complete ---")
+
+@ingest_group.command(name="run")
+@click.argument("index")
+@click.option("--start", required=True, help="ISO8601 start time (inclusive)")
+@click.option("--end", required=True, help="ISO8601 end time (exclusive)")
+@click.option("--batch-size", default=5000, help="Number of documents per page")
+@click.option("--run-id", default="default", help="Identifier for checkpointing")
+def run_ingest(index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+    """
+    Run scalable event extraction with resumability and checkpoints.
+    """
+    click.echo(f"--- Starting Extraction: {index} ---")
+    try:
+        settings = get_settings()
+    except Exception as e:
+        click.secho(f"Configuration Error: {e}", fg="red")
+        sys.exit(10)
+
+    try:
+        asyncio.run(_run_extraction(settings, index, start, end, batch_size, run_id))
+    except KeyboardInterrupt:
+        click.secho("\nProcess interrupted by user (SIGINT).", fg="yellow")
+        sys.exit(130)
+
+async def _run_extraction(settings: Settings, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+    from tads.ingestion.checkpoint import CheckpointManager, ExtractionCheckpoint
+
+    source = ReadOnlyElasticSource(settings=settings)
+    manager = CheckpointManager()
+
+    # Check for existing checkpoint
+    checkpoint = manager.load(run_id)
+    if checkpoint:
+        click.secho(f"Resuming from checkpoint '{run_id}'. Documents processed: {checkpoint.documents_processed}", fg="green")
+        if checkpoint.index != index or checkpoint.start_time != start or checkpoint.end_time != end:
+            click.secho("Warning: Current run parameters differ from checkpoint parameters!", fg="yellow")
+        search_after = checkpoint.search_after
+        docs_processed = checkpoint.documents_processed
+    else:
+        click.echo("No checkpoint found. Starting fresh extraction.")
+        search_after = None
+        docs_processed = 0
+        checkpoint = ExtractionCheckpoint(
+            index=index,
+            start_time=start,
+            end_time=end,
+            search_after=search_after,
+            documents_processed=0
+        )
+        manager.save(run_id, checkpoint)
+
+    try:
+        await source.connect()
+        stream = source.stream_events(
+            index=index,
+            start_time=start,
+            end_time=end,
+            batch_size=batch_size,
+            search_after=search_after
+        )
+
+        click.echo("Extraction running. Press Ctrl+C to stop gracefully...")
+
+        async for batch, next_sa in stream:
+            batch_len = len(batch)
+            docs_processed += batch_len
+
+            # Here we would normally yield the batch to the next processing stage.
+            # For now, we simulate processing by just counting.
+
+            # Save checkpoint after successful processing of batch
+            checkpoint.search_after = next_sa
+            checkpoint.documents_processed = docs_processed
+            manager.save(run_id, checkpoint)
+
+            sys.stdout.write(f"\rProcessed {docs_processed} documents...")
+            sys.stdout.flush()
+
+        print()
+        click.secho(f"Extraction complete! Total documents processed: {docs_processed}", fg="green")
+        manager.clear(run_id)
+
+    except asyncio.CancelledError:
+        click.secho("\nExtraction cancelled. Checkpoint safely preserved.", fg="yellow")
+        raise
+    except Exception as e:
+        click.secho(f"\nError during extraction: {e}", fg="red")
+        sys.exit(1)
+    finally:
+        await source.close()
+
