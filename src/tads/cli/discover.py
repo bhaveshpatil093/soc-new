@@ -1,5 +1,6 @@
 import asyncio
 import sys
+import typing
 
 import click
 from pydantic import ValidationError
@@ -74,3 +75,77 @@ async def _run_discovery(settings: Settings, pattern: str) -> None:
         await source.close()
 
     click.echo("\n--- Discovery Complete ---")
+
+@discover_group.command(name="mapping")
+@click.argument("index")
+def discover_mapping(index: str) -> None:
+    """
+    Inspect the schema of INDEX and map it against the canonical internal fields.
+    """
+    click.echo(f"--- Schema Inspection: {index} ---")
+    try:
+        settings = get_settings()
+    except Exception as e:
+        click.secho(f"Configuration Error: {e}", fg="red")
+        sys.exit(10)
+
+    asyncio.run(_run_mapping(settings, index))
+
+async def _run_mapping(settings: Settings, index: str) -> None:
+    from tads.schema.mapping import SchemaInspector
+    source = ReadOnlyElasticSource(settings=settings)
+
+    click.echo("Connecting and fetching mapping...")
+    try:
+        await source.connect()
+        fields_mapping = await source.discover_fields(index)
+
+        # Flatten the mapping to just field names for the inspector
+        # The reader.py already has a recursive get_date_fields, let's write a generic flat field extractor
+        def _extract_all_fields(mapping_dict: dict[str, typing.Any], prefix: str = "") -> list[str]:
+            fields = []
+            props = mapping_dict.get("properties", {})
+            for k, v in props.items():
+                full_key = f"{prefix}.{k}" if prefix else k
+                if "properties" in v:
+                    fields.extend(_extract_all_fields(v, full_key))
+                else:
+                    fields.append(full_key)
+            return fields
+
+        flat_fields = _extract_all_fields(fields_mapping)
+        if not flat_fields:
+            click.secho(f"No fields found in index '{index}'.", fg="yellow")
+            sys.exit(0)
+
+        inspector = SchemaInspector()
+        report = inspector.inspect_and_map(flat_fields)
+
+        click.echo("\n[ Mapped Fields ]")
+        for source_f, canonical_f in report.mapped_fields.items():
+            click.echo(f"  {source_f} -> {canonical_f}")
+
+        click.echo(f"\n[ Missing Canonical Fields ] ({len(report.missing_canonical_fields)})")
+        for m in report.missing_canonical_fields:
+            click.secho(f"  {m}", fg="yellow")
+
+        click.echo(f"\n[ Unmapped Source Fields (Raw/Extra) ] ({len(report.unmapped_fields)})")
+        # Just show a sample if too many
+        display_unmapped = report.unmapped_fields[:15]
+        for u in display_unmapped:
+            click.echo(f"  {u}")
+        if len(report.unmapped_fields) > 15:
+            click.echo(f"  ... and {len(report.unmapped_fields) - 15} more.")
+
+        click.echo("\n[ Summary ]")
+        click.echo(f"  Coverage: {report.coverage_percentage:.1f}% of canonical schema resolved.")
+        click.echo(
+            f"  Source fields preserved: {len(report.mapped_fields)} mapped + "
+            f"{len(report.unmapped_fields)} unmapped = {len(flat_fields)} total."
+        )
+
+    except Exception as e:
+        click.secho(f"Error during mapping inspection: {e}", fg="red")
+        sys.exit(1)
+    finally:
+        await source.close()

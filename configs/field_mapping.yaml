@@ -1,0 +1,80 @@
+canonical_fields:
+  timestamp:
+    candidates:
+      - "@timestamp"
+      - "timestamp"
+      - "time"
+      - "event.created"
+      - "date"
+
+  event_action:
+    candidates:
+      - "event.action"
+      - "action"
+      - "event_action"
+
+  event_category:
+    candidates:
+      - "event.category"
+      - "category"
+      - "event_category"
+
+  event_dataset:
+    candidates:
+      - "event.dataset"
+      - "dataset"
+      - "log.source"
+
+  user_name:
+    candidates:
+      - "user.name"
+      - "username"
+      - "src_user_name"
+      - "dst_user_name"
+      - "user"
+
+  source_ip:
+    candidates:
+      - "source.ip"
+      - "src_ip"
+      - "source_address"
+      - "client.ip"
+
+  destination_ip:
+    candidates:
+      - "destination.ip"
+      - "dest_ip"
+      - "destination_address"
+      - "server.ip"
+
+  host_name:
+    candidates:
+      - "host.name"
+      - "hostname"
+      - "agent.hostname"
+      - "computer_name"
+
+  process_name:
+    candidates:
+      - "process.name"
+      - "process_name"
+      - "proc_name"
+      - "exe"
+
+  network_protocol:
+    candidates:
+      - "network.protocol"
+      - "protocol"
+      - "app"
+
+  file_name:
+    candidates:
+      - "file.name"
+      - "filename"
+      - "target_file_name"
+
+  agent_type:
+    candidates:
+      - "agent.type"
+      - "agent_type"
+      - "sensor"
