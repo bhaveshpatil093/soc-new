@@ -1,6 +1,8 @@
 import json
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
+
+from dateutil.parser import parse as dateutil_parse
 
 from tads.schema.canonical import SCHEMA_V1
 
@@ -18,6 +20,56 @@ def _resolve_dot_notation(doc: dict[str, Any], path: str) -> Any:
             return None
     return current
 
+def normalize_timestamp(ts_val: Any) -> datetime:
+    """
+    Parses various timestamp formats (Epochs, ISO8601, native ES) and explicitly sets tzinfo=UTC.
+    Raises ValueError on parsing failure, future bounds violation, or out-of-range bounds.
+    """
+    if ts_val is None:
+        raise ValueError("MISSING_TIMESTAMP: timestamp value is None")
+
+    dt = None
+    if isinstance(ts_val, (int, float)):
+        # Epoch handling. Check if it's millis or seconds.
+        # 1e11 seconds is in year 5138, so anything larger is assumed to be millis.
+        if ts_val > 1e11:
+            ts_val = ts_val / 1000.0
+        try:
+            dt = datetime.fromtimestamp(ts_val, tz=UTC)
+        except Exception as e:
+            raise ValueError(f"INVALID_TIMESTAMP_FORMAT: Could not parse epoch {ts_val}") from e
+    elif isinstance(ts_val, str):
+        try:
+            # Elasticsearch Z format handling
+            if ts_val.endswith("Z"):
+                ts_val_fixed = ts_val[:-1] + "+00:00"
+                try:
+                    dt = datetime.fromisoformat(ts_val_fixed)
+                except ValueError:
+                    dt = dateutil_parse(ts_val_fixed)
+            else:
+                try:
+                    dt = datetime.fromisoformat(ts_val)
+                except ValueError:
+                    dt = dateutil_parse(ts_val)
+
+            dt = dt.replace(tzinfo=UTC) if dt.tzinfo is None else dt.astimezone(UTC)
+        except Exception as e:
+            raise ValueError(f"INVALID_TIMESTAMP_FORMAT: Could not parse string {ts_val}") from e
+    else:
+        raise ValueError(f"INVALID_TIMESTAMP_FORMAT: Unsupported type {type(ts_val)}")
+
+    # Bounds checking
+    now = datetime.now(UTC)
+    if dt > now + timedelta(hours=1):
+        raise ValueError(f"FUTURE_TIMESTAMP: parsed {dt} is beyond tolerance of current time {now}")
+
+    out_of_range_limit = datetime(2000, 1, 1, tzinfo=UTC)
+    if dt < out_of_range_limit:
+        raise ValueError(f"OUT_OF_RANGE_TIMESTAMP: parsed {dt} is older than limit {out_of_range_limit}")
+
+    return dt
+
 def coerce_hit_to_canonical(hit: dict[str, Any]) -> dict[str, Any]:
     """
     Takes a raw Elasticsearch hit and coerces it into a flat dictionary
@@ -26,42 +78,38 @@ def coerce_hit_to_canonical(hit: dict[str, Any]) -> dict[str, Any]:
     """
     _id = hit.get("_id")
     if not _id:
-        raise ValueError("Hit is missing required field '_id'")
+        raise ValueError("MISSING_ID: Hit is missing required field '_id'")
 
     source = hit.get("_source", {})
 
     # We must have a timestamp
-    ts = source.pop("@timestamp", None)
-    if not ts:
+    ts_val = source.pop("@timestamp", None)
+    if not ts_val:
         # Check source_mapping fallbacks for timestamp just in case
         for f in SCHEMA_V1.fields:
             if f.name == "@timestamp":
                 for path in f.source_mapping:
-                    ts = _resolve_dot_notation(source, path)
-                    if ts:
+                    ts_val = _resolve_dot_notation(source, path)
+                    if ts_val:
                         break
                 break
 
-    if not ts:
-        raise ValueError(f"Hit {_id} is missing required field '@timestamp'")
+    if not ts_val:
+        raise ValueError("MISSING_TIMESTAMP: Hit is missing required field '@timestamp'")
 
-    try:
-        if ts.endswith("Z"):
-            ts = ts[:-1] + "+00:00"
-        dt = datetime.fromisoformat(ts)
-    except Exception as e:
-        raise ValueError(f"Hit {_id} has invalid '@timestamp' format: {ts}") from e
+    dt = normalize_timestamp(ts_val)
 
     canonical_record = {
         "_id": str(_id),
         "@timestamp": dt,
+        "raw_timestamp": str(ts_val),
     }
 
     # Keep track of fields we explicitly captured so we don't put them in raw_extra
     captured_paths = {"@timestamp"}
 
     for field in SCHEMA_V1.fields:
-        if field.name in ("_id", "@timestamp"):
+        if field.name in ("_id", "@timestamp", "raw_timestamp"):
             continue
 
         val = None

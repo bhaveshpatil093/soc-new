@@ -74,9 +74,17 @@ SCHEMA_V1 = CanonicalSchema(
             arrow_type=pa.timestamp('us', tz='UTC'),
             nullable=False,
             source_mapping=["@timestamp", "timestamp"],
-            normalization_rule="ISO8601 parsing into UTC datetime",
-            validation_rule="Must be a valid historical timestamp",
-            # We handle complex timestamp normalizer in raw.py
+            normalization_rule="Robust parsing into UTC datetime",
+            validation_rule="Must be a valid historical timestamp (not future, not absurdly old)",
+            # Complex timestamp normalization happens directly in coerce_hit_to_canonical
+        ),
+        CanonicalField(
+            name="raw_timestamp",
+            arrow_type=pa.string(),
+            nullable=True,
+            source_mapping=[], # We explicitly handle this in raw.py
+            normalization_rule="String coercion of the original timestamp value",
+            validation_rule="None",
         ),
         CanonicalField(
             name="event_id",

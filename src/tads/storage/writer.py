@@ -1,5 +1,6 @@
 import json
 import uuid
+from collections import OrderedDict
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -22,10 +23,17 @@ class ParquetStorage:
             # Default to project_root/data/{dataset}/raw
             project_root = Path(__file__).resolve().parent.parent.parent.parent
             self.base_dir = project_root / "data" / dataset / "raw"
+            self.artifacts_dir = project_root / "artifacts" / dataset
         else:
             self.base_dir = Path(base_dir) / "data" / dataset / "raw"
+            self.artifacts_dir = Path(base_dir) / "artifacts" / dataset
 
         self.base_dir.mkdir(parents=True, exist_ok=True)
+        self.quarantine_dir = self.artifacts_dir / "quarantine"
+        self.quarantine_dir.mkdir(parents=True, exist_ok=True)
+
+        self._seen_events: OrderedDict[str, None] = OrderedDict()
+        self._max_cache = 100000
 
     def _get_partition_dir(self, partition: str) -> Path:
         """Returns the directory for a partition, creating it if necessary."""
@@ -59,23 +67,55 @@ class ParquetStorage:
 
         coerced_records = []
         dropped: dict[str, int] = {}
+        quarantine_file = self.quarantine_dir / f"{run_id}_rejected.jsonl"
+
+        quarantine_buffer = []
 
         for hit in batch:
+            _id = str(hit.get("_id", ""))
             try:
                 coerced = coerce_hit_to_canonical(hit)
+
+                # Check duplicates using LRU
+                cache_key = f"{_id}_{coerced['raw_timestamp']}"
+                if cache_key in self._seen_events:
+                    dropped["DUPLICATE_TIMESTAMP"] = dropped.get("DUPLICATE_TIMESTAMP", 0) + 1
+                    # Don't quarantine duplicates, just count them.
+                    # Reader will perform final exact deduplication.
+
+                self._seen_events[cache_key] = None
+                if len(self._seen_events) > self._max_cache:
+                    self._seen_events.popitem(last=False)
+
                 coerced_records.append(coerced)
             except ValueError as e:
-                msg = str(e).lower()
-                if "missing required field '_id'" in msg:
+                msg = str(e)
+                if "MISSING_ID" in msg:
                     reason = "MISSING_ID"
-                elif "missing required field '@timestamp'" in msg:
+                elif "MISSING_TIMESTAMP" in msg:
                     reason = "MISSING_TIMESTAMP"
-                elif "invalid '@timestamp'" in msg:
+                elif "INVALID_TIMESTAMP_FORMAT" in msg:
                     reason = "INVALID_TIMESTAMP"
+                elif "FUTURE_TIMESTAMP" in msg:
+                    reason = "FUTURE_TIMESTAMP"
+                elif "OUT_OF_RANGE_TIMESTAMP" in msg:
+                    reason = "OUT_OF_RANGE_TIMESTAMP"
                 else:
                     reason = "SCHEMA_ERROR"
 
                 dropped[reason] = dropped.get(reason, 0) + 1
+
+                # Add to quarantine
+                quarantine_buffer.append({
+                    "reason": reason,
+                    "error_msg": msg,
+                    "raw_hit": hit
+                })
+
+        if quarantine_buffer:
+            with open(quarantine_file, "a", encoding="utf-8") as f:
+                for q_evt in quarantine_buffer:
+                    f.write(json.dumps(q_evt, default=str) + "\n")
 
         if not coerced_records:
             return None, dropped
