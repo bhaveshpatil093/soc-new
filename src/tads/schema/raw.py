@@ -1,3 +1,4 @@
+import hashlib
 import json
 from datetime import UTC, datetime, timedelta
 from typing import Any
@@ -70,6 +71,27 @@ def normalize_timestamp(ts_val: Any) -> datetime:
 
     return dt
 
+def compute_deterministic_id(record: dict[str, Any]) -> str:
+    """
+    Constructs a stable SHA-256 fingerprint from explicit canonical fields.
+    Used as a fallback when Elasticsearch `_id` is missing or unstable.
+    """
+    # Use explicitly defined set of core fields
+    fields = [
+        str(record.get("@timestamp", "")),
+        str(record.get("host_name", "") or record.get("host_ip", "")),
+        str(record.get("event_category", "")),
+        str(record.get("event_action", "")),
+        str(record.get("process_name", "")),
+    ]
+
+    # Normalize message (strip whitespace, lowercase) to prevent trivial differences from breaking the hash
+    msg = str(record.get("message", "")).strip().lower()
+    fields.append(msg)
+
+    fingerprint = "|".join(fields)
+    return hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()
+
 def coerce_hit_to_canonical(hit: dict[str, Any]) -> dict[str, Any]:
     """
     Takes a raw Elasticsearch hit and coerces it into a flat dictionary
@@ -77,8 +99,7 @@ def coerce_hit_to_canonical(hit: dict[str, Any]) -> dict[str, Any]:
     Unknown fields are stuffed into `raw_extra` as a JSON string.
     """
     _id = hit.get("_id")
-    if not _id:
-        raise ValueError("MISSING_ID: Hit is missing required field '_id'")
+    # We no longer raise an error for missing _id here. We generate it at the end if missing.
 
     source = hit.get("_source", {})
 
@@ -100,10 +121,12 @@ def coerce_hit_to_canonical(hit: dict[str, Any]) -> dict[str, Any]:
     dt = normalize_timestamp(ts_val)
 
     canonical_record = {
-        "_id": str(_id),
         "@timestamp": dt,
         "raw_timestamp": str(ts_val),
     }
+
+    if _id:
+        canonical_record["_id"] = str(_id)
 
     # Keep track of fields we explicitly captured so we don't put them in raw_extra
     captured_paths = {"@timestamp"}
@@ -145,8 +168,13 @@ def coerce_hit_to_canonical(hit: dict[str, Any]) -> dict[str, Any]:
         source.pop(top_key, None)
 
     if source:
-        canonical_record["raw_extra"] = json.dumps(source)
+        canonical_record["raw_extra"] = json.dumps(source, default=str)
     else:
         canonical_record["raw_extra"] = None
+
+    if not _id:
+        canonical_record["_id"] = compute_deterministic_id(canonical_record)
+    else:
+        canonical_record["_id"] = str(_id)
 
     return canonical_record
