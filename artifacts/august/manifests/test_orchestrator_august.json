@@ -1,0 +1,17 @@
+{
+  "run_id": "test_orchestrator_august",
+  "source": "logs-mock",
+  "requested_start": "2026-08-01",
+  "requested_end": "2026-09-01",
+  "actual_min_timestamp": null,
+  "actual_max_timestamp": null,
+  "event_count": 0,
+  "partition_count": 1,
+  "duration_seconds": 0.0001742839813232422,
+  "dropped_events": {},
+  "schema_hash": "8fd0f627463722ad277781e9f940d8c822e09dd2c6e7a1625225b8b0194d8b6d",
+  "software_version": "0.1.0",
+  "configuration_hash": "d2ad7f4d4f9d10ca740a5d5a5e4329accfd8f94d3c7ccae3f9803611475c1098",
+  "checksums": {},
+  "status": "COMPLETED"
+}

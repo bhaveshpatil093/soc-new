@@ -5,6 +5,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from tads.constants import DatasetType
 from tads.schema.raw import CANONICAL_RAW_SCHEMA
 
 
@@ -52,20 +53,25 @@ class ExtractionManifest(BaseModel):
 class ManifestBuilder:
     """Handles lifecycle and generation of extraction manifests."""
 
-    def __init__(self, base_dir: Path | str | None = None) -> None:
+    def __init__(self, dataset: DatasetType, base_dir: Path | str | None = None) -> None:
+        assert dataset in ("july", "august"), "Invalid dataset namespace"
+        self.dataset = dataset
+
         if base_dir is None:
             project_root = Path(__file__).resolve().parent.parent.parent.parent
-            self.manifest_dir = project_root / "artifacts" / "manifests"
-            self.data_dir = project_root / "data" / "raw"
+            self.manifest_dir = project_root / "artifacts" / dataset / "manifests"
+            self.data_dir = project_root / "data" / dataset / "raw"
         else:
-            self.manifest_dir = Path(base_dir) / "artifacts" / "manifests"
-            self.data_dir = Path(base_dir) / "data" / "raw"
+            self.manifest_dir = Path(base_dir) / "artifacts" / dataset / "manifests"
+            self.data_dir = Path(base_dir) / "data" / dataset / "raw"
 
         self.manifest_dir.mkdir(parents=True, exist_ok=True)
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
     def _get_path(self, run_id: str) -> Path:
-        return self.manifest_dir / f"{run_id}.json"
+        path = self.manifest_dir / f"{run_id}.json"
+        assert f"/{self.dataset}/" in str(path.absolute()), "Fatal: Attempted to access foreign dataset path!"
+        return path
 
     def initialize_run(
         self,

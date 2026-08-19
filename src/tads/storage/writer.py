@@ -7,21 +7,30 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from tads.constants import DatasetType
 from tads.schema.raw import CANONICAL_RAW_SCHEMA, coerce_hit_to_canonical
 
 
 class ParquetStorage:
-    """Handles partitioned writing of event batches to local Parquet files."""
+    """Handles raw Parquet writing partitioned by date."""
 
-    def __init__(self, base_dir: Path | str | None = None) -> None:
+    def __init__(self, dataset: DatasetType, base_dir: Path | str | None = None) -> None:
+        assert dataset in ("july", "august"), "Invalid dataset namespace"
+        self.dataset = dataset
+
         if base_dir is None:
+            # Default to project_root/data/{dataset}/raw
             project_root = Path(__file__).resolve().parent.parent.parent.parent
-            self.base_dir = project_root / "data" / "raw"
+            self.base_dir = project_root / "data" / dataset / "raw"
         else:
-            self.base_dir = Path(base_dir)
+            self.base_dir = Path(base_dir) / "data" / dataset / "raw"
+
+        self.base_dir.mkdir(parents=True, exist_ok=True)
 
     def _get_partition_dir(self, partition: str) -> Path:
+        """Returns the directory for a partition, creating it if necessary."""
         p_dir = self.base_dir / partition
+        assert f"/{self.dataset}/" in str(p_dir.absolute()), "Fatal: Attempted to access foreign dataset path!"
         p_dir.mkdir(parents=True, exist_ok=True)
         return p_dir
 

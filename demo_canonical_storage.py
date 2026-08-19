@@ -14,8 +14,8 @@ def main():
     if data_dir.exists():
         shutil.rmtree(data_dir)
         
-    writer = ParquetStorage(base_dir=data_dir)
-    reader = ParquetReader(base_dir=data_dir)
+    writer = ParquetStorage(dataset="july", base_dir=data_dir)
+    reader = ParquetReader(dataset="july", base_dir=data_dir)
     
     # 1. Write a healthy partition for 2026-07
     partition_good = "2026-07"

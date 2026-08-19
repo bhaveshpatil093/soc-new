@@ -2,16 +2,25 @@ from pathlib import Path
 
 import polars as pl
 
+from tads.constants import DatasetType
+
 
 class ParquetReader:
-    """Reads partitioned Parquet files and ensures exactly-once deduplication."""
+    """Handles reading and validating Canonical Parquet data into Polars LazyFrames."""
 
-    def __init__(self, base_dir: Path | str | None = None) -> None:
+    def __init__(self, dataset: DatasetType, base_dir: Path | str | None = None) -> None:
+        assert dataset in ("july", "august"), "Invalid dataset namespace"
+        self.dataset = dataset
+
         if base_dir is None:
+            # Default to project_root/data/{dataset}/raw
             project_root = Path(__file__).resolve().parent.parent.parent.parent
-            self.base_dir = project_root / "data" / "raw"
+            self.base_dir = project_root / "data" / dataset / "raw"
         else:
-            self.base_dir = Path(base_dir)
+            self.base_dir = Path(base_dir) / "data" / dataset / "raw"
+
+        if not self.base_dir.exists():
+            raise FileNotFoundError(f"Base data directory not found: {self.base_dir}")
 
     def load_and_deduplicate(self, partition: str, unique_id_field: str = "_id") -> pl.LazyFrame:
         """

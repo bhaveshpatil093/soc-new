@@ -8,6 +8,8 @@ Changing any value here requires updating corresponding tests.
 
 from __future__ import annotations
 
+from typing import Literal
+
 # ============================================================
 # Constraint #7: Primary temporal unit = 5-second window
 # ============================================================
@@ -108,3 +110,9 @@ EVALUATION_PERIOD_LABEL: str = "august_unseen"
 PARQUET_COMPRESSION: str = "zstd"
 PARQUET_COMPRESSION_LEVEL: int = 3
 PARQUET_ROW_GROUP_SIZE: int = 100_000
+
+# ============================================================
+# Dataset Isolation namespaces
+# ============================================================
+
+DatasetType = Literal["july", "august"]

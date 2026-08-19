@@ -6,6 +6,8 @@ from typing import Any
 import structlog
 from pydantic import BaseModel, Field
 
+from tads.constants import DatasetType
+
 logger = structlog.get_logger()
 
 class ExtractionCheckpoint(BaseModel):
@@ -22,12 +24,15 @@ class ExtractionCheckpoint(BaseModel):
 class CheckpointManager:
     """Manages atomic reads and writes of extraction checkpoints to disk."""
 
-    def __init__(self, checkpoint_dir: Path | str | None = None) -> None:
-        if checkpoint_dir is None:
-            base_dir = Path(__file__).resolve().parent.parent.parent.parent
-            self.checkpoint_dir = base_dir / "artifacts" / "checkpoints"
+    def __init__(self, dataset: DatasetType, base_dir: Path | str | None = None) -> None:
+        assert dataset in ("july", "august"), "Invalid dataset namespace"
+        self.dataset = dataset
+
+        if base_dir is None:
+            project_root = Path(__file__).resolve().parent.parent.parent.parent
+            self.checkpoint_dir = project_root / "artifacts" / dataset / "checkpoints"
         else:
-            self.checkpoint_dir = Path(checkpoint_dir)
+            self.checkpoint_dir = Path(base_dir) / "artifacts" / dataset / "checkpoints"
 
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
 

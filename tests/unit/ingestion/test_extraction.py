@@ -20,7 +20,7 @@ def mock_settings() -> Settings:
 class TestCheckpointManager:
 
     def test_checkpoint_save_and_load(self, tmp_path: Path) -> None:
-        manager = CheckpointManager(checkpoint_dir=tmp_path)
+        manager = CheckpointManager(dataset="july", base_dir=tmp_path)
         run_id = "test_run"
 
         checkpoint = ExtractionCheckpoint(

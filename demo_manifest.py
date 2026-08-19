@@ -17,9 +17,9 @@ async def main():
     )
     
     base_dir = Path(__file__).resolve().parent
-    data_dir = base_dir / "data" / "raw"
-    manifest_dir = base_dir / "artifacts" / "manifests"
-    checkpoints_dir = base_dir / "artifacts" / "checkpoints"
+    data_dir = base_dir / "data" / "july" / "raw"
+    manifest_dir = base_dir / "artifacts" / "july" / "manifests"
+    checkpoints_dir = base_dir / "artifacts" / "july" / "checkpoints"
     
     if data_dir.exists():
         shutil.rmtree(data_dir)
@@ -59,10 +59,22 @@ async def main():
         client.open_point_in_time = AsyncMock(return_value={"id": "mock_pit_123"})
         client.close_point_in_time = AsyncMock(return_value={})
         client.search = AsyncMock(side_effect=mock_search)
+        client.info = AsyncMock(return_value={"version": {"number": "8.0.0"}})
+        client.indices = AsyncMock()
+        client.indices.get_mapping = AsyncMock(return_value={
+            "logs-mock": {
+                "mappings": {
+                    "properties": {
+                        "@timestamp": {"type": "date"},
+                        "event_data": {"type": "keyword"}
+                    }
+                }
+            }
+        })
         client.close = AsyncMock(return_value=None)
         
         try:
-            await _run_extraction(settings, "logs-mock", "2026-07-01", "2026-08-01", batch_size, run_id)
+            await _run_extraction(settings, "july", "logs-mock", "2026-07-01", "2026-08-01", batch_size, run_id)
         except SystemExit as e:
             print(f"Exited: {e}")
             

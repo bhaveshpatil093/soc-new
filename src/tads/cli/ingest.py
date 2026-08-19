@@ -136,16 +136,17 @@ async def _run_test_connection(settings: Settings, index_pattern: str) -> None:
     click.echo("\n--- Diagnostic Complete ---")
 
 @ingest_group.command(name="run")
-@click.argument("index")
+@click.option("--dataset", type=click.Choice(["july", "august"]), required=True, help="Target dataset namespace")
+@click.option("--index", required=True, help="Elasticsearch index or data stream pattern")
 @click.option("--start", required=True, help="ISO8601 start time (inclusive)")
 @click.option("--end", required=True, help="ISO8601 end time (exclusive)")
 @click.option("--batch-size", default=5000, help="Number of documents per page")
 @click.option("--run-id", default="default", help="Identifier for checkpointing")
-def run_ingest(index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+def run_ingest(dataset: str, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
     """
     Run scalable event extraction with resumability and checkpoints.
     """
-    click.echo(f"--- Starting Extraction: {index} ---")
+    click.echo(f"--- Starting Extraction: {index} into {dataset} ---")
     try:
         settings = get_settings()
     except Exception as e:
@@ -153,12 +154,12 @@ def run_ingest(index: str, start: str, end: str, batch_size: int, run_id: str) -
         sys.exit(10)
 
     try:
-        asyncio.run(_run_extraction(settings, index, start, end, batch_size, run_id))
+        asyncio.run(_run_extraction(settings, dataset, index, start, end, batch_size, run_id))
     except KeyboardInterrupt:
         click.secho("\nProcess interrupted by user (SIGINT).", fg="yellow")
         sys.exit(130)
 
-async def _run_extraction(settings: Settings, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
+async def _run_extraction(settings: Settings, dataset: Any, index: str, start: str, end: str, batch_size: int, run_id: str) -> None:
     import datetime
     import time
 
@@ -167,7 +168,7 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
     from tads.storage.writer import ParquetStorage
 
     # Check for existing completed manifest first (Idempotency)
-    manifest_builder = ManifestBuilder()
+    manifest_builder = ManifestBuilder(dataset=dataset)
     try:
         existing_manifest = manifest_builder.load(run_id)
         if existing_manifest.status == "COMPLETED":
@@ -194,8 +195,8 @@ async def _run_extraction(settings: Settings, index: str, start: str, end: str, 
         pass
 
     source = ReadOnlyElasticSource(settings=settings)
-    manager = CheckpointManager()
-    writer = ParquetStorage()
+    manager = CheckpointManager(dataset=dataset)
+    writer = ParquetStorage(dataset=dataset)
 
     # We define the partition string from the start date (e.g. "2024-07")
     partition = start[:7] if len(start) >= 7 else "default"
