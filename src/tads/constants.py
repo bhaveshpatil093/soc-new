@@ -15,6 +15,7 @@ from typing import Literal
 # ============================================================
 WINDOW_SIZE_SECONDS: int = 5
 WINDOW_SIZE_MS: int = WINDOW_SIZE_SECONDS * 1000
+ALLOWED_LATENESS_SECONDS: int = 60
 
 # ============================================================
 # Constraint #1, #2: READ-ONLY Kibana proxy access to ES
