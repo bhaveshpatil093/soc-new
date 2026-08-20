@@ -78,6 +78,15 @@ class InMemoryFrequencyBaseline(BaseBaseline):  # type: ignore[misc]
                 freqs[k] = v
         self.state["frequencies"] = freqs
 
+    def get_frequency(self, *key_vals: str) -> int:
+        """Query the frequency of a specific key."""
+        key = key_vals[0] if len(self.fields) == 1 else tuple(key_vals)
+        return self.state["frequencies"].get(key, 0)
+
+    def get_total_count(self) -> int:
+        """Get the total number of events recorded."""
+        return sum(self.state["frequencies"].values())
+
 
 class DuckDBFrequencyBaseline(BaseBaseline):  # type: ignore[misc]
     """
@@ -168,6 +177,11 @@ class DuckDBFrequencyBaseline(BaseBaseline):  # type: ignore[misc]
         where_clause = " AND ".join(f"{f} = ?" for f in self.fields)
         res = self._con.execute(f"SELECT c FROM final_freq WHERE {where_clause}", list(key_vals)).fetchone()
         return res[0] if res else 0
+
+    def get_total_count(self) -> int:
+        """Get the total number of events recorded."""
+        res = self._con.execute("SELECT SUM(c) FROM final_freq").fetchone()
+        return res[0] if res and res[0] else 0
 
     def __del__(self) -> None:
         try:

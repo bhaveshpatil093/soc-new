@@ -18,13 +18,12 @@ import pytest
 
 from tads.baselines.base import ImmutableBaselineError
 from tads.baselines.components import (
-    FeatureStatisticsBaseline,
     GlobalDistributionBaseline,
     RelationshipFrequencyBaseline,
     TemporalStatisticsBaseline,
     UserDistributionBaseline,
 )
-from tads.baselines.manager import BASELINE_DIR, BaselineManager
+from tads.baselines.manager import BaselineManager
 from tads.baselines.statistics import RobustFeatureStatisticsBaseline
 from tads.models.base import TemporalLeakageError
 
@@ -198,17 +197,17 @@ class TestBaselineComponents:
         })
         baseline = RobustFeatureStatisticsBaseline(features=["event_count"])
         baseline.fit(data)
-        
+
         # Save to trigger the SQL compilation
         version_id = "v_test_stats"
         version_dir = clean_baseline_dir / version_id
         version_dir.mkdir()
         baseline.save(version_dir, "test_stats")
-        
+
         # Load and verify
         new_baseline = RobustFeatureStatisticsBaseline(features=["event_count"])
         new_baseline.load(version_dir, "test_stats")
-        
+
         stats = new_baseline.get_statistics("event_count")
         assert stats is not None
         assert stats["calibration_method"] == "robust"
