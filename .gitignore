@@ -64,3 +64,9 @@ htmlcov/
 
 # --- ruff ---
 .ruff_cache/
+
+# Test Artifacts
+bench*.txt
+run*.txt
+artifacts/july/
+
