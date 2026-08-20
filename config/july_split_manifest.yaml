@@ -1,0 +1,19 @@
+# July Dataset Chronological Split Manifest
+# 
+# This configuration guarantees that model fitting never sees the
+# calibration/validation data, and explicitly reserves August
+# exclusively for inference.
+
+training_period:
+  start: "2025-07-01T00:00:00Z"
+  end:   "2025-07-21T23:59:59Z"
+  purpose: "Fitting model weights/baselines (PCA matrix, IF trees, Rarity tables)"
+
+validation_period:
+  start: "2025-07-22T00:00:00Z"
+  end:   "2025-07-31T23:59:59Z"
+  purpose: "Hyperparameter selection, threshold calibration, and model comparison"
+
+inference_period:
+  start: "2025-08-01T00:00:00Z"
+  purpose: "Exclusively used for Phase 8+ detection and reporting. Read-only."
