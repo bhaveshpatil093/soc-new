@@ -21,6 +21,8 @@ from tads.models.detectors.isolation_forest import IsolationForestDetector
 from tads.models.detectors.pca import PCADetector
 from tads.models.detectors.rarity import RarityDetector
 from tads.models.detectors.statistical import RobustStatisticalDetector
+from tads.models.detectors.autoencoder import AutoencoderDetector
+from tads.models.detectors.sequence_lstm import SequenceLSTMDetector
 
 
 def generate_realistic_features(n_windows: int, start: datetime) -> pa.Table:
@@ -100,7 +102,9 @@ def inject_anomalies(data: pa.Table) -> pa.Table:
 
 
 def main() -> None:
+    import torch
     np.random.seed(42)
+    torch.manual_seed(42)
     
     cont_features = ["f_volume", "f_latency", "f_cpu", "f_mem"]
     cat_features = ["user", "host"]
@@ -123,6 +127,12 @@ def main() -> None:
         "PCA": PCADetector(feature_columns=cont_features, target_explained_variance=0.95),
         "Statistical": RobustStatisticalDetector(feature_columns=cont_features),
         "Rarity": RarityDetector(feature_columns=cat_features),
+        "Autoencoder": AutoencoderDetector(
+            feature_columns=cont_features, hidden_dim=8, latent_dim=3, epochs=1, batch_size=256
+        ),
+        "LSTM": SequenceLSTMDetector(
+            feature_columns=cont_features, seq_len=10, hidden_dim=16, num_layers=1, epochs=1, batch_size=128
+        ),
     }
     
     ensemble = EnsembleDetector(detectors=detectors, strategy="max")
