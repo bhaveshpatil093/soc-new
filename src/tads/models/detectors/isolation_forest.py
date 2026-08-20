@@ -8,9 +8,11 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import joblib
+import numpy as np
 import pyarrow as pa
 from sklearn.ensemble import IsolationForest
 
+from tads.models.calibration import EmpiricalCalibrator
 from tads.models.detectors.base import BaseAnomalyDetector
 
 if TYPE_CHECKING:
@@ -49,6 +51,7 @@ class IsolationForestDetector(BaseAnomalyDetector):  # type: ignore[misc]
             random_state=random_state,
             n_jobs=n_jobs,
         )
+        self.calibrator: EmpiricalCalibrator | None = None
 
     def _extract_features(self, data: pa.Table) -> Any:
         """Extracts the exact expected feature columns into a format sklearn can ingest."""
@@ -100,6 +103,27 @@ class IsolationForestDetector(BaseAnomalyDetector):  # type: ignore[misc]
 
         return pa.array(inverted_scores)
 
+    def fit_calibrator(
+        self, data: pa.Table, threshold_evidence: float = 0.95
+    ) -> None:
+        """Fit the empirical calibrator on July training scores."""
+        raw_scores = self.score(data)
+        self.calibrator = EmpiricalCalibrator(
+            model_version=self.version, threshold_evidence=threshold_evidence
+        )
+        self.calibrator.fit(raw_scores, data=data)
+        # Use calibrated threshold in predict()
+        self.threshold = threshold_evidence
+
+    def _calibrate(self, raw_scores: pa.Array) -> pa.Array:
+        """
+        Maps raw scores to calibrated evidence using the frozen July empirical CDF.
+        If no calibrator is fitted, returns raw scores unchanged (base behavior).
+        """
+        if self.calibrator is not None and self.calibrator.is_fitted:
+            return self.calibrator.calibrate(raw_scores)
+        return raw_scores
+
     def explain(self, data: pa.Table) -> pa.Array:
         """
         Explainability is deferred for tree ensembles in Phase 6 base implementation.
@@ -120,6 +144,16 @@ class IsolationForestDetector(BaseAnomalyDetector):  # type: ignore[misc]
             "is_fitted": self.is_fitted,
             "feature_columns": self.feature_columns,
             "model": self.model,
+            "calibrator_sorted_scores": (
+                self.calibrator._sorted_scores.tolist()
+                if self.calibrator is not None and self.calibrator._sorted_scores is not None
+                else None
+            ),
+            "calibrator_threshold": (
+                self.calibrator.threshold_evidence
+                if self.calibrator is not None
+                else None
+            ),
         }
 
         # We save directly to the given path, expecting it to be a .joblib file
@@ -143,3 +177,14 @@ class IsolationForestDetector(BaseAnomalyDetector):  # type: ignore[misc]
         self.is_fitted = state["is_fitted"]
         self.feature_columns = state["feature_columns"]
         self.model = state["model"]
+
+        # Restore calibrator if it was saved
+        cal_scores = state.get("calibrator_sorted_scores")
+        cal_threshold = state.get("calibrator_threshold")
+        if cal_scores is not None and cal_threshold is not None:
+            self.calibrator = EmpiricalCalibrator(
+                model_version=self.version, threshold_evidence=cal_threshold
+            )
+            self.calibrator._sorted_scores = np.array(cal_scores)
+            self.calibrator._n_scores = len(cal_scores)
+            self.calibrator.is_fitted = True
