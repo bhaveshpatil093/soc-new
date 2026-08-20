@@ -100,36 +100,7 @@ class RelationshipFrequencyBaseline(BaseBaseline):  # type: ignore[misc]
         self.state["known_pairs"] = set(tuple(pair) for pair in data.get("known_pairs", []))
 
 
-class FeatureStatisticsBaseline(BaseBaseline):  # type: ignore[misc]
-    """Tracks simple min/max/mean for numeric features."""
-
-    def __init__(self, feature_name: str, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self.feature_name = feature_name
-        self.state["min"] = float('inf')
-        self.state["max"] = float('-inf')
-        self.state["sum"] = 0.0
-        self.state["count"] = 0
-
-    def _fit(self, data: pa.Table | list[dict[str, Any]]) -> None:
-        values: list[float] = []
-        if isinstance(data, pa.Table):
-            if self.feature_name in data.column_names:
-                values = [float(v) for v in data.column(self.feature_name).to_pylist() if v is not None]
-        else:
-            values = [float(row[self.feature_name]) for row in data if row.get(self.feature_name) is not None]
-
-        if values:
-            self.state["min"] = min(self.state["min"], min(values))
-            self.state["max"] = max(self.state["max"], max(values))
-            self.state["sum"] += sum(values)
-            self.state["count"] += len(values)
-
-    @property
-    def mean(self) -> float:
-        if self.state["count"] == 0:
-            return 0.0
-        return self.state["sum"] / self.state["count"]
+# Note: FeatureStatisticsBaseline has been replaced by RobustFeatureStatisticsBaseline in statistics.py
 
 
 class TemporalStatisticsBaseline(BaseBaseline):  # type: ignore[misc]

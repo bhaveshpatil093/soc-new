@@ -24,7 +24,8 @@ from tads.baselines.components import (
     TemporalStatisticsBaseline,
     UserDistributionBaseline,
 )
-from tads.baselines.manager import BaselineManager
+from tads.baselines.manager import BASELINE_DIR, BaselineManager
+from tads.baselines.statistics import RobustFeatureStatisticsBaseline
 from tads.models.base import TemporalLeakageError
 
 if TYPE_CHECKING:
@@ -190,17 +191,30 @@ class TestBaselineComponents:
         new_baseline.from_dict(serialized)
         assert new_baseline.state["known_pairs"] == {("alice", "host1"), ("bob", "host2")}
 
-    def test_feature_statistics_baseline(self) -> None:
+    def test_robust_feature_statistics_baseline(self, clean_baseline_dir: Path) -> None:
         data = pa.table({
-            "window_start": [datetime(2025, 7, 1, tzinfo=UTC)] * 3,
-            "event_count": [10.0, 20.0, 30.0]
+            "window_start": [datetime(2025, 7, 1, tzinfo=UTC)] * 5,
+            "event_count": [10.0, 10.0, 10.0, 10.0, 100.0]  # Skewed data
         })
-        baseline = FeatureStatisticsBaseline("event_count")
+        baseline = RobustFeatureStatisticsBaseline(features=["event_count"])
         baseline.fit(data)
-
-        assert baseline.state["min"] == 10.0
-        assert baseline.state["max"] == 30.0
-        assert baseline.mean == 20.0
+        
+        # Save to trigger the SQL compilation
+        version_id = "v_test_stats"
+        version_dir = clean_baseline_dir / version_id
+        version_dir.mkdir()
+        baseline.save(version_dir, "test_stats")
+        
+        # Load and verify
+        new_baseline = RobustFeatureStatisticsBaseline(features=["event_count"])
+        new_baseline.load(version_dir, "test_stats")
+        
+        stats = new_baseline.get_statistics("event_count")
+        assert stats is not None
+        assert stats["calibration_method"] == "robust"
+        assert stats["mean"] == 28.0  # (40+100)/5
+        assert stats["median"] == 10.0
+        assert stats["mad"] == 0.0  # Median is 10, abs deviations are [0,0,0,0,90], median of that is 0
 
     def test_temporal_statistics_baseline(self) -> None:
         data = pa.table({
