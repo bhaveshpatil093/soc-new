@@ -6,12 +6,15 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pyarrow as pa
 import pyarrow.compute as pc
 
 from tads.models.base import TemporalLeakageError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class ImmutableBaselineError(Exception):
@@ -106,10 +109,24 @@ class BaseBaseline(ABC):
         pass
 
     def to_dict(self) -> dict[str, Any]:
-        """Serialize state for storage."""
-        # Default simple implementation
+        """Serialize state for storage (default JSON serialization)."""
         return self.state
 
     def from_dict(self, data: dict[str, Any]) -> None:
-        """Deserialize state from storage."""
+        """Deserialize state from storage (default JSON serialization)."""
         self.state = data
+
+    def save(self, version_dir: Path, name: str) -> None:
+        """Save the baseline state to the version directory."""
+        import json
+        state_file = version_dir / f"{name}.json"
+        state_file.write_text(json.dumps(self.to_dict(), indent=2))
+
+    def load(self, version_dir: Path, name: str) -> None:
+        """Load the baseline state from the version directory."""
+        import json
+        state_file = version_dir / f"{name}.json"
+        if state_file.exists():
+            raw_state = json.loads(state_file.read_text())
+            self.from_dict(raw_state)
+

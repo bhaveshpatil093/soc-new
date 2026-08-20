@@ -4,7 +4,6 @@ Baseline Manager and Storage orchestration for the persistent July baseline syst
 
 from __future__ import annotations
 
-import json
 import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -55,11 +54,9 @@ class BaselineManager:
 
         version_dir.mkdir(parents=True, exist_ok=True)
 
-        # Serialize each component
+        # Ask components to persist themselves
         for name, comp in self.components.items():
-            state_dict = comp.to_dict()
-            state_file = version_dir / f"{name}.json"
-            state_file.write_text(json.dumps(state_dict, indent=2))
+            comp.save(version_dir, name)
 
         # Freeze by touching the sentinel file
         (version_dir / ".frozen").touch()
@@ -85,10 +82,7 @@ class BaselineManager:
 
         manager = cls(components)
         for name, comp in manager.components.items():
-            state_file = version_dir / f"{name}.json"
-            if state_file.exists():
-                raw_state = json.loads(state_file.read_text())
-                comp.from_dict(raw_state)
+            comp.load(version_dir, name)
             # Ensure loaded components are also frozen
             comp.is_frozen = True
 
