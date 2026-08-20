@@ -126,7 +126,7 @@ def main() -> None:
     })
     val_preds = detector.predict(val_data)
 
-    evidence_np = val_preds.column("calibrated_evidence").to_numpy()
+    val_preds.column("calibrated_evidence").to_numpy()
     flags_np = val_preds.column("anomaly").to_numpy(zero_copy_only=False)
     n_flagged = int(np.sum(flags_np))
     flag_rate = n_flagged / len(flags_np)

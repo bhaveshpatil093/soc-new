@@ -10,48 +10,49 @@ from pathlib import Path
 
 import numpy as np
 import pyarrow as pa
+
 from tads.baselines.statistics import RobustFeatureStatisticsBaseline
 
 
 def main() -> None:
     print("--- Robust Feature Statistics Benchmark ---")
-    
+
     # 1. Generate heavy-tailed data (e.g. event count per window)
     # Most windows have ~0-5 events, but a few have 10,000+
     np.random.seed(42)
     num_windows = 1_000_000
-    
+
     # Pareto distribution simulates heavy tails perfectly
     pareto_values = np.random.pareto(a=1.5, size=num_windows) * 10
     pareto_values = np.round(pareto_values)
-    
+
     from datetime import UTC, datetime
     july_time = datetime(2025, 7, 15, tzinfo=UTC)
     data = pa.table({
         "window_start": [july_time] * num_windows,
         "event_count": pareto_values
     })
-    
+
     print(f"Generated {num_windows:,} simulated heavy-tailed windows.")
     print(f"Max event_count observed: {np.max(pareto_values):,.0f}")
-    
+
     # 2. Fit the baseline
     baseline = RobustFeatureStatisticsBaseline(features=["event_count"])
     print("Fitting DuckDB statistics baseline...")
     baseline.fit(data)
-    
+
     # 3. Save to compute robust statistics and export to Parquet
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
         print("Computing exact percentiles and saving to Parquet...")
         baseline.save(tmp_path, "stats")
-        
+
         # 4. Load back to query
         infer_baseline = RobustFeatureStatisticsBaseline(features=["event_count"])
         infer_baseline.load(tmp_path, "stats")
-        
+
         stats = infer_baseline.get_statistics("event_count")
-        
+
         print("\n=== RESULTS ===")
         print(f"{'Metric':<10} | {'Value':<15}")
         print("-" * 30)
@@ -63,7 +64,7 @@ def main() -> None:
         print(f"p90        | {stats['p90']:<15.2f}")
         print(f"p99        | {stats['p99']:<15.2f}")
         print(f"p99.9      | {stats['p99_9']:<15.2f}")
-        
+
         print("\n=== DOWNSTREAM USAGE EXPLANATION ===")
         print(f"Calibration Method Assigned: '{stats['calibration_method']}'")
         print("Why?")

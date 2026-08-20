@@ -48,8 +48,8 @@ def main() -> None:
     per_window_us = (elapsed / num_windows) * 1_000_000
 
     print(f"Windows processed:   {num_windows}")
-    print(f"Rolling scales:      4 (30s, 1m, 5m, 15m)")
-    print(f"Features per window: 60 (5 metrics x 3 aggs x 4 scales)")
+    print("Rolling scales:      4 (30s, 1m, 5m, 15m)")
+    print("Features per window: 60 (5 metrics x 3 aggs x 4 scales)")
     print(f"Total time:          {elapsed:.4f} s")
     print(f"Per-window time:     {per_window_us:.1f} us")
     print()
