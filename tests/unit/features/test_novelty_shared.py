@@ -11,6 +11,7 @@ import pytest
 
 from tads.features.hosts import HistoricalHostDeviationFeature, RelationshipNoveltyHostUserFeature
 from tads.features.ips import HistoricalIpFrequencyFeature, RelationshipNoveltyFeature
+from tads.features.processes import HistoricalProcessDeviationFeature
 from tads.features.users import HistoricalUserDeviationFeature
 from tads.features.utils import calculate_historical_deviation, calculate_relationship_novelty
 
@@ -50,6 +51,7 @@ def test_shared_relationship_novelty_utility() -> None:
         (HistoricalUserDeviationFeature, "user_name", "known_users"),
         (HistoricalIpFrequencyFeature, "source_ip", "known_source_ips"),
         (HistoricalHostDeviationFeature, "host_name", "known_hosts"),
+        (HistoricalProcessDeviationFeature, "process_name", "known_processes"),
     ],
 )
 def test_historical_features_behavioral_equivalence(
