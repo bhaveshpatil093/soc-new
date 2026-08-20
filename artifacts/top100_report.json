@@ -1,0 +1,4912 @@
+[
+  {
+    "rank": 1,
+    "timestamp": "2025-08-01T05:33:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[PCA (Evidence 1.00)]: recon_error: f_volume=0.0014, f_latency=0.0005, f_cpu=39.0768, f_mem=39.0738",
+    "july_comparison": {
+      "event_count": {
+        "val": 500.0,
+        "median": 10.0,
+        "ratio": 50.0
+      },
+      "f_volume": {
+        "val": 5000.0,
+        "median": 47.95413198331937,
+        "ratio": 104.26630184317021
+      },
+      "f_latency": {
+        "val": 97.3821418200849,
+        "median": 33.865075114028,
+        "ratio": 2.875592080991608
+      },
+      "f_cpu": {
+        "val": 99.0,
+        "median": 30.0478948697313,
+        "ratio": 3.2947399619574513
+      },
+      "f_mem": {
+        "val": 43.50838784192519,
+        "median": 45.10141206271318,
+        "ratio": 0.9646790610774469
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 500,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 2,
+    "timestamp": "2025-08-01T05:33:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Statistical",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[PCA (Evidence 1.00)]: recon_error: f_volume=0.0012, f_latency=0.0004, f_cpu=34.2362, f_mem=34.2336",
+    "july_comparison": {
+      "event_count": {
+        "val": 500.0,
+        "median": 10.0,
+        "ratio": 50.0
+      },
+      "f_volume": {
+        "val": 5000.0,
+        "median": 47.95413198331937,
+        "ratio": 104.26630184317021
+      },
+      "f_latency": {
+        "val": 131.05105933006254,
+        "median": 33.865075114028,
+        "ratio": 3.8697997535454154
+      },
+      "f_cpu": {
+        "val": 99.0,
+        "median": 30.0478948697313,
+        "ratio": 3.2947399619574513
+      },
+      "f_mem": {
+        "val": 49.71953739444224,
+        "median": 45.10141206271318,
+        "ratio": 1.1023942515437786
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "charlie",
+      "host": "web-02"
+    },
+    "related_events": 500,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 3,
+    "timestamp": "2025-08-01T05:33:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Statistical",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[PCA (Evidence 1.00)]: recon_error: f_volume=0.0013, f_latency=0.0004, f_cpu=36.3747, f_mem=36.3720",
+    "july_comparison": {
+      "event_count": {
+        "val": 500.0,
+        "median": 10.0,
+        "ratio": 50.0
+      },
+      "f_volume": {
+        "val": 5000.0,
+        "median": 47.95413198331937,
+        "ratio": 104.26630184317021
+      },
+      "f_latency": {
+        "val": 32.04417736719983,
+        "median": 33.865075114028,
+        "ratio": 0.9462308073820306
+      },
+      "f_cpu": {
+        "val": 99.0,
+        "median": 30.0478948697313,
+        "ratio": 3.2947399619574513
+      },
+      "f_mem": {
+        "val": 46.88079693867417,
+        "median": 45.10141206271318,
+        "ratio": 1.0394529748533543
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "charlie",
+      "host": "web-02"
+    },
+    "related_events": 500,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 4,
+    "timestamp": "2025-08-01T05:23:55+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 70.32102081291384,
+        "median": 47.95413198331937,
+        "ratio": 1.4664225563998259
+      },
+      "f_latency": {
+        "val": 79.80490031916034,
+        "median": 33.865075114028,
+        "ratio": 2.3565546525571586
+      },
+      "f_cpu": {
+        "val": 17.058204182242758,
+        "median": 30.0478948697313,
+        "ratio": 0.567700474731969
+      },
+      "f_mem": {
+        "val": 22.301685111790896,
+        "median": 45.10141206271318,
+        "ratio": 0.4944786447213796
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 5,
+    "timestamp": "2025-08-01T04:28:05+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 80.26687210049454,
+        "median": 47.95413198331937,
+        "ratio": 1.6738259828874602
+      },
+      "f_latency": {
+        "val": 9.285661596549177,
+        "median": 33.865075114028,
+        "ratio": 0.2741958068979082
+      },
+      "f_cpu": {
+        "val": 42.25856312498645,
+        "median": 30.0478948697313,
+        "ratio": 1.406373501644388
+      },
+      "f_mem": {
+        "val": 60.57168206743067,
+        "median": 45.10141206271318,
+        "ratio": 1.3430107683370578
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 6,
+    "timestamp": "2025-08-01T01:40:00+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Statistical",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[PCA (Evidence 1.00)]: recon_error: f_volume=0.0027, f_latency=0.0009, f_cpu=77.3745, f_mem=77.3687",
+    "july_comparison": {
+      "event_count": {
+        "val": 10.0,
+        "median": 10.0,
+        "ratio": 1.0
+      },
+      "f_volume": {
+        "val": 48.69424542704829,
+        "median": 47.95413198331937,
+        "ratio": 1.0154337783444054
+      },
+      "f_latency": {
+        "val": 92.26292384230862,
+        "median": 33.865075114028,
+        "ratio": 2.724426965882924
+      },
+      "f_cpu": {
+        "val": 95.0,
+        "median": 30.0478948697313,
+        "ratio": 3.1616191554137156
+      },
+      "f_mem": {
+        "val": 10.0,
+        "median": 45.10141206271318,
+        "ratio": 0.22172254797909816
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "bob",
+      "host": "web-02"
+    },
+    "related_events": 10,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 7,
+    "timestamp": "2025-08-01T01:51:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 15.0,
+        "median": 10.0,
+        "ratio": 1.5
+      },
+      "f_volume": {
+        "val": 83.78282299285301,
+        "median": 47.95413198331937,
+        "ratio": 1.7471450222891427
+      },
+      "f_latency": {
+        "val": 125.4639668134575,
+        "median": 33.865075114028,
+        "ratio": 3.7048187960902026
+      },
+      "f_cpu": {
+        "val": 37.21289086126221,
+        "median": 30.0478948697313,
+        "ratio": 1.2384525113188065
+      },
+      "f_mem": {
+        "val": 51.50861094977748,
+        "median": 45.10141206271318,
+        "ratio": 1.1420620462648738
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 15,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 8,
+    "timestamp": "2025-08-01T00:41:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "statistical_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Statistical (Evidence 1.00)]: Driven by f_latency (Robust Z-Score: 209.02)",
+    "july_comparison": {
+      "event_count": {
+        "val": 11.0,
+        "median": 10.0,
+        "ratio": 1.1
+      },
+      "f_volume": {
+        "val": 45.64138976509031,
+        "median": 47.95413198331937,
+        "ratio": 0.9517717843577371
+      },
+      "f_latency": {
+        "val": 5000.0,
+        "median": 33.865075114028,
+        "ratio": 147.64473379032427
+      },
+      "f_cpu": {
+        "val": 31.05142281947614,
+        "median": 30.0478948697313,
+        "ratio": 1.0333976125148034
+      },
+      "f_mem": {
+        "val": 46.52578370850524,
+        "median": 45.10141206271318,
+        "ratio": 1.0315815310574197
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "charlie",
+      "host": "web-02"
+    },
+    "related_events": 11,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 9,
+    "timestamp": "2025-08-01T01:37:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 49.07814891893412,
+        "median": 47.95413198331937,
+        "ratio": 1.0234394178171284
+      },
+      "f_latency": {
+        "val": 202.5292416229222,
+        "median": 33.865075114028,
+        "ratio": 5.980475192834523
+      },
+      "f_cpu": {
+        "val": 31.012604413669685,
+        "median": 30.0478948697313,
+        "ratio": 1.032105728142379
+      },
+      "f_mem": {
+        "val": 49.17741787966469,
+        "median": 45.10141206271318,
+        "ratio": 1.0903742395312115
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 10,
+    "timestamp": "2025-08-01T02:27:05+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 16.0,
+        "median": 10.0,
+        "ratio": 1.6
+      },
+      "f_volume": {
+        "val": 91.21555716326345,
+        "median": 47.95413198331937,
+        "ratio": 1.9021417631955548
+      },
+      "f_latency": {
+        "val": 121.55960857799278,
+        "median": 33.865075114028,
+        "ratio": 3.5895272096307527
+      },
+      "f_cpu": {
+        "val": 28.87443719657442,
+        "median": 30.0478948697313,
+        "ratio": 0.9609470920261052
+      },
+      "f_mem": {
+        "val": 39.17301909316626,
+        "median": 45.10141206271318,
+        "ratio": 0.8685541605370685
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 16,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 11,
+    "timestamp": "2025-08-01T02:29:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 26.67687686905702,
+        "median": 47.95413198331937,
+        "ratio": 0.5562998591724369
+      },
+      "f_latency": {
+        "val": 227.17856101752986,
+        "median": 33.865075114028,
+        "ratio": 6.708343632860427
+      },
+      "f_cpu": {
+        "val": 30.904689135019996,
+        "median": 30.0478948697313,
+        "ratio": 1.0285142859093195
+      },
+      "f_mem": {
+        "val": 44.77617627383106,
+        "median": 45.10141206271318,
+        "ratio": 0.9927887892195065
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 12,
+    "timestamp": "2025-08-01T01:20:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 57.46054466385931,
+        "median": 47.95413198331937,
+        "ratio": 1.1982396987989836
+      },
+      "f_latency": {
+        "val": 76.85497264185699,
+        "median": 33.865075114028,
+        "ratio": 2.2694463952339263
+      },
+      "f_cpu": {
+        "val": 41.55804687650317,
+        "median": 30.0478948697313,
+        "ratio": 1.3830601796456163
+      },
+      "f_mem": {
+        "val": 59.92601310553328,
+        "median": 45.10141206271318,
+        "ratio": 1.3286948315987668
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "db-01"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 13,
+    "timestamp": "2025-08-01T04:28:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "PCA",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 63.75771627760239,
+        "median": 47.95413198331937,
+        "ratio": 1.3295562580463396
+      },
+      "f_latency": {
+        "val": 101.70432566188035,
+        "median": 33.865075114028,
+        "ratio": 3.003221617534554
+      },
+      "f_cpu": {
+        "val": 40.66632340780927,
+        "median": 30.0478948697313,
+        "ratio": 1.3533834428039893
+      },
+      "f_mem": {
+        "val": 56.97148846854489,
+        "median": 45.10141206271318,
+        "ratio": 1.2631863585407583
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 14,
+    "timestamp": "2025-08-01T03:32:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 18.0,
+        "median": 10.0,
+        "ratio": 1.8
+      },
+      "f_volume": {
+        "val": 106.97686561800299,
+        "median": 47.95413198331937,
+        "ratio": 2.2308164321525914
+      },
+      "f_latency": {
+        "val": 11.066023383819502,
+        "median": 33.865075114028,
+        "ratio": 0.32676801532430677
+      },
+      "f_cpu": {
+        "val": 17.90435430962122,
+        "median": 30.0478948697313,
+        "ratio": 0.5958605215853954
+      },
+      "f_mem": {
+        "val": 27.51450202224102,
+        "median": 45.10141206271318,
+        "ratio": 0.6100585494747328
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 18,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 15,
+    "timestamp": "2025-08-01T02:17:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[IForest (Evidence 1.00)]: Explanation deferred.",
+    "july_comparison": {
+      "event_count": {
+        "val": 5.0,
+        "median": 10.0,
+        "ratio": 0.5
+      },
+      "f_volume": {
+        "val": 31.527913579052615,
+        "median": 47.95413198331937,
+        "ratio": 0.6574597907437769
+      },
+      "f_latency": {
+        "val": 225.83039230414087,
+        "median": 33.865075114028,
+        "ratio": 6.668533630701875
+      },
+      "f_cpu": {
+        "val": 16.548621843232326,
+        "median": 30.0478948697313,
+        "ratio": 0.5507414717395911
+      },
+      "f_mem": {
+        "val": 22.226632413573615,
+        "median": 45.10141206271318,
+        "ratio": 0.4928145571732354
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "charlie",
+      "host": "web-02"
+    },
+    "related_events": 5,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 16,
+    "timestamp": "2025-08-01T05:49:55+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "PCA",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 2.0,
+        "median": 10.0,
+        "ratio": 0.2
+      },
+      "f_volume": {
+        "val": 7.684132600537388,
+        "median": 47.95413198331937,
+        "ratio": 0.16023921782611514
+      },
+      "f_latency": {
+        "val": 5.136434631021588,
+        "median": 33.865075114028,
+        "ratio": 0.15167350474571697
+      },
+      "f_cpu": {
+        "val": 30.982559630006072,
+        "median": 30.0478948697313,
+        "ratio": 1.031105831683946
+      },
+      "f_mem": {
+        "val": 52.5014260104451,
+        "median": 45.10141206271318,
+        "ratio": 1.1640749947571987
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 2,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 17,
+    "timestamp": "2025-08-01T02:54:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "PCA",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 15.0,
+        "median": 10.0,
+        "ratio": 1.5
+      },
+      "f_volume": {
+        "val": 95.64347955953359,
+        "median": 47.95413198331937,
+        "ratio": 1.994478381817082
+      },
+      "f_latency": {
+        "val": 18.956200365450577,
+        "median": 33.865075114028,
+        "ratio": 0.5597566313265997
+      },
+      "f_cpu": {
+        "val": 30.5745636318574,
+        "median": 30.0478948697313,
+        "ratio": 1.0175276425989044
+      },
+      "f_mem": {
+        "val": 49.88970550856573,
+        "median": 45.10141206271318,
+        "ratio": 1.1061672623286043
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 15,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 18,
+    "timestamp": "2025-08-01T05:37:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[IForest (Evidence 1.00)]: Explanation deferred.",
+    "july_comparison": {
+      "event_count": {
+        "val": 18.0,
+        "median": 10.0,
+        "ratio": 1.8
+      },
+      "f_volume": {
+        "val": 116.04281112200762,
+        "median": 47.95413198331937,
+        "ratio": 2.419870954235447
+      },
+      "f_latency": {
+        "val": 193.79563997823445,
+        "median": 33.865075114028,
+        "ratio": 5.72258113486239
+      },
+      "f_cpu": {
+        "val": 20.50736794888714,
+        "median": 30.0478948697313,
+        "ratio": 0.6824893403612512
+      },
+      "f_mem": {
+        "val": 28.84755977017614,
+        "median": 45.10141206271318,
+        "ratio": 0.6396154455222781
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "david",
+      "host": "web-01"
+    },
+    "related_events": 18,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 19,
+    "timestamp": "2025-08-01T04:05:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 17.0,
+        "median": 10.0,
+        "ratio": 1.7
+      },
+      "f_volume": {
+        "val": 110.74220919967509,
+        "median": 47.95413198331937,
+        "ratio": 2.3093361222385647
+      },
+      "f_latency": {
+        "val": 1.109288082797959,
+        "median": 33.865075114028,
+        "ratio": 0.03275610873629677
+      },
+      "f_cpu": {
+        "val": 24.191763071814293,
+        "median": 30.0478948697313,
+        "ratio": 0.8051067529587181
+      },
+      "f_mem": {
+        "val": 36.94417869863574,
+        "median": 45.10141206271318,
+        "ratio": 0.8191357434056639
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "db-01"
+    },
+    "related_events": 17,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 20,
+    "timestamp": "2025-08-01T01:10:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 10.0,
+        "median": 10.0,
+        "ratio": 1.0
+      },
+      "f_volume": {
+        "val": 77.14816939486322,
+        "median": 47.95413198331937,
+        "ratio": 1.608790863354567
+      },
+      "f_latency": {
+        "val": 137.2975409148117,
+        "median": 33.865075114028,
+        "ratio": 4.054251775686706
+      },
+      "f_cpu": {
+        "val": 33.731974367611016,
+        "median": 30.0478948697313,
+        "ratio": 1.1226069085322468
+      },
+      "f_mem": {
+        "val": 53.25221866241726,
+        "median": 45.10141206271318,
+        "ratio": 1.1807217607371239
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 10,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 21,
+    "timestamp": "2025-08-01T05:45:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity",
+      "Autoencoder"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 10.0,
+        "median": 10.0,
+        "ratio": 1.0
+      },
+      "f_volume": {
+        "val": 61.87051150666382,
+        "median": 47.95413198331937,
+        "ratio": 1.290201885589029
+      },
+      "f_latency": {
+        "val": 179.10373942730604,
+        "median": 33.865075114028,
+        "ratio": 5.288744785719241
+      },
+      "f_cpu": {
+        "val": 26.950893916363505,
+        "median": 30.0478948697313,
+        "ratio": 0.8969311838052404
+      },
+      "f_mem": {
+        "val": 42.18388563171087,
+        "median": 45.10141206271318,
+        "ratio": 0.9353118605921804
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 10,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 22,
+    "timestamp": "2025-08-01T01:31:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 40.860200003446394,
+        "median": 47.95413198331937,
+        "ratio": 0.8520683893863292
+      },
+      "f_latency": {
+        "val": 191.61493926158735,
+        "median": 33.865075114028,
+        "ratio": 5.658187339505244
+      },
+      "f_cpu": {
+        "val": 23.453030272833615,
+        "median": 30.0478948697313,
+        "ratio": 0.7805215764535633
+      },
+      "f_mem": {
+        "val": 36.077247071933435,
+        "median": 45.10141206271318,
+        "ratio": 0.799913914486054
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 23,
+    "timestamp": "2025-08-01T03:16:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 17.0,
+        "median": 10.0,
+        "ratio": 1.7
+      },
+      "f_volume": {
+        "val": 100.98628470659605,
+        "median": 47.95413198331937,
+        "ratio": 2.1058932886476533
+      },
+      "f_latency": {
+        "val": 8.055531793884033,
+        "median": 33.865075114028,
+        "ratio": 0.23787136944950027
+      },
+      "f_cpu": {
+        "val": 28.894336041917892,
+        "median": 30.0478948697313,
+        "ratio": 0.9616093296114583
+      },
+      "f_mem": {
+        "val": 41.1141210327003,
+        "median": 45.10141206271318,
+        "ratio": 0.9115927673291341
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 17,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 24,
+    "timestamp": "2025-08-01T03:36:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 81.00424207139892,
+        "median": 47.95413198331937,
+        "ratio": 1.6892025508787414
+      },
+      "f_latency": {
+        "val": 114.29722577549751,
+        "median": 33.865075114028,
+        "ratio": 3.375076694519184
+      },
+      "f_cpu": {
+        "val": 35.89362043292811,
+        "median": 30.0478948697313,
+        "ratio": 1.1945469254515226
+      },
+      "f_mem": {
+        "val": 51.60440723332096,
+        "median": 45.10141206271318,
+        "ratio": 1.1441860658722929
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 25,
+    "timestamp": "2025-08-01T04:19:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "PCA",
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 7.0,
+        "median": 10.0,
+        "ratio": 0.7
+      },
+      "f_volume": {
+        "val": 34.43941901225635,
+        "median": 47.95413198331937,
+        "ratio": 0.7181741716070671
+      },
+      "f_latency": {
+        "val": 137.8396907779581,
+        "median": 33.865075114028,
+        "ratio": 4.070260890130449
+      },
+      "f_cpu": {
+        "val": 29.39479253966231,
+        "median": 30.0478948697313,
+        "ratio": 0.9782646227664057
+      },
+      "f_mem": {
+        "val": 39.56656888411188,
+        "median": 45.10141206271318,
+        "ratio": 0.8772800467775789
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 7,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 26,
+    "timestamp": "2025-08-01T00:29:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 17.0,
+        "median": 10.0,
+        "ratio": 1.7
+      },
+      "f_volume": {
+        "val": 77.98885881255158,
+        "median": 47.95413198331937,
+        "ratio": 1.6263219786707777
+      },
+      "f_latency": {
+        "val": 34.00579296876818,
+        "median": 33.865075114028,
+        "ratio": 1.004155250040532
+      },
+      "f_cpu": {
+        "val": 10.718123353797015,
+        "median": 30.0478948697313,
+        "ratio": 0.3567013063731762
+      },
+      "f_mem": {
+        "val": 14.452868303592387,
+        "median": 45.10141206271318,
+        "ratio": 0.320452678587885
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 17,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 27,
+    "timestamp": "2025-08-01T02:17:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 18.0,
+        "median": 10.0,
+        "ratio": 1.8
+      },
+      "f_volume": {
+        "val": 88.58244804759647,
+        "median": 47.95413198331937,
+        "ratio": 1.8472328532275275
+      },
+      "f_latency": {
+        "val": 9.368942197318288,
+        "median": 33.865075114028,
+        "ratio": 0.2766549953239989
+      },
+      "f_cpu": {
+        "val": 34.64655793603803,
+        "median": 30.0478948697313,
+        "ratio": 1.1530444341024098
+      },
+      "f_mem": {
+        "val": 54.61585544147313,
+        "median": 45.10141206271318,
+        "ratio": 1.2109566628541515
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 18,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 28,
+    "timestamp": "2025-08-01T02:07:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 51.72413394118867,
+        "median": 47.95413198331937,
+        "ratio": 1.0786168324177086
+      },
+      "f_latency": {
+        "val": 156.9518919991673,
+        "median": 33.865075114028,
+        "ratio": 4.634624062420956
+      },
+      "f_cpu": {
+        "val": 38.02599007604763,
+        "median": 30.0478948697313,
+        "ratio": 1.2655126171368847
+      },
+      "f_mem": {
+        "val": 58.545415186069334,
+        "median": 45.10141206271318,
+        "ratio": 1.298083862754948
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "db-01"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 29,
+    "timestamp": "2025-08-01T03:49:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 53.9165563462955,
+        "median": 47.95413198331937,
+        "ratio": 1.124335987669428
+      },
+      "f_latency": {
+        "val": 292.3878505979045,
+        "median": 33.865075114028,
+        "ratio": 8.633905273010544
+      },
+      "f_cpu": {
+        "val": 24.31329899694923,
+        "median": 30.0478948697313,
+        "ratio": 0.8091514930532185
+      },
+      "f_mem": {
+        "val": 36.58171977080795,
+        "median": 45.10141206271318,
+        "ratio": 0.8110992117040889
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 30,
+    "timestamp": "2025-08-01T06:01:05+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 51.083502253251055,
+        "median": 47.95413198331937,
+        "ratio": 1.065257573028748
+      },
+      "f_latency": {
+        "val": 335.97468891260445,
+        "median": 33.865075114028,
+        "ratio": 9.920978700957699
+      },
+      "f_cpu": {
+        "val": 27.347308408536588,
+        "median": 30.0478948697313,
+        "ratio": 0.9101239380361669
+      },
+      "f_mem": {
+        "val": 41.22004577659638,
+        "median": 45.10141206271318,
+        "ratio": 0.9139413577402014
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 31,
+    "timestamp": "2025-08-01T05:04:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "PCA",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 46.763252454256445,
+        "median": 47.95413198331937,
+        "ratio": 0.9751662791127745
+      },
+      "f_latency": {
+        "val": 67.16948125032587,
+        "median": 33.865075114028,
+        "ratio": 1.9834440356077083
+      },
+      "f_cpu": {
+        "val": 37.03605510739198,
+        "median": 30.0478948697313,
+        "ratio": 1.2325673817735627
+      },
+      "f_mem": {
+        "val": 59.966107584430006,
+        "median": 45.10141206271318,
+        "ratio": 1.3295838166008545
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 32,
+    "timestamp": "2025-08-01T04:17:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[IForest (Evidence 1.00)]: Explanation deferred.",
+    "july_comparison": {
+      "event_count": {
+        "val": 19.0,
+        "median": 10.0,
+        "ratio": 1.9
+      },
+      "f_volume": {
+        "val": 96.09732878667732,
+        "median": 47.95413198331937,
+        "ratio": 2.0039426179188133
+      },
+      "f_latency": {
+        "val": 325.9586947619101,
+        "median": 33.865075114028,
+        "ratio": 9.625216942952758
+      },
+      "f_cpu": {
+        "val": 21.28108176627303,
+        "median": 30.0478948697313,
+        "ratio": 0.7082386922123617
+      },
+      "f_mem": {
+        "val": 31.272145939967658,
+        "median": 45.10141206271318,
+        "ratio": 0.6933739878583839
+      }
+    },
+    "novel_relationships": [
+      "User: charlie | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "charlie",
+      "host": "db-01"
+    },
+    "related_events": 19,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 33,
+    "timestamp": "2025-08-01T03:50:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 7.0,
+        "median": 10.0,
+        "ratio": 0.7
+      },
+      "f_volume": {
+        "val": 34.20286374584981,
+        "median": 47.95413198331937,
+        "ratio": 0.7132412230451199
+      },
+      "f_latency": {
+        "val": 109.59923500858947,
+        "median": 33.865075114028,
+        "ratio": 3.2363499752932765
+      },
+      "f_cpu": {
+        "val": 38.16122629449433,
+        "median": 30.0478948697313,
+        "ratio": 1.270013305755272
+      },
+      "f_mem": {
+        "val": 59.27968862001288,
+        "median": 45.10141206271318,
+        "ratio": 1.3143643604236805
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 7,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 34,
+    "timestamp": "2025-08-01T00:32:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 16.0,
+        "median": 10.0,
+        "ratio": 1.6
+      },
+      "f_volume": {
+        "val": 94.05847760288606,
+        "median": 47.95413198331937,
+        "ratio": 1.9614259233303164
+      },
+      "f_latency": {
+        "val": 61.853610432039716,
+        "median": 33.865075114028,
+        "ratio": 1.8264719692417857
+      },
+      "f_cpu": {
+        "val": 30.932531084417,
+        "median": 30.0478948697313,
+        "ratio": 1.0294408715991894
+      },
+      "f_mem": {
+        "val": 48.61941097812174,
+        "median": 45.10141206271318,
+        "ratio": 1.078001968331209
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 16,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 35,
+    "timestamp": "2025-08-01T05:50:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 65.78860217475221,
+        "median": 47.95413198331937,
+        "ratio": 1.3719068504385916
+      },
+      "f_latency": {
+        "val": 109.51358506597299,
+        "median": 33.865075114028,
+        "ratio": 3.233820822697923
+      },
+      "f_cpu": {
+        "val": 38.506625532283266,
+        "median": 30.0478948697313,
+        "ratio": 1.2815082620337857
+      },
+      "f_mem": {
+        "val": 56.402660313089726,
+        "median": 45.10141206271318,
+        "ratio": 1.2505741557417813
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 36,
+    "timestamp": "2025-08-01T00:41:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 42.70573758183554,
+        "median": 47.95413198331937,
+        "ratio": 0.8905538650285765
+      },
+      "f_latency": {
+        "val": 114.9222918085363,
+        "median": 33.865075114028,
+        "ratio": 3.3935342361290615
+      },
+      "f_cpu": {
+        "val": 41.96149191834879,
+        "median": 30.0478948697313,
+        "ratio": 1.3964869119872565
+      },
+      "f_mem": {
+        "val": 63.08677369706098,
+        "median": 45.10141206271318,
+        "ratio": 1.3987760207893112
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 37,
+    "timestamp": "2025-08-01T03:52:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 11.0,
+        "median": 10.0,
+        "ratio": 1.1
+      },
+      "f_volume": {
+        "val": 48.57347997488706,
+        "median": 47.95413198331937,
+        "ratio": 1.0129154249269514
+      },
+      "f_latency": {
+        "val": 183.92061582658184,
+        "median": 33.865075114028,
+        "ratio": 5.430982072453635
+      },
+      "f_cpu": {
+        "val": 29.223135058910007,
+        "median": 30.0478948697313,
+        "ratio": 0.9725518271946526
+      },
+      "f_mem": {
+        "val": 44.95090133317843,
+        "median": 45.10141206271318,
+        "ratio": 0.9966628377549362
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 11,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 38,
+    "timestamp": "2025-08-01T04:39:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 11.0,
+        "median": 10.0,
+        "ratio": 1.1
+      },
+      "f_volume": {
+        "val": 57.99134650034594,
+        "median": 47.95413198331937,
+        "ratio": 1.2093086476993884
+      },
+      "f_latency": {
+        "val": 28.60065344156208,
+        "median": 33.865075114028,
+        "ratio": 0.8445471727217511
+      },
+      "f_cpu": {
+        "val": 21.019176704157093,
+        "median": 30.0478948697313,
+        "ratio": 0.6995224389356716
+      },
+      "f_mem": {
+        "val": 29.291011028016086,
+        "median": 45.10141206271318,
+        "ratio": 0.649447759801559
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 11,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 39,
+    "timestamp": "2025-08-01T06:29:55+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 32.500689692509496,
+        "median": 47.95413198331937,
+        "ratio": 0.6777453443180812
+      },
+      "f_latency": {
+        "val": 152.61153454819257,
+        "median": 33.865075114028,
+        "ratio": 4.506457878340154
+      },
+      "f_cpu": {
+        "val": 35.823665210566574,
+        "median": 30.0478948697313,
+        "ratio": 1.1922188015458441
+      },
+      "f_mem": {
+        "val": 55.053153370130666,
+        "median": 45.10141206271318,
+        "ratio": 1.2206525439509446
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 40,
+    "timestamp": "2025-08-01T01:21:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 83.49149841871568,
+        "median": 47.95413198331937,
+        "ratio": 1.7410699550928754
+      },
+      "f_latency": {
+        "val": 162.06390618103666,
+        "median": 33.865075114028,
+        "ratio": 4.78557645702385
+      },
+      "f_cpu": {
+        "val": 32.077689969185016,
+        "median": 30.0478948697313,
+        "ratio": 1.0675519901894501
+      },
+      "f_mem": {
+        "val": 47.51351627437727,
+        "median": 45.10141206271318,
+        "ratio": 1.0534817891801276
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 41,
+    "timestamp": "2025-08-01T06:31:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 11.0,
+        "median": 10.0,
+        "ratio": 1.1
+      },
+      "f_volume": {
+        "val": 51.25335514481856,
+        "median": 47.95413198331937,
+        "ratio": 1.0687995596009705
+      },
+      "f_latency": {
+        "val": 133.65716613383702,
+        "median": 33.865075114028,
+        "ratio": 3.9467553425999027
+      },
+      "f_cpu": {
+        "val": 36.18855348074834,
+        "median": 30.0478948697313,
+        "ratio": 1.2043623567520805
+      },
+      "f_mem": {
+        "val": 52.453017011241386,
+        "median": 45.10141206271318,
+        "ratio": 1.1630016580923421
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "db-01"
+    },
+    "related_events": 11,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 42,
+    "timestamp": "2025-08-01T01:01:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 18.0,
+        "median": 10.0,
+        "ratio": 1.8
+      },
+      "f_volume": {
+        "val": 90.98301209238127,
+        "median": 47.95413198331937,
+        "ratio": 1.8972924402850062
+      },
+      "f_latency": {
+        "val": 100.40731862059107,
+        "median": 33.865075114028,
+        "ratio": 2.964922365667488
+      },
+      "f_cpu": {
+        "val": 35.54388330153616,
+        "median": 30.0478948697313,
+        "ratio": 1.1829076031992256
+      },
+      "f_mem": {
+        "val": 52.39570646786391,
+        "median": 45.10141206271318,
+        "ratio": 1.16173095412197
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 18,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 43,
+    "timestamp": "2025-08-01T06:51:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 4.0,
+        "median": 10.0,
+        "ratio": 0.4
+      },
+      "f_volume": {
+        "val": 12.336523894766206,
+        "median": 47.95413198331937,
+        "ratio": 0.257256744821435
+      },
+      "f_latency": {
+        "val": 1.5015311339228699,
+        "median": 33.865075114028,
+        "ratio": 0.044338632909185174
+      },
+      "f_cpu": {
+        "val": 33.48740545405593,
+        "median": 30.0478948697313,
+        "ratio": 1.1144676057752523
+      },
+      "f_mem": {
+        "val": 52.622436056652965,
+        "median": 45.10141206271318,
+        "ratio": 1.1667580603348262
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "db-01"
+    },
+    "related_events": 4,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 44,
+    "timestamp": "2025-08-01T06:48:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 52.42791305912779,
+        "median": 47.95413198331937,
+        "ratio": 1.0932929216061007
+      },
+      "f_latency": {
+        "val": 46.49730794871572,
+        "median": 33.865075114028,
+        "ratio": 1.3730165308109723
+      },
+      "f_cpu": {
+        "val": 20.476343906880025,
+        "median": 30.0478948697313,
+        "ratio": 0.6814568539876927
+      },
+      "f_mem": {
+        "val": 32.54440638537666,
+        "median": 45.10141206271318,
+        "ratio": 0.7215828706232945
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 45,
+    "timestamp": "2025-08-01T05:51:55+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 3.0,
+        "median": 10.0,
+        "ratio": 0.3
+      },
+      "f_volume": {
+        "val": 16.520407783657422,
+        "median": 47.95413198331937,
+        "ratio": 0.3445043649086167
+      },
+      "f_latency": {
+        "val": 12.669983595053228,
+        "median": 33.865075114028,
+        "ratio": 0.37413127100388194
+      },
+      "f_cpu": {
+        "val": 38.31515689105924,
+        "median": 30.0478948697313,
+        "ratio": 1.2751361470468918
+      },
+      "f_mem": {
+        "val": 56.47860612333248,
+        "median": 45.10141206271318,
+        "ratio": 1.2522580455973173
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 3,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 46,
+    "timestamp": "2025-08-01T02:15:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 37.05553374285056,
+        "median": 47.95413198331937,
+        "ratio": 0.772728693238367
+      },
+      "f_latency": {
+        "val": 183.17735156280511,
+        "median": 33.865075114028,
+        "ratio": 5.4090342615814
+      },
+      "f_cpu": {
+        "val": 34.65255382768051,
+        "median": 30.0478948697313,
+        "ratio": 1.1532439785852586
+      },
+      "f_mem": {
+        "val": 52.86364426917216,
+        "median": 45.10141206271318,
+        "ratio": 1.1721061902821504
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 47,
+    "timestamp": "2025-08-01T01:08:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 89.11784518605049,
+        "median": 47.95413198331937,
+        "ratio": 1.8583976291563307
+      },
+      "f_latency": {
+        "val": 103.31296358423529,
+        "median": 33.865075114028,
+        "ratio": 3.0507230010967774
+      },
+      "f_cpu": {
+        "val": 30.871555017632886,
+        "median": 30.0478948697313,
+        "ratio": 1.0274115758016478
+      },
+      "f_mem": {
+        "val": 44.541222283232614,
+        "median": 45.10141206271318,
+        "ratio": 0.9875793294741719
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 48,
+    "timestamp": "2025-08-01T06:11:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 36.509678472046744,
+        "median": 47.95413198331937,
+        "ratio": 0.7613458311527038
+      },
+      "f_latency": {
+        "val": 222.18545347147423,
+        "median": 33.865075114028,
+        "ratio": 6.560902425975659
+      },
+      "f_cpu": {
+        "val": 31.537764588642236,
+        "median": 30.0478948697313,
+        "ratio": 1.049583164656628
+      },
+      "f_mem": {
+        "val": 47.492550502344095,
+        "median": 45.10141206271318,
+        "ratio": 1.0530169307405732
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 49,
+    "timestamp": "2025-08-01T03:46:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 81.06128900353991,
+        "median": 47.95413198331937,
+        "ratio": 1.6903921654079093
+      },
+      "f_latency": {
+        "val": 8.013592687943856,
+        "median": 33.865075114028,
+        "ratio": 0.23663295182311195
+      },
+      "f_cpu": {
+        "val": 21.36581925989924,
+        "median": 30.0478948697313,
+        "ratio": 0.7110587730863657
+      },
+      "f_mem": {
+        "val": 32.58409627891656,
+        "median": 45.10141206271318,
+        "ratio": 0.7224628850557632
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 50,
+    "timestamp": "2025-08-01T05:42:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 3.0,
+        "median": 10.0,
+        "ratio": 0.3
+      },
+      "f_volume": {
+        "val": 15.015256188384704,
+        "median": 47.95413198331937,
+        "ratio": 0.3131170467981298
+      },
+      "f_latency": {
+        "val": 60.65851097355876,
+        "median": 33.865075114028,
+        "ratio": 1.7911819409617096
+      },
+      "f_cpu": {
+        "val": 26.17701064722293,
+        "median": 30.0478948697313,
+        "ratio": 0.8711761925655663
+      },
+      "f_mem": {
+        "val": 36.835848542959624,
+        "median": 45.10141206271318,
+        "ratio": 0.8167338195917159
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 3,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 51,
+    "timestamp": "2025-08-01T05:10:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 11.0,
+        "median": 10.0,
+        "ratio": 1.1
+      },
+      "f_volume": {
+        "val": 46.33693415308423,
+        "median": 47.95413198331937,
+        "ratio": 0.9662761525785165
+      },
+      "f_latency": {
+        "val": 171.57901230370425,
+        "median": 33.865075114028,
+        "ratio": 5.066547519117438
+      },
+      "f_cpu": {
+        "val": 27.461052545966968,
+        "median": 30.0478948697313,
+        "ratio": 0.9139093658647554
+      },
+      "f_mem": {
+        "val": 42.05370307774336,
+        "median": 45.10141206271318,
+        "ratio": 0.93242541983537
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 11,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 52,
+    "timestamp": "2025-08-01T01:22:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 31.123125056775756,
+        "median": 47.95413198331937,
+        "ratio": 0.649018630294503
+      },
+      "f_latency": {
+        "val": 46.656784010298765,
+        "median": 33.865075114028,
+        "ratio": 1.3777256909426439
+      },
+      "f_cpu": {
+        "val": 22.08052204456075,
+        "median": 30.0478948697313,
+        "ratio": 0.7348442258696641
+      },
+      "f_mem": {
+        "val": 31.145882129394025,
+        "median": 45.10141206271318,
+        "ratio": 0.6905744344785902
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 53,
+    "timestamp": "2025-08-01T04:32:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 41.37937333318495,
+        "median": 47.95413198331937,
+        "ratio": 0.8628948460078181
+      },
+      "f_latency": {
+        "val": 154.4977835063178,
+        "median": 33.865075114028,
+        "ratio": 4.562156823397089
+      },
+      "f_cpu": {
+        "val": 31.610236021628467,
+        "median": 30.0478948697313,
+        "ratio": 1.0519950285592548
+      },
+      "f_mem": {
+        "val": 49.14366825701081,
+        "median": 45.10141206271318,
+        "ratio": 1.0896259342983963
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 54,
+    "timestamp": "2025-08-01T02:24:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 42.03999452996271,
+        "median": 47.95413198331937,
+        "ratio": 0.8766709518292634
+      },
+      "f_latency": {
+        "val": 14.22183833367445,
+        "median": 33.865075114028,
+        "ratio": 0.4199559069568786
+      },
+      "f_cpu": {
+        "val": 39.67957025361206,
+        "median": 30.0478948697313,
+        "ratio": 1.3205440988674122
+      },
+      "f_mem": {
+        "val": 61.052791945658655,
+        "median": 45.10141206271318,
+        "ratio": 1.3536780591429198
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 55,
+    "timestamp": "2025-08-01T04:31:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 93.49152171756177,
+        "median": 47.95413198331937,
+        "ratio": 1.9496030446361197
+      },
+      "f_latency": {
+        "val": 71.56889704367016,
+        "median": 33.865075114028,
+        "ratio": 2.1133541503359616
+      },
+      "f_cpu": {
+        "val": 23.627448953475366,
+        "median": 30.0478948697313,
+        "ratio": 0.7863262653143944
+      },
+      "f_mem": {
+        "val": 34.577307491531,
+        "median": 45.10141206271318,
+        "ratio": 0.7666568719279013
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 56,
+    "timestamp": "2025-08-01T05:24:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Statistical",
+      "Rarity",
+      "Autoencoder",
+      "LSTM"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 51.00137934284827,
+        "median": 47.95413198331937,
+        "ratio": 1.0635450425958886
+      },
+      "f_latency": {
+        "val": 159.16721237308627,
+        "median": 33.865075114028,
+        "ratio": 4.700040139794466
+      },
+      "f_cpu": {
+        "val": 38.332946716877714,
+        "median": 30.0478948697313,
+        "ratio": 1.275728196037199
+      },
+      "f_mem": {
+        "val": 57.96530361955701,
+        "median": 45.10141206271318,
+        "ratio": 1.2852214812910223
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 57,
+    "timestamp": "2025-08-01T01:05:00+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "IForest",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 88.55006516923895,
+        "median": 47.95413198331937,
+        "ratio": 1.8465575646336523
+      },
+      "f_latency": {
+        "val": 92.79647201460882,
+        "median": 33.865075114028,
+        "ratio": 2.7401820814556395
+      },
+      "f_cpu": {
+        "val": 25.15906624639453,
+        "median": 30.0478948697313,
+        "ratio": 0.8372987976518274
+      },
+      "f_mem": {
+        "val": 38.272620036452146,
+        "median": 45.10141206271318,
+        "ratio": 0.8485902832318055
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 58,
+    "timestamp": "2025-08-01T02:39:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 3.0,
+        "median": 10.0,
+        "ratio": 0.3
+      },
+      "f_volume": {
+        "val": 12.664238859564865,
+        "median": 47.95413198331937,
+        "ratio": 0.2640906703090792
+      },
+      "f_latency": {
+        "val": 18.608040832601148,
+        "median": 33.865075114028,
+        "ratio": 0.5494758470177761
+      },
+      "f_cpu": {
+        "val": 31.234434507661334,
+        "median": 30.0478948697313,
+        "ratio": 1.0394882783993393
+      },
+      "f_mem": {
+        "val": 49.680093106872654,
+        "median": 45.10141206271318,
+        "ratio": 1.1015196827494635
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 3,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 59,
+    "timestamp": "2025-08-01T03:04:55+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 5.0,
+        "median": 10.0,
+        "ratio": 0.5
+      },
+      "f_volume": {
+        "val": 27.211681299880986,
+        "median": 47.95413198331937,
+        "ratio": 0.5674522752147082
+      },
+      "f_latency": {
+        "val": 5.542903227080184,
+        "median": 33.865075114028,
+        "ratio": 0.1636760942775566
+      },
+      "f_cpu": {
+        "val": 21.19208786372676,
+        "median": 30.0478948697313,
+        "ratio": 0.7052769571912532
+      },
+      "f_mem": {
+        "val": 32.36667629959875,
+        "median": 45.10141206271318,
+        "ratio": 0.7176421938761723
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 5,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 60,
+    "timestamp": "2025-08-01T00:03:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 15.0,
+        "median": 10.0,
+        "ratio": 1.5
+      },
+      "f_volume": {
+        "val": 87.82355883954604,
+        "median": 47.95413198331937,
+        "ratio": 1.8314075389811053
+      },
+      "f_latency": {
+        "val": 68.3543315226256,
+        "median": 33.865075114028,
+        "ratio": 2.0184314162147254
+      },
+      "f_cpu": {
+        "val": 34.08933212474818,
+        "median": 30.0478948697313,
+        "ratio": 1.1344998467459368
+      },
+      "f_mem": {
+        "val": 52.72915231365072,
+        "median": 45.10141206271318,
+        "ratio": 1.1691242003760598
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 15,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 61,
+    "timestamp": "2025-08-01T02:17:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 3.0,
+        "median": 10.0,
+        "ratio": 0.3
+      },
+      "f_volume": {
+        "val": 11.617227146373711,
+        "median": 47.95413198331937,
+        "ratio": 0.24225706244489445
+      },
+      "f_latency": {
+        "val": 30.5617685337111,
+        "median": 33.865075114028,
+        "ratio": 0.9024568358642568
+      },
+      "f_cpu": {
+        "val": 27.939721726197117,
+        "median": 30.0478948697313,
+        "ratio": 0.9298395726997218
+      },
+      "f_mem": {
+        "val": 39.7786991101945,
+        "median": 45.10141206271318,
+        "ratio": 0.881983452200621
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 3,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 62,
+    "timestamp": "2025-08-01T06:28:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 42.97748934406974,
+        "median": 47.95413198331937,
+        "ratio": 0.8962207752820813
+      },
+      "f_latency": {
+        "val": 29.518460612768294,
+        "median": 33.865075114028,
+        "ratio": 0.8716490518144695
+      },
+      "f_cpu": {
+        "val": 38.967324624385896,
+        "median": 30.0478948697313,
+        "ratio": 1.2968404207124529
+      },
+      "f_mem": {
+        "val": 56.700149927688656,
+        "median": 45.10141206271318,
+        "ratio": 1.2571701712764007
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 63,
+    "timestamp": "2025-08-01T06:38:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 16.377597269518773,
+        "median": 47.95413198331937,
+        "ratio": 0.34152630007390494
+      },
+      "f_latency": {
+        "val": 103.74857153661854,
+        "median": 33.865075114028,
+        "ratio": 3.063586045130092
+      },
+      "f_cpu": {
+        "val": 30.043907735727306,
+        "median": 30.0478948697313,
+        "ratio": 0.9998673073763975
+      },
+      "f_mem": {
+        "val": 43.436024917321,
+        "median": 45.10141206271318,
+        "ratio": 0.9630746118752009
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 64,
+    "timestamp": "2025-08-01T00:07:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 47.594371987002525,
+        "median": 47.95413198331937,
+        "ratio": 0.992497831126586
+      },
+      "f_latency": {
+        "val": 45.59662843854189,
+        "median": 33.865075114028,
+        "ratio": 1.3464204135089695
+      },
+      "f_cpu": {
+        "val": 20.352588686869588,
+        "median": 30.0478948697313,
+        "ratio": 0.677338255312246
+      },
+      "f_mem": {
+        "val": 30.832474928049383,
+        "median": 45.10141206271318,
+        "ratio": 0.6836254901548771
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 65,
+    "timestamp": "2025-08-01T01:22:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 6.0,
+        "median": 10.0,
+        "ratio": 0.6
+      },
+      "f_volume": {
+        "val": 27.280442844317747,
+        "median": 47.95413198331937,
+        "ratio": 0.5688861776041975
+      },
+      "f_latency": {
+        "val": 51.87575286331945,
+        "median": 33.865075114028,
+        "ratio": 1.5318363443354905
+      },
+      "f_cpu": {
+        "val": 24.17726610944942,
+        "median": 30.0478948697313,
+        "ratio": 0.8046242911281066
+      },
+      "f_mem": {
+        "val": 33.69145280316594,
+        "median": 45.10141206271318,
+        "ratio": 0.7470154760635481
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 6,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 66,
+    "timestamp": "2025-08-01T00:29:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 5.0,
+        "median": 10.0,
+        "ratio": 0.5
+      },
+      "f_volume": {
+        "val": 26.683561477103055,
+        "median": 47.95413198331937,
+        "ratio": 0.5564392550444832
+      },
+      "f_latency": {
+        "val": 4.298690631109876,
+        "median": 33.865075114028,
+        "ratio": 0.12693580677543576
+      },
+      "f_cpu": {
+        "val": 25.094563683526594,
+        "median": 30.0478948697313,
+        "ratio": 0.8351521393535479
+      },
+      "f_mem": {
+        "val": 34.71707406155512,
+        "median": 45.10141206271318,
+        "ratio": 0.7697558119307059
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 5,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 67,
+    "timestamp": "2025-08-01T02:45:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 16.0,
+        "median": 10.0,
+        "ratio": 1.6
+      },
+      "f_volume": {
+        "val": 91.84673942476402,
+        "median": 47.95413198331937,
+        "ratio": 1.9153039712346893
+      },
+      "f_latency": {
+        "val": 54.85816687284362,
+        "median": 33.865075114028,
+        "ratio": 1.6199038888332364
+      },
+      "f_cpu": {
+        "val": 25.00592365905237,
+        "median": 30.0478948697313,
+        "ratio": 0.8322021814660316
+      },
+      "f_mem": {
+        "val": 37.55873246088696,
+        "median": 45.10141206271318,
+        "ratio": 0.832761786009312
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 16,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 68,
+    "timestamp": "2025-08-01T02:07:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 68.29788620587526,
+        "median": 47.95413198331937,
+        "ratio": 1.4242336036784562
+      },
+      "f_latency": {
+        "val": 38.60028866680448,
+        "median": 33.865075114028,
+        "ratio": 1.1398258688880039
+      },
+      "f_cpu": {
+        "val": 36.124907040279425,
+        "median": 30.0478948697313,
+        "ratio": 1.2022441903798655
+      },
+      "f_mem": {
+        "val": 57.207308536373155,
+        "median": 45.10141206271318,
+        "ratio": 1.268415021171107
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 69,
+    "timestamp": "2025-08-01T05:05:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 54.918725567102626,
+        "median": 47.95413198331937,
+        "ratio": 1.1452344833643502
+      },
+      "f_latency": {
+        "val": 9.802540433267962,
+        "median": 33.865075114028,
+        "ratio": 0.28945869454774764
+      },
+      "f_cpu": {
+        "val": 22.511860669652467,
+        "median": 30.0478948697313,
+        "ratio": 0.7491992622860829
+      },
+      "f_mem": {
+        "val": 31.96342907774235,
+        "median": 45.10141206271318,
+        "ratio": 0.7087012937266229
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 70,
+    "timestamp": "2025-08-01T05:48:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Statistical",
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 51.93811607580047,
+        "median": 47.95413198331937,
+        "ratio": 1.0830790575850047
+      },
+      "f_latency": {
+        "val": 141.50998313927767,
+        "median": 33.865075114028,
+        "ratio": 4.178640757854386
+      },
+      "f_cpu": {
+        "val": 31.90088693802723,
+        "median": 30.0478948697313,
+        "ratio": 1.0616679496626746
+      },
+      "f_mem": {
+        "val": 49.261531505873975,
+        "median": 45.10141206271318,
+        "ratio": 1.0922392282834998
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 71,
+    "timestamp": "2025-08-01T05:26:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 59.293121534308554,
+        "median": 47.95413198331937,
+        "ratio": 1.2364549014239983
+      },
+      "f_latency": {
+        "val": 52.68289370367626,
+        "median": 33.865075114028,
+        "ratio": 1.5556703632366464
+      },
+      "f_cpu": {
+        "val": 22.33499210698285,
+        "median": 30.0478948697313,
+        "ratio": 0.7433130408573803
+      },
+      "f_mem": {
+        "val": 31.964158166416826,
+        "median": 45.10141206271318,
+        "ratio": 0.7087174592664838
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 72,
+    "timestamp": "2025-08-01T05:45:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 72.21457314498197,
+        "median": 47.95413198331937,
+        "ratio": 1.5059092962020766
+      },
+      "f_latency": {
+        "val": 13.177511124407658,
+        "median": 33.865075114028,
+        "ratio": 0.3891180243964411
+      },
+      "f_cpu": {
+        "val": 36.7839984274574,
+        "median": 30.0478948697313,
+        "ratio": 1.224178884641656
+      },
+      "f_mem": {
+        "val": 52.736368282847415,
+        "median": 45.10141206271318,
+        "ratio": 1.1692841946837027
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 73,
+    "timestamp": "2025-08-01T00:02:05+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 78.58572988800567,
+        "median": 47.95413198331937,
+        "ratio": 1.6387686866137283
+      },
+      "f_latency": {
+        "val": 10.883490247524803,
+        "median": 33.865075114028,
+        "ratio": 0.32137800406107797
+      },
+      "f_cpu": {
+        "val": 23.43695866423655,
+        "median": 30.0478948697313,
+        "ratio": 0.7799867100788392
+      },
+      "f_mem": {
+        "val": 35.720705708874604,
+        "median": 45.10141206271318,
+        "ratio": 0.7920085885383196
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 13,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 74,
+    "timestamp": "2025-08-01T03:54:15+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 10.0,
+        "median": 10.0,
+        "ratio": 1.0
+      },
+      "f_volume": {
+        "val": 42.3174467960823,
+        "median": 47.95413198331937,
+        "ratio": 0.8824567361745227
+      },
+      "f_latency": {
+        "val": 9.568176480281624,
+        "median": 33.865075114028,
+        "ratio": 0.28253817385800445
+      },
+      "f_cpu": {
+        "val": 38.00950392384936,
+        "median": 30.0478948697313,
+        "ratio": 1.2649639546675255
+      },
+      "f_mem": {
+        "val": 55.076921330360605,
+        "median": 45.10141206271318,
+        "ratio": 1.2211795332211894
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 10,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 75,
+    "timestamp": "2025-08-01T03:24:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 6.0,
+        "median": 10.0,
+        "ratio": 0.6
+      },
+      "f_volume": {
+        "val": 32.97828987917307,
+        "median": 47.95413198331937,
+        "ratio": 0.6877048653626848
+      },
+      "f_latency": {
+        "val": 51.41139461041232,
+        "median": 33.865075114028,
+        "ratio": 1.518124334208728
+      },
+      "f_cpu": {
+        "val": 38.5105396705082,
+        "median": 30.0478948697313,
+        "ratio": 1.2816385253431424
+      },
+      "f_mem": {
+        "val": 58.87530112224787,
+        "median": 45.10141206271318,
+        "ratio": 1.3053981777861456
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 6,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 76,
+    "timestamp": "2025-08-01T04:26:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 6.0,
+        "median": 10.0,
+        "ratio": 0.6
+      },
+      "f_volume": {
+        "val": 22.410666935383748,
+        "median": 47.95413198331937,
+        "ratio": 0.4673354726382952
+      },
+      "f_latency": {
+        "val": 24.589018831521216,
+        "median": 33.865075114028,
+        "ratio": 0.7260878279090441
+      },
+      "f_cpu": {
+        "val": 24.490500135056436,
+        "median": 30.0478948697313,
+        "ratio": 0.8150487826595434
+      },
+      "f_mem": {
+        "val": 38.719403631260896,
+        "median": 45.10141206271318,
+        "ratio": 0.8584964829354311
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 6,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 77,
+    "timestamp": "2025-08-01T00:56:50+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 38.5318513139827,
+        "median": 47.95413198331937,
+        "ratio": 0.8035147279359749
+      },
+      "f_latency": {
+        "val": 33.424293772713874,
+        "median": 33.865075114028,
+        "ratio": 0.9869841912403867
+      },
+      "f_cpu": {
+        "val": 38.5676486467014,
+        "median": 30.0478948697313,
+        "ratio": 1.2835391235860738
+      },
+      "f_mem": {
+        "val": 59.098859390404485,
+        "median": 45.10141206271318,
+        "ratio": 1.3103549686698934
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 78,
+    "timestamp": "2025-08-01T06:30:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 15.0,
+        "median": 10.0,
+        "ratio": 1.5
+      },
+      "f_volume": {
+        "val": 84.75734459982654,
+        "median": 47.95413198331937,
+        "ratio": 1.7674669750942213
+      },
+      "f_latency": {
+        "val": 47.25638451742555,
+        "median": 33.865075114028,
+        "ratio": 1.3954312623936995
+      },
+      "f_cpu": {
+        "val": 26.43100266930651,
+        "median": 30.0478948697313,
+        "ratio": 0.8796290982744264
+      },
+      "f_mem": {
+        "val": 40.75348333107541,
+        "median": 45.10141206271318,
+        "ratio": 0.9035966163189745
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 15,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 79,
+    "timestamp": "2025-08-01T00:27:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 6.0,
+        "median": 10.0,
+        "ratio": 0.6
+      },
+      "f_volume": {
+        "val": 18.460702282741487,
+        "median": 47.95413198331937,
+        "ratio": 0.384965831289845
+      },
+      "f_latency": {
+        "val": 37.736566530216336,
+        "median": 33.865075114028,
+        "ratio": 1.1143210639029304
+      },
+      "f_cpu": {
+        "val": 27.164024244924494,
+        "median": 30.0478948697313,
+        "ratio": 0.9040242041144829
+      },
+      "f_mem": {
+        "val": 38.45153238503744,
+        "median": 45.10141206271318,
+        "ratio": 0.852557173411131
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 6,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 80,
+    "timestamp": "2025-08-01T03:15:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 75.71030671256486,
+        "median": 47.95413198331937,
+        "ratio": 1.5788067384662565
+      },
+      "f_latency": {
+        "val": 10.064746669048526,
+        "median": 33.865075114028,
+        "ratio": 0.2972013685237445
+      },
+      "f_cpu": {
+        "val": 23.742386028477345,
+        "median": 30.0478948697313,
+        "ratio": 0.7901513943459048
+      },
+      "f_mem": {
+        "val": 34.12814191822209,
+        "median": 45.10141206271318,
+        "ratio": 0.7566978583900469
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 81,
+    "timestamp": "2025-08-01T02:42:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 57.62507870240316,
+        "median": 47.95413198331937,
+        "ratio": 1.2016707699442413
+      },
+      "f_latency": {
+        "val": 1.2573991961587732,
+        "median": 33.865075114028,
+        "ratio": 0.03712967391700596
+      },
+      "f_cpu": {
+        "val": 38.24206303847243,
+        "median": 30.0478948697313,
+        "ratio": 1.2727035688944557
+      },
+      "f_mem": {
+        "val": 58.41610079392486,
+        "median": 45.10141206271318,
+        "ratio": 1.295216671103284
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 82,
+    "timestamp": "2025-08-01T05:50:05+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 20.04595442990245,
+        "median": 47.95413198331937,
+        "ratio": 0.4180235070645288
+      },
+      "f_latency": {
+        "val": 9.967707967876137,
+        "median": 33.865075114028,
+        "ratio": 0.2943359178833533
+      },
+      "f_cpu": {
+        "val": 34.22921922342344,
+        "median": 30.0478948697313,
+        "ratio": 1.1391553175961153
+      },
+      "f_mem": {
+        "val": 52.98515728904855,
+        "median": 45.10141206271318,
+        "ratio": 1.174800407920113
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 83,
+    "timestamp": "2025-08-01T05:53:00+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "behavioural_anomaly",
+    "detector_agreement": [
+      "PCA"
+    ],
+    "top_anomalous_features": "[PCA (Evidence 1.00)]: recon_error: f_volume=0.0000, f_latency=0.0000, f_cpu=0.2611, f_mem=0.2610",
+    "july_comparison": {
+      "event_count": {
+        "val": 13.0,
+        "median": 10.0,
+        "ratio": 1.3
+      },
+      "f_volume": {
+        "val": 56.91234275536694,
+        "median": 47.95413198331937,
+        "ratio": 1.1868079016666102
+      },
+      "f_latency": {
+        "val": 18.47906951815786,
+        "median": 33.865075114028,
+        "ratio": 0.5456674599402627
+      },
+      "f_cpu": {
+        "val": 21.26635316741954,
+        "median": 30.0478948697313,
+        "ratio": 0.7077485214727027
+      },
+      "f_mem": {
+        "val": 39.282778753524916,
+        "median": 45.10141206271318,
+        "ratio": 0.8709877796930726
+      }
+    },
+    "novel_relationships": [],
+    "affected_entities": {
+      "user": "bob",
+      "host": "web-02"
+    },
+    "related_events": 13,
+    "model_only_status": true,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 84,
+    "timestamp": "2025-08-01T02:37:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 8.0,
+        "median": 10.0,
+        "ratio": 0.8
+      },
+      "f_volume": {
+        "val": 23.83198143299005,
+        "median": 47.95413198331937,
+        "ratio": 0.4969745139225938
+      },
+      "f_latency": {
+        "val": 115.57115112878118,
+        "median": 33.865075114028,
+        "ratio": 3.4126943684500466
+      },
+      "f_cpu": {
+        "val": 27.891440740782485,
+        "median": 30.0478948697313,
+        "ratio": 0.9282327717699413
+      },
+      "f_mem": {
+        "val": 41.21778357259197,
+        "median": 45.10141206271318,
+        "ratio": 0.9138911995766107
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 8,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 85,
+    "timestamp": "2025-08-01T03:22:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 7.0,
+        "median": 10.0,
+        "ratio": 0.7
+      },
+      "f_volume": {
+        "val": 32.87835096215792,
+        "median": 47.95413198331937,
+        "ratio": 0.6856208131052086
+      },
+      "f_latency": {
+        "val": 97.16304371305672,
+        "median": 33.865075114028,
+        "ratio": 2.86912234465438
+      },
+      "f_cpu": {
+        "val": 24.40576740934313,
+        "median": 30.0478948697313,
+        "ratio": 0.8122288604626423
+      },
+      "f_mem": {
+        "val": 37.54605704851352,
+        "median": 45.10141206271318,
+        "ratio": 0.8324807435364996
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 7,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 86,
+    "timestamp": "2025-08-01T01:19:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 48.14427198134141,
+        "median": 47.95413198331937,
+        "ratio": 1.0039650388852452
+      },
+      "f_latency": {
+        "val": 24.244131778076415,
+        "median": 33.865075114028,
+        "ratio": 0.7159036764703267
+      },
+      "f_cpu": {
+        "val": 21.065162172245138,
+        "median": 30.0478948697313,
+        "ratio": 0.7010528445859645
+      },
+      "f_mem": {
+        "val": 30.943727933063894,
+        "median": 45.10141206271318,
+        "ratio": 0.686092220129092
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 87,
+    "timestamp": "2025-08-01T00:22:25+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 6.0,
+        "median": 10.0,
+        "ratio": 0.6
+      },
+      "f_volume": {
+        "val": 20.835231863287774,
+        "median": 47.95413198331937,
+        "ratio": 0.43448251488600015
+      },
+      "f_latency": {
+        "val": 47.264201132963166,
+        "median": 33.865075114028,
+        "ratio": 1.3956620788177379
+      },
+      "f_cpu": {
+        "val": 34.909109722193016,
+        "median": 30.0478948697313,
+        "ratio": 1.1617822104855222
+      },
+      "f_mem": {
+        "val": 50.84177862215557,
+        "median": 45.10141206271318,
+        "ratio": 1.1272768699893576
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 6,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 88,
+    "timestamp": "2025-08-01T05:53:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 11.0,
+        "median": 10.0,
+        "ratio": 1.1
+      },
+      "f_volume": {
+        "val": 75.11872231879788,
+        "median": 47.95413198331937,
+        "ratio": 1.5664702750730133
+      },
+      "f_latency": {
+        "val": 13.461181145987558,
+        "median": 33.865075114028,
+        "ratio": 0.39749450136053305
+      },
+      "f_cpu": {
+        "val": 26.511685769934704,
+        "median": 30.0478948697313,
+        "ratio": 0.8823142481319451
+      },
+      "f_mem": {
+        "val": 36.838390122978836,
+        "median": 45.10141206271318,
+        "ratio": 0.8167901721514911
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 11,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 89,
+    "timestamp": "2025-08-01T00:17:35+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 7.0,
+        "median": 10.0,
+        "ratio": 0.7
+      },
+      "f_volume": {
+        "val": 32.40348227474632,
+        "median": 47.95413198331937,
+        "ratio": 0.675718252725703
+      },
+      "f_latency": {
+        "val": 31.535834970710972,
+        "median": 33.865075114028,
+        "ratio": 0.931219991821244
+      },
+      "f_cpu": {
+        "val": 38.516354630086724,
+        "median": 30.0478948697313,
+        "ratio": 1.2818320483704204
+      },
+      "f_mem": {
+        "val": 57.85423055343074,
+        "median": 45.10141206271318,
+        "ratio": 1.2827587409676855
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 7,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 90,
+    "timestamp": "2025-08-01T02:43:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 36.715600910343795,
+        "median": 47.95413198331937,
+        "ratio": 0.7656399853742563
+      },
+      "f_latency": {
+        "val": 112.5092483758359,
+        "median": 33.865075114028,
+        "ratio": 3.322279605079953
+      },
+      "f_cpu": {
+        "val": 32.167318370967635,
+        "median": 30.0478948697313,
+        "ratio": 1.070534841473082
+      },
+      "f_mem": {
+        "val": 50.412219974359786,
+        "median": 45.10141206271318,
+        "ratio": 1.117752586199784
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 91,
+    "timestamp": "2025-08-01T06:41:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 60.171697727765654,
+        "median": 47.95413198331937,
+        "ratio": 1.2547760795398426
+      },
+      "f_latency": {
+        "val": 50.15425046916856,
+        "median": 33.865075114028,
+        "ratio": 1.4810021917947278
+      },
+      "f_cpu": {
+        "val": 37.44300970975997,
+        "median": 30.0478948697313,
+        "ratio": 1.2461109129970407
+      },
+      "f_mem": {
+        "val": 53.60220187904256,
+        "median": 45.10141206271318,
+        "ratio": 1.188481677791132
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 92,
+    "timestamp": "2025-08-01T06:10:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 73.21463496873251,
+        "median": 47.95413198331937,
+        "ratio": 1.5267638457974777
+      },
+      "f_latency": {
+        "val": 56.3102748866842,
+        "median": 33.865075114028,
+        "ratio": 1.6627831090608942
+      },
+      "f_cpu": {
+        "val": 24.285164006772746,
+        "median": 30.0478948697313,
+        "ratio": 0.8082151549071201
+      },
+      "f_mem": {
+        "val": 34.50937008596729,
+        "median": 45.10141206271318,
+        "ratio": 0.7651505464614338
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 93,
+    "timestamp": "2025-08-01T03:11:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 16.0,
+        "median": 10.0,
+        "ratio": 1.6
+      },
+      "f_volume": {
+        "val": 54.63606382832228,
+        "median": 47.95413198331937,
+        "ratio": 1.1393400645293128
+      },
+      "f_latency": {
+        "val": 46.81244441110387,
+        "median": 33.865075114028,
+        "ratio": 1.3823221786303568
+      },
+      "f_cpu": {
+        "val": 22.378204649014116,
+        "median": 30.0478948697313,
+        "ratio": 0.744751162969382
+      },
+      "f_mem": {
+        "val": 34.61440228926378,
+        "median": 45.10141206271318,
+        "ratio": 0.7674793472349094
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 16,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 94,
+    "timestamp": "2025-08-01T06:21:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 14.0,
+        "median": 10.0,
+        "ratio": 1.4
+      },
+      "f_volume": {
+        "val": 78.80514753575062,
+        "median": 47.95413198331937,
+        "ratio": 1.643344259951627
+      },
+      "f_latency": {
+        "val": 47.57082419465846,
+        "median": 33.865075114028,
+        "ratio": 1.404716334881333
+      },
+      "f_cpu": {
+        "val": 30.44502055276741,
+        "median": 30.0478948697313,
+        "ratio": 1.0132164228062497
+      },
+      "f_mem": {
+        "val": 42.52683256606151,
+        "median": 45.10141206271318,
+        "ratio": 0.9429157674027647
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: db-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "db-01"
+    },
+    "related_events": 14,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 95,
+    "timestamp": "2025-08-01T01:41:40+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 12.0,
+        "median": 10.0,
+        "ratio": 1.2
+      },
+      "f_volume": {
+        "val": 37.72880055373876,
+        "median": 47.95413198331937,
+        "ratio": 0.7867685013433785
+      },
+      "f_latency": {
+        "val": 101.0343365703533,
+        "median": 33.865075114028,
+        "ratio": 2.9834375453223676
+      },
+      "f_cpu": {
+        "val": 28.981606827138222,
+        "median": 30.0478948697313,
+        "ratio": 0.9645137189405171
+      },
+      "f_mem": {
+        "val": 40.532985511359826,
+        "median": 45.10141206271318,
+        "ratio": 0.898707682477857
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 12,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 96,
+    "timestamp": "2025-08-01T01:24:45+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 37.769756105108755,
+        "median": 47.95413198331937,
+        "ratio": 0.787622558119638
+      },
+      "f_latency": {
+        "val": 20.279605917132375,
+        "median": 33.865075114028,
+        "ratio": 0.598835403401539
+      },
+      "f_cpu": {
+        "val": 35.52107260409872,
+        "median": 30.0478948697313,
+        "ratio": 1.1821484585890514
+      },
+      "f_mem": {
+        "val": 55.774801534725384,
+        "median": 45.10141206271318,
+        "ratio": 1.2366531109307828
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-02"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-02"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 97,
+    "timestamp": "2025-08-01T01:31:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 7.0,
+        "median": 10.0,
+        "ratio": 0.7
+      },
+      "f_volume": {
+        "val": 26.048849016265205,
+        "median": 47.95413198331937,
+        "ratio": 0.543203430839415
+      },
+      "f_latency": {
+        "val": 28.756036535606892,
+        "median": 33.865075114028,
+        "ratio": 0.8491354718329037
+      },
+      "f_cpu": {
+        "val": 25.460041289109395,
+        "median": 30.0478948697313,
+        "ratio": 0.8473153077607618
+      },
+      "f_mem": {
+        "val": 36.14412616392796,
+        "median": 45.10141206271318,
+        "ratio": 0.8013967747544094
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 7,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 98,
+    "timestamp": "2025-08-01T05:09:10+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 7.0,
+        "median": 10.0,
+        "ratio": 0.7
+      },
+      "f_volume": {
+        "val": 34.89018423270143,
+        "median": 47.95413198331937,
+        "ratio": 0.727574096114133
+      },
+      "f_latency": {
+        "val": 44.442216479253425,
+        "median": 33.865075114028,
+        "ratio": 1.312331844226267
+      },
+      "f_cpu": {
+        "val": 23.847619709113744,
+        "median": 30.0478948697313,
+        "ratio": 0.7936535924563756
+      },
+      "f_mem": {
+        "val": 34.190372425562664,
+        "median": 45.10141206271318,
+        "ratio": 0.7580776490550053
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 7,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 99,
+    "timestamp": "2025-08-01T03:57:20+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 9.0,
+        "median": 10.0,
+        "ratio": 0.9
+      },
+      "f_volume": {
+        "val": 39.72343455403063,
+        "median": 47.95413198331937,
+        "ratio": 0.828363123491595
+      },
+      "f_latency": {
+        "val": 107.6748784501411,
+        "median": 33.865075114028,
+        "ratio": 3.179525752935321
+      },
+      "f_cpu": {
+        "val": 24.982617196079023,
+        "median": 30.0478948697313,
+        "ratio": 0.8314265376788582
+      },
+      "f_mem": {
+        "val": 36.79831755619403,
+        "median": 45.10141206271318,
+        "ratio": 0.8159016729903321
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 9,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  },
+  {
+    "rank": 100,
+    "timestamp": "2025-08-01T01:05:30+00:00",
+    "duration": "5s",
+    "ensemble_evidence": 1.0,
+    "category": "novel_relationship",
+    "detector_agreement": [
+      "Rarity"
+    ],
+    "top_anomalous_features": "[Rarity (Evidence 1.00)]: Driven by user='eve' [RARE (Surprisal: 3.00)]",
+    "july_comparison": {
+      "event_count": {
+        "val": 10.0,
+        "median": 10.0,
+        "ratio": 1.0
+      },
+      "f_volume": {
+        "val": 37.29511754418178,
+        "median": 47.95413198331937,
+        "ratio": 0.777724796627634
+      },
+      "f_latency": {
+        "val": 23.00268191017544,
+        "median": 33.865075114028,
+        "ratio": 0.6792449694182722
+      },
+      "f_cpu": {
+        "val": 37.805114652239794,
+        "median": 30.0478948697313,
+        "ratio": 1.2581618384961375
+      },
+      "f_mem": {
+        "val": 56.50758990289849,
+        "median": 45.10141206271318,
+        "ratio": 1.2529006813428614
+      }
+    },
+    "novel_relationships": [
+      "User: eve | Host: web-01"
+    ],
+    "affected_entities": {
+      "user": "eve",
+      "host": "web-01"
+    },
+    "related_events": 10,
+    "model_only_status": false,
+    "analyst_status": "Pending"
+  }
+]
