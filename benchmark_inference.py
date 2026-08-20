@@ -153,7 +153,16 @@ def main() -> None:
 
         print("\n  Sample results (10 windows):")
         table_rows = []
-        for i in range(len(august_sample)):
+        headers = ["Win", "IForest", "PCA", "Stat", "Rarity", "Ensemble", "Flag", "Agree", "Disagg", "Top", "Category"]
+
+        # Sort by ensemble evidence to clearly show a high and low evidence window
+        ens_ev_col = sample_results.column("ensemble_evidence").to_numpy()
+        sorted_indices = np.argsort(ens_ev_col)[::-1] # descending
+
+        # We will show the highest evidence window, the lowest evidence window, and maybe one more.
+        indices_to_show = [sorted_indices[0], sorted_indices[-1]]
+
+        for i in indices_to_show:
             row = [
                 i,
                 f"{sample_results.column('evidence_IForest').to_numpy()[i]:.3f}",
@@ -162,11 +171,13 @@ def main() -> None:
                 f"{sample_results.column('evidence_Rarity').to_numpy()[i]:.3f}",
                 f"{sample_results.column('ensemble_evidence').to_numpy()[i]:.3f}",
                 sample_results.column("ensemble_flagged").to_numpy(zero_copy_only=False)[i],
+                sample_results.column("detector_agreement").to_numpy()[i],
+                f"{sample_results.column('detector_disagreement').to_numpy()[i]:.3f}",
+                sample_results.column("top_detector").to_pylist()[i],
                 sample_results.column("primary_category").to_pylist()[i],
             ]
             table_rows.append(row)
 
-        headers = ["Win", "IForest", "PCA", "Stat", "Rarity", "Ensemble", "Flag", "Category"]
         print(tabulate(table_rows, headers=headers, tablefmt="github"))
 
         # ------------------------------------------------------------------

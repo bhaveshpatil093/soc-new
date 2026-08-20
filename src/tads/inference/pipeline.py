@@ -211,10 +211,22 @@ class AugustInferencePipeline:
 
         ensemble_flagged = (ensemble_ev >= ensemble_threshold).tolist()
 
+        # Calculate agreement metric (how many detectors flagged it)
+        agreement = np.sum([ev_arrays >= threshold for ev_arrays, threshold in zip(
+            [evidence_arrays[n] for n in det_names],
+            [self.detectors[n].threshold for n in det_names], strict=False
+        )], axis=0)
+
+        # Calculate disagreement metric (spread/variance of evidence)
+        # Using peak-to-peak spread (max - min) as a robust, interpretable disagreement measure
+        disagreement = np.max(ev_matrix, axis=1) - np.min(ev_matrix, axis=1)
+
         all_columns["ensemble_evidence"] = ensemble_ev.tolist()
         all_columns["ensemble_flagged"] = ensemble_flagged
         all_columns["top_detector"] = top_detectors
         all_columns["primary_category"] = primary_categories
+        all_columns["detector_agreement"] = agreement.tolist()
+        all_columns["detector_disagreement"] = disagreement.tolist()
 
         return pa.table(all_columns)
 
