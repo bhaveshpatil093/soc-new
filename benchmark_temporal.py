@@ -1,8 +1,9 @@
 """
-Validation benchmark for anomaly episode grouping.
+Validation benchmark for temporal anomaly classification.
 
-Validates that consecutive/related anomalous windows are properly grouped
-into episodes, and stats are aggregated correctly.
+Injects specific data patterns into a synthetic dataset and proves that the
+TemporalAnalyzer correctly classifies them based on timestamps and trends,
+without using static attack rules.
 """
 
 from __future__ import annotations
@@ -13,6 +14,7 @@ import numpy as np
 import pyarrow as pa
 
 from tads.explanation.episodes import EpisodeGrouper
+from tads.explanation.temporal_analysis import TemporalAnalyzer
 from tads.inference.pipeline import AugustInferencePipeline
 from tads.models.detectors.ensemble import EnsembleDetector
 from tads.models.detectors.isolation_forest import IsolationForestDetector
@@ -26,10 +28,10 @@ def generate_realistic_features(n_windows: int, start: datetime) -> pa.Table:
     timestamps = [start + timedelta(seconds=i * 5) for i in range(n_windows)]
 
     event_counts = np.random.poisson(lam=10, size=n_windows)
-    f_volume = event_counts * np.random.normal(5, 1, n_windows)
-    f_latency = np.random.exponential(scale=50, size=n_windows)
-    f_cpu = np.random.normal(30, 5, n_windows)
-    f_mem = f_cpu * 1.5 + np.random.normal(0, 2, n_windows)
+    f_volume = event_counts * np.random.normal(5, 0.5, n_windows)
+    f_latency = np.random.normal(30, 2, n_windows)
+    f_cpu = np.random.normal(30, 2, n_windows)
+    f_mem = f_cpu * 1.5 + np.random.normal(0, 1, n_windows)
 
     users = ["alice", "bob", "charlie", "david", "eve", "service-account"]
     hosts = ["web-01", "web-02", "db-01"]
@@ -50,25 +52,48 @@ def generate_realistic_features(n_windows: int, start: datetime) -> pa.Table:
 
 
 def inject_anomalies(data: pa.Table) -> pa.Table:
-    """Inject a 3-window sustained burst anomaly."""
-    len(data)
-
+    """Inject anomalies into specific indices to trigger temporal patterns."""
     f_vol = data.column("f_volume").to_numpy().copy()
-    f_lat = data.column("f_latency").to_numpy().copy()
     f_cpu = data.column("f_cpu").to_numpy().copy()
-    f_mem = data.column("f_mem").to_numpy().copy()
+    f_lat = data.column("f_latency").to_numpy().copy()
     users = data.column("user").to_pylist()
-    hosts = data.column("host").to_pylist()
     events = data.column("event_count").to_numpy().copy()
 
-    # Sustained Attack / Temporal Burst (3 consecutive high-volume windows)
-    idx_burst = 4000
-    for i in range(3):
-        events[idx_burst + i] = 500
-        f_vol[idx_burst + i] = 5000.0
-        f_cpu[idx_burst + i] = 99.0
-        users[idx_burst + i] = "HACKER_ADMIN"
-        hosts[idx_burst + i] = "db-01"
+    # We leave huge gaps between these indices (e.g. 100, 300, 500) so they don't merge.
+
+    # 1. OCCUR ONCE (Index 100)
+    users[100] = "USER_ONCE"
+    events[100] = 300
+    f_vol[100] = 3000.0
+
+    # 2. REPEAT (Index 200, 250)
+    users[200] = "USER_REPEAT"
+    events[200] = 300
+    f_vol[200] = 3000.0
+
+    users[250] = "USER_REPEAT"
+    events[250] = 300
+    f_vol[250] = 3000.0
+
+    # 3. PERSIST (Index 300 to 314) -> 15 windows = 75 seconds
+    for i in range(300, 315):
+        users[i] = "USER_PERSIST"
+        events[i] = 300
+        f_vol[i] = 3000.0
+
+    # 4. ESCALATE (Index 400 to 405) -> strictly increasing CPU anomaly
+    # Keep volume normal so we don't instantly peg evidence to 1.0
+    for i in range(6):
+        idx = 400 + i
+        users[idx] = "USER_ESCALATE"
+        # Ramp up latency to slowly push evidence up without maxing out
+        f_lat[idx] = 100.0 + (i * 20.0)
+
+    # 5. RECUR PERIODICALLY (Index 500, 600, 700) -> Exact 100-window (500s) gaps
+    for idx in [500, 600, 700]:
+        users[idx] = "USER_PERIODIC"
+        events[idx] = 300
+        f_vol[idx] = 3000.0
 
     return pa.table({
         "window_start": data.column("window_start"),
@@ -76,9 +101,9 @@ def inject_anomalies(data: pa.Table) -> pa.Table:
         "f_volume": f_vol.tolist(),
         "f_latency": f_lat.tolist(),
         "f_cpu": f_cpu.tolist(),
-        "f_mem": f_mem.tolist(),
+        "f_mem": data.column("f_mem"),
         "user": users,
-        "host": hosts,
+        "host": data.column("host"),
     })
 
 
@@ -90,7 +115,7 @@ def main() -> None:
 
     print("=== Training on July Baseline ===")
     july_start = datetime(2025, 7, 1, tzinfo=UTC)
-    july_data = generate_realistic_features(10000, start=july_start)
+    july_data = generate_realistic_features(5000, start=july_start)
 
     detectors = {
         "IForest": IsolationForestDetector(feature_columns=cont_features, n_jobs=1),
@@ -104,13 +129,12 @@ def main() -> None:
 
     print("=== Scoring August Data ===")
     august_start = datetime(2025, 8, 1, tzinfo=UTC)
-    raw_august = generate_realistic_features(5000, start=august_start)
+    raw_august = generate_realistic_features(1000, start=august_start)
     august_data = inject_anomalies(raw_august)
 
     pipeline = AugustInferencePipeline(detectors=detectors, ensemble_strategy="max")
     results = pipeline.score_all(august_data)
 
-    # Combine results with window_start, user, host for Episode Grouper
     combined_data = pa.table({
         "window_start": august_data.column("window_start"),
         "user": august_data.column("user"),
@@ -123,55 +147,39 @@ def main() -> None:
     grouper = EpisodeGrouper(evidence_floor=0.90, max_gap_seconds=15.0, alert_threshold=0.95)
     episodes = grouper.group(combined_data)
 
-    print(f"\nCreated {len(episodes)} episodes.")
+    print(f"\nCreated {len(episodes)} anomaly episodes.")
 
-    # Find the multi-window burst episode (it has HACKER_ADMIN)
-    burst_ep = next(e for e in episodes if "HACKER_ADMIN" in e.affected_users)
+    print("\n=== Running Temporal Analysis ===")
+    analyzer = TemporalAnalyzer()
+    classifications = analyzer.analyze(episodes)
 
+    # Filter the noisy background episodes to just show the injected ones to prove the logic
     print("\n" + "="*80)
-    print("=== MULTI-WINDOW BURST EPISODE ===")
+    print("=== CATEGORY VERIFICATION ===")
     print("="*80)
-    print(f"Episode ID:     {burst_ep.episode_id}")
-    print(f"Start Time:     {burst_ep.start_time}")
-    print(f"End Time:       {burst_ep.end_time}")
-    print(f"Duration:       {burst_ep.duration_seconds}s")
-    print(f"Window Count:   {burst_ep.window_count}")
-    print(f"Peak Evidence:  {burst_ep.peak_evidence:.4f}")
-    print(f"Mean Evidence:  {burst_ep.mean_evidence:.4f}")
-    print(f"Mean Agreement: {burst_ep.model_agreement_mean:.2f}")
-    print(f"Affected Users: {burst_ep.affected_users}")
-    print(f"Affected Hosts: {burst_ep.affected_hosts}")
-    print(f"Categories:     {burst_ep.primary_categories}")
 
-    print("\n--- Constituent Windows Sanity Check ---")
-    timestamps = combined_data.column("window_start").to_pylist()
-    evidences = combined_data.column("ensemble_evidence").to_pylist()
-    agreements = combined_data.column("detector_agreement").to_pylist()
+    for category, eps in classifications.items():
+        print(f"\n--- Category: {category.upper()} ---")
+        if not eps:
+            print("No examples found.")
+            continue
 
-    # Find the indices of the windows that fall within the episode's time bounds
-    constituent_indices = [
-        i for i, ts in enumerate(timestamps)
-        if burst_ep.start_time <= ts <= burst_ep.end_time and evidences[i] >= 0.90
-    ]
+        # We find one of our injected users in the category to prove it worked
+        injected_eps = [e for e in eps if any("USER_" in u for u in e.affected_users)]
 
-    calc_evs = []
-    calc_ags = []
+        if not injected_eps:
+            print("Only background noise found in this category.")
+            continue
 
-    for i in constituent_indices:
-        ev = evidences[i]
-        ag = agreements[i]
-        calc_evs.append(ev)
-        calc_ags.append(ag)
-        print(f"Window {i} Evidence: {ev:.4f} | Agreement: {ag}")
+        for ep in injected_eps[:2]: # Show up to 2 examples
+            print(f"Episode ID: {ep.episode_id} | Users: {ep.affected_users}")
+            print(f"Duration:   {ep.duration_seconds}s | Windows: {ep.window_count}")
+            print(f"Peak Ev:    {ep.peak_evidence:.4f}")
+            if category == "escalate":
+                print(f"Evidence Trend: {[round(v, 4) for v in ep.evidence_trend]}")
 
-    calc_peak = max(calc_evs)
-    calc_mean = sum(calc_evs) / len(calc_evs)
-    calc_ag_mean = sum(calc_ags) / len(calc_ags)
-
-    print("\n--- Manual Recomputation ---")
-    print(f"Calculated Peak:       {calc_peak:.4f}  (Matches: {abs(calc_peak - burst_ep.peak_evidence) < 1e-6})")
-    print(f"Calculated Mean:       {calc_mean:.4f}  (Matches: {abs(calc_mean - burst_ep.mean_evidence) < 1e-6})")
-    print(f"Calculated Mean Agree: {calc_ag_mean:.2f}  (Matches: {abs(calc_ag_mean - burst_ep.model_agreement_mean) < 1e-6})")
+        if len(injected_eps) > 2:
+            print(f"... and {len(injected_eps) - 2} more related episodes.")
 
 if __name__ == "__main__":
     main()

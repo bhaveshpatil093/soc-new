@@ -3,7 +3,6 @@
 from datetime import UTC, datetime
 
 import pyarrow as pa
-import pytest
 
 from tads.explanation.episodes import EpisodeGrouper
 
@@ -32,12 +31,12 @@ class TestEpisodeGrouper:
         ]
         # Floor is 0.90, Threshold is 0.95
         evidences = [0.92, 0.99, 0.91]
-        
+
         data = create_mock_window_data(timestamps, evidences)
         grouper = EpisodeGrouper(evidence_floor=0.90, max_gap_seconds=15.0, alert_threshold=0.95)
-        
+
         episodes = grouper.group(data)
-        
+
         assert len(episodes) == 1
         ep = episodes[0]
         assert ep.window_count == 3
@@ -54,12 +53,12 @@ class TestEpisodeGrouper:
             datetime(2025, 8, 1, 10, 0, 35, tzinfo=UTC), # ep2
         ]
         evidences = [0.96, 0.96, 0.96, 0.96]
-        
+
         data = create_mock_window_data(timestamps, evidences)
         grouper = EpisodeGrouper(evidence_floor=0.90, max_gap_seconds=15.0, alert_threshold=0.95)
-        
+
         episodes = grouper.group(data)
-        
+
         assert len(episodes) == 2
         assert episodes[0].window_count == 2
         assert episodes[1].window_count == 2
@@ -74,16 +73,16 @@ class TestEpisodeGrouper:
         # The gap between the two 0.96 windows is 15 seconds.
         # max_gap_seconds = 15.0, so this should merge.
         evidences = [0.96, 0.50, 0.50, 0.96]
-        
+
         data = create_mock_window_data(timestamps, evidences)
         grouper = EpisodeGrouper(evidence_floor=0.90, max_gap_seconds=15.0, alert_threshold=0.95)
-        
+
         episodes = grouper.group(data)
-        
+
         assert len(episodes) == 1
         assert episodes[0].window_count == 2
         assert episodes[0].duration_seconds == 15.0
-        
+
     def test_drops_sub_threshold_episodes(self) -> None:
         """An episode where peak evidence is below 0.95 should not be emitted."""
         timestamps = [
@@ -92,10 +91,10 @@ class TestEpisodeGrouper:
         ]
         # Floor is 0.90, but peak is 0.94 (below 0.95 alert threshold)
         evidences = [0.91, 0.94]
-        
+
         data = create_mock_window_data(timestamps, evidences)
         grouper = EpisodeGrouper(evidence_floor=0.90, max_gap_seconds=15.0, alert_threshold=0.95)
-        
+
         episodes = grouper.group(data)
-        
+
         assert len(episodes) == 0
