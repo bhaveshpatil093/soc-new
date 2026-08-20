@@ -151,7 +151,7 @@ class AugustInferencePipeline:
     # Core inference
     # ------------------------------------------------------------------
 
-    def score_all(self, data: pa.Table) -> pa.Table:
+    def score_all(self, data: pa.Table, chunk_size: int | None = 100_000) -> pa.Table:
         """
         Run all detectors on the input data and produce a unified evidence table.
 
@@ -165,7 +165,20 @@ class AugustInferencePipeline:
 
         Evidence is produced for EVERY window, not just flagged ones.
         """
-        len(data)
+        if chunk_size is None or chunk_size >= len(data):
+            return self._score_chunk(data)
+
+        batches = data.to_batches(max_chunksize=chunk_size)
+        results = []
+        for batch in batches:
+            chunk_table = pa.Table.from_batches([batch])
+            res = self._score_chunk(chunk_table)
+            results.append(res)
+        
+        return pa.concat_tables(results)
+
+    def _score_chunk(self, data: pa.Table) -> pa.Table:
+        """Internal helper to score a single chunk of data."""
         all_columns: dict[str, list[Any]] = {}
 
         evidence_arrays: dict[str, np.ndarray] = {}
