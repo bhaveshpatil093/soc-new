@@ -18,7 +18,6 @@ from tads.features.registry import (
 )
 from tads.features.utils import (
     average_distinct_per_entity,
-    calculate_entropy,
     calculate_hhi,
     calculate_historical_deviation,
     calculate_relationship_novelty,
@@ -115,30 +114,6 @@ class SourceIpConcentrationFeature(BaseFeature):  # type: ignore[misc]
     def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
         events = window_data.get("events", [])
         return {"source_ip_concentration": float(calculate_hhi(events, "source_ip"))}
-
-
-class DestinationDiversityFeature(BaseFeature):  # type: ignore[misc]
-    """
-    Shannon entropy of the destination IP event distribution.
-    """
-
-    @property
-    def metadata(self) -> FeatureMetadata:
-        return FeatureMetadata(
-            name="destination_diversity",
-            group=FeatureGroup.IPS,
-            source_fields=["destination_ip"],
-            mathematical_definition="-Sum(p * log2(p)) across distinct destination_ips",
-            data_type="float64",
-            expected_range=(0.0, None),
-            missing_value_behavior="Nulls mapped to 'unknown'",
-            requires_baseline=False,
-            is_causal=True,
-        )
-
-    def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        events = window_data.get("events", [])
-        return {"destination_diversity": float(calculate_entropy(events, "destination_ip"))}
 
 
 class InternalExternalProportionFeature(BaseFeature):  # type: ignore[misc]
@@ -288,7 +263,7 @@ _FEATURES: list[type[BaseFeature]] = [
     UniqueSourceIPsFeature,
     UniqueDestinationIPsFeature,
     SourceIpConcentrationFeature,
-    DestinationDiversityFeature,
+
     InternalExternalProportionFeature,
     IpUserDiversityFeature,
     IpHostDiversityFeature,

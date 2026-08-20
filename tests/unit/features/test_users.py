@@ -24,17 +24,6 @@ def test_user_event_concentration_feature() -> None:
     assert feat.compute({"events": [{"user_name": "a"}, {"user_name": "b"}]}) == {"user_event_concentration": 0.5}
 
 
-def test_user_diversity_feature() -> None:
-    feat = uf.UserDiversityFeature()
-    assert feat.compute({"events": []}) == {"user_diversity": 0.0}
-
-    # 1 user -> entropy = 0.0
-    assert feat.compute({"events": [{"user_name": "a"}, {"user_name": "a"}]}) == {"user_diversity": 0.0}
-
-    # 2 users, equal split -> entropy = 1.0
-    assert feat.compute({"events": [{"user_name": "a"}, {"user_name": "b"}]}) == {"user_diversity": 1.0}
-
-
 def test_login_volume_feature() -> None:
     feat = uf.LoginVolumeFeature()
     events = [

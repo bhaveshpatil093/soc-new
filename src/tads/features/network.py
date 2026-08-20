@@ -82,28 +82,6 @@ class UniqueDestinationPortsFeature(BaseFeature):  # type: ignore[misc]
         return {"unique_destination_ports": float(count)}
 
 
-class ProtocolDiversityFeature(BaseFeature):  # type: ignore[misc]
-    """Shannon entropy of the network protocol distribution."""
-
-    @property
-    def metadata(self) -> FeatureMetadata:
-        return FeatureMetadata(
-            name="protocol_diversity",
-            group=FeatureGroup.NETWORK,
-            source_fields=["network_protocol"],
-            mathematical_definition="-Sum(p * log2(p)) across distinct network_protocol",
-            data_type="float64",
-            expected_range=(0.0, None),
-            missing_value_behavior="Nulls mapped to 'unknown'",
-            requires_baseline=False,
-            is_causal=True,
-        )
-
-    def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        events = window_data.get("events", [])
-        return {"protocol_diversity": float(calculate_entropy(events, "network_protocol"))}
-
-
 class SourceDestinationDiversityFeature(BaseFeature):  # type: ignore[misc]
     """Average number of distinct destination IPs per source IP."""
 
@@ -210,7 +188,7 @@ class HostNetworkRelationshipsFeature(BaseFeature):  # type: ignore[misc]
 _FEATURES: list[type[BaseFeature]] = [
     NetworkUniqueDestinationsFeature,
     UniqueDestinationPortsFeature,
-    ProtocolDiversityFeature,
+
     SourceDestinationDiversityFeature,
     ConnectionConcentrationFeature,
     NetworkEntropyFeature,

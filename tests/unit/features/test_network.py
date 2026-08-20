@@ -20,17 +20,6 @@ def test_unique_destination_ports_feature() -> None:
     assert feat.compute({"events": events}) == {"unique_destination_ports": 2.0}
 
 
-def test_protocol_diversity_feature() -> None:
-    feat = nf.ProtocolDiversityFeature()
-    assert feat.compute({"events": []}) == {"protocol_diversity": 0.0}
-
-    events = [{"network_protocol": "tcp"}, {"network_protocol": "tcp"}]
-    assert feat.compute({"events": events}) == {"protocol_diversity": 0.0}
-
-    events = [{"network_protocol": "tcp"}, {"network_protocol": "udp"}]
-    assert feat.compute({"events": events}) == {"protocol_diversity": 1.0}
-
-
 def test_source_destination_diversity_feature() -> None:
     feat = nf.SourceDestinationDiversityFeature()
     events = [

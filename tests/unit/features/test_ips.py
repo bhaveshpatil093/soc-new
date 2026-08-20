@@ -37,21 +37,6 @@ def test_source_ip_concentration_feature() -> None:
     }
 
 
-def test_destination_diversity_feature() -> None:
-    feat = ipf.DestinationDiversityFeature()
-    assert feat.compute({"events": []}) == {"destination_diversity": 0.0}
-
-    # 1 IP -> entropy = 0.0
-    assert feat.compute({"events": [{"destination_ip": "1.1.1.1"}, {"destination_ip": "1.1.1.1"}]}) == {
-        "destination_diversity": 0.0
-    }
-
-    # 2 IPs, equal split -> entropy = 1.0
-    assert feat.compute({"events": [{"destination_ip": "1.1.1.1"}, {"destination_ip": "2.2.2.2"}]}) == {
-        "destination_diversity": 1.0
-    }
-
-
 def test_internal_external_proportion_feature() -> None:
     feat = ipf.InternalExternalProportionFeature()
     assert feat.compute({"events": []}) == {"internal_source_ratio": 0.0}

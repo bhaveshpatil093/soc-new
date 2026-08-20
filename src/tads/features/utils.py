@@ -16,6 +16,8 @@ def calculate_entropy(events: Collection[dict[str, Any]], field: str) -> float:
     if not events:
         return 0.0
     counts = Counter(e.get(field) or "unknown" for e in events)
+    if len(counts) <= 1:
+        return 0.0
     total = sum(counts.values())
     if total == 0:
         return 0.0

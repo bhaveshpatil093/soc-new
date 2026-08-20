@@ -73,28 +73,6 @@ class UserEventConcentrationFeature(BaseFeature):  # type: ignore[misc]
         return {"user_event_concentration": float(calculate_hhi(events, "user_name"))}
 
 
-class UserDiversityFeature(BaseFeature):  # type: ignore[misc]
-    """
-    Shannon entropy of the user event distribution.
-    Higher values indicate activity is spread across more users.
-    """
-
-    @property
-    def metadata(self) -> FeatureMetadata:
-        return FeatureMetadata(
-            name="user_diversity",
-            group=FeatureGroup.USERS,
-            source_fields=["user_name"],
-            mathematical_definition="-Sum(p * log2(p)) across distinct users",
-            data_type="float64",
-            expected_range=(0.0, None),
-            missing_value_behavior="Nulls mapped to 'unknown'",
-            requires_baseline=False,
-            is_causal=True,
-        )
-
-    def compute(self, window_data: dict[str, Any]) -> dict[str, float]:
-        events = window_data.get("events", [])
         return {"user_diversity": float(calculate_entropy(events, "user_name"))}
 
 
@@ -256,7 +234,6 @@ class HistoricalUserDeviationFeature(BaseFeature):  # type: ignore[misc]
 _FEATURES: list[type[BaseFeature]] = [
     ActiveUsersFeature,
     UserEventConcentrationFeature,
-    UserDiversityFeature,
     LoginVolumeFeature,
     FailedLoginRatioFeature,
     UserHostDiversityFeature,
