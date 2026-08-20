@@ -1,0 +1,42 @@
+experiment_id: "EXPERIMENT-TADS-V1"
+status: "FROZEN"
+freeze_timestamp: "2026-08-20T22:45:00Z"
+description: "Explicit boundary between July training/calibration work and August inference."
+
+datasets:
+  training_manifest: "config/july_split_manifest.yaml#training_period"
+  validation_manifest: "config/july_split_manifest.yaml#validation_period"
+  august_manifest: "config/july_split_manifest.yaml#inference_period"
+
+features:
+  registry_version: "v1.0.0"
+  feature_definitions: "src/tads/features/builtin.py"
+
+models:
+  ensemble_strategy: "max"
+  detectors:
+    IsolationForest: "artifact://models/iforest_v1.pkl"
+    PCA: "artifact://models/pca_v1.pkl"
+    Statistical: "artifact://models/statistical_v1.pkl"
+    Rarity: "artifact://models/rarity_v1.pkl"
+
+calibration:
+  thresholds:
+    IsolationForest: 0.95
+    PCA: 0.95
+    Statistical: 0.95
+    Rarity: 0.95
+    Ensemble: 0.90 # Evidence floor for episode grouping
+  temporal_gap_seconds: 15.0
+
+reproducibility:
+  random_seeds:
+    numpy: 42
+    isolation_forest: 42
+    autoencoder: 42
+  config_hash: "157546e66b3d48758f3bbe34758e45fea591120e3dd1a8a7fd874c4bdf01d8cf"
+
+environment:
+  git_commit: "fa8b31840ae249a9a711f81dbf5756a08c09d95a"
+  python_version: "3.11.9"
+  dependencies: "pyproject.toml#dependencies"
