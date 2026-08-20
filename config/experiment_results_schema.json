@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TADS Experiment Results Bundle",
+  "type": "object",
+  "properties": {
+    "experiment_id": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "timestamp": {"type": "string"},
+        "git_commit": {"type": "string"}
+      },
+      "required": ["timestamp", "git_commit"]
+    },
+    "dataset_statistics": {
+      "type": "object",
+      "properties": {
+        "total_events": {"type": "integer"},
+        "unique_users": {"type": "integer"},
+        "unique_hosts": {"type": "integer"},
+        "time_range_days": {"type": "number"}
+      },
+      "required": ["total_events", "unique_users", "unique_hosts", "time_range_days"]
+    },
+    "feature_statistics": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "median": {"type": "number"},
+            "mad": {"type": "number"},
+            "p99": {"type": "number"}
+          },
+          "required": ["median", "mad"]
+        }
+      }
+    },
+    "model_comparison": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "model": {"type": "string"},
+          "val_flag_rate": {"type": "string"},
+          "stability": {"type": "string"}
+        },
+        "required": ["model", "val_flag_rate", "stability"]
+      }
+    },
+    "july_validation": {
+      "type": "object",
+      "properties": {
+        "calibration_success": {"type": "boolean"},
+        "thresholds": {
+          "type": "object"
+        }
+      },
+      "required": ["calibration_success", "thresholds"]
+    },
+    "august_detection": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rank": {"type": "integer"},
+          "timestamp": {"type": "string"},
+          "evidence": {"type": "number"},
+          "category": {"type": "string"},
+          "top_detector": {"type": "string"}
+        },
+        "required": ["rank", "timestamp", "evidence", "category", "top_detector"]
+      }
+    },
+    "anomaly_episodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "episode_id": {"type": "string"},
+          "start_time": {"type": "string"},
+          "end_time": {"type": "string"},
+          "window_count": {"type": "integer"},
+          "max_evidence": {"type": "number"},
+          "primary_category": {"type": "string"}
+        },
+        "required": ["episode_id", "start_time", "end_time", "window_count", "max_evidence", "primary_category"]
+      }
+    },
+    "model_only_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {"type": "string"},
+          "detector": {"type": "string"},
+          "detector_evidence": {"type": "number"},
+          "ensemble_evidence": {"type": "number"}
+        },
+        "required": ["timestamp", "detector", "detector_evidence", "ensemble_evidence"]
+      }
+    },
+    "drift": {
+      "type": "object",
+      "properties": {
+        "detected": {"type": "boolean"},
+        "drifted_features": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "required": ["detected", "drifted_features"]
+    },
+    "performance_benchmarks": {
+      "type": "object",
+      "properties": {
+        "ingestion_throughput_eps": {"type": "number"},
+        "inference_ms_per_window": {"type": "number"}
+      },
+      "required": ["ingestion_throughput_eps", "inference_ms_per_window"]
+    }
+  },
+  "required": [
+    "experiment_id",
+    "metadata",
+    "dataset_statistics",
+    "feature_statistics",
+    "model_comparison",
+    "july_validation",
+    "august_detection",
+    "anomaly_episodes",
+    "model_only_candidates",
+    "drift",
+    "performance_benchmarks"
+  ]
+}

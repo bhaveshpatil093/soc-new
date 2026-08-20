@@ -1,0 +1,147 @@
+{
+  "experiment_id": "EXPERIMENT-TADS-V1",
+  "metadata": {
+    "timestamp": "2026-08-20T18:01:21.864907+00:00",
+    "git_commit": "cdbe9ef5539779ac87ce748391556d5d162378bc"
+  },
+  "dataset_statistics": {
+    "total_events": 1000000,
+    "unique_users": 5,
+    "unique_hosts": 3,
+    "time_range_days": 15.0
+  },
+  "feature_statistics": {
+    "event_count": {
+      "median": 10.0,
+      "mad": 5.0,
+      "p99": 100.0
+    },
+    "f_volume": {
+      "median": 47.95,
+      "mad": 15.0,
+      "p99": 500.0
+    },
+    "f_latency": {
+      "median": 33.87,
+      "mad": 10.0,
+      "p99": 250.0
+    },
+    "f_cpu": {
+      "median": 30.05,
+      "mad": 5.0,
+      "p99": 85.0
+    },
+    "f_mem": {
+      "median": 45.1,
+      "mad": 10.0,
+      "p99": 90.0
+    }
+  },
+  "model_comparison": [
+    {
+      "model": "IsolationForest",
+      "val_flag_rate": "67.26 \u00b1 40.48",
+      "stability": "POOR (High daily variance)"
+    },
+    {
+      "model": "PCA",
+      "val_flag_rate": "0.10 \u00b1 0.05",
+      "stability": "STABLE"
+    },
+    {
+      "model": "Statistical",
+      "val_flag_rate": "0.05 \u00b1 0.02",
+      "stability": "STABLE"
+    },
+    {
+      "model": "Rarity",
+      "val_flag_rate": "0.01 \u00b1 0.01",
+      "stability": "STABLE"
+    },
+    {
+      "model": "Autoencoder",
+      "val_flag_rate": "73.80 \u00b1 36.65",
+      "stability": "POOR (High daily variance)"
+    },
+    {
+      "model": "SequenceLSTM",
+      "val_flag_rate": "70.20 \u00b1 38.53",
+      "stability": "POOR (High daily variance)"
+    }
+  ],
+  "july_validation": {
+    "calibration_success": true,
+    "thresholds": {
+      "IsolationForest": 0.95,
+      "PCA": 0.95,
+      "Statistical": 0.95,
+      "Rarity": 0.95,
+      "Ensemble": 0.9
+    }
+  },
+  "august_detection": [
+    {
+      "rank": 1,
+      "timestamp": "2025-08-01T00:26:05Z",
+      "evidence": 1.0,
+      "category": "novel_relationship",
+      "top_detector": "Rarity"
+    },
+    {
+      "rank": 2,
+      "timestamp": "2025-08-01T00:41:40Z",
+      "evidence": 1.0,
+      "category": "statistical_anomaly",
+      "top_detector": "Statistical"
+    },
+    {
+      "rank": 3,
+      "timestamp": "2025-08-01T03:53:00Z",
+      "evidence": 1.0,
+      "category": "novel_relationship",
+      "top_detector": "Rarity"
+    },
+    {
+      "rank": 4,
+      "timestamp": "2025-08-01T05:33:30Z",
+      "evidence": 1.0,
+      "category": "behavioural_anomaly",
+      "top_detector": "PCA"
+    },
+    {
+      "rank": 5,
+      "timestamp": "2025-08-01T05:33:20Z",
+      "evidence": 1.0,
+      "category": "behavioural_anomaly",
+      "top_detector": "PCA"
+    }
+  ],
+  "anomaly_episodes": [
+    {
+      "episode_id": "EP-20250801-01",
+      "start_time": "2025-08-01T05:33:15Z",
+      "end_time": "2025-08-01T05:33:35Z",
+      "window_count": 5,
+      "max_evidence": 1.0,
+      "primary_category": "behavioural_anomaly"
+    }
+  ],
+  "model_only_candidates": [
+    {
+      "timestamp": "2025-08-01T12:00:00Z",
+      "detector": "IsolationForest",
+      "detector_evidence": 0.96,
+      "ensemble_evidence": 0.55
+    }
+  ],
+  "drift": {
+    "detected": true,
+    "drifted_features": [
+      "f_latency"
+    ]
+  },
+  "performance_benchmarks": {
+    "ingestion_throughput_eps": 59144.68,
+    "inference_ms_per_window": 0.45
+  }
+}
